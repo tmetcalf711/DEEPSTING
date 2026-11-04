@@ -1,0 +1,29 @@
+{
+  "id": "floorgen",
+  "grid_w": 13,
+  "grid_h": 9,
+  "start": [
+    6,
+    4
+  ],
+  "room_cap": 20,
+  "base_rooms": 5,
+  "rooms_per_depth": 2.6,
+  "branch_skip_chance": 0.5,
+  "max_attempts": 200,
+  "big_room_attempt_rate": 0.3,
+  "special_weights": {
+    "vault": 1.0,
+    "arcade": 1.0,
+    "sacrifice": 0.6,
+    "curse": 0.8,
+    "library": 0.5,
+    "challenge": 0.7,
+    "miniboss": 1.0,
+    "brood_cell": 0.3
+  },
+  "floor1_brood_cells": [
+    2,
+    4
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "extra_eye",
+  "name_key": "MUT_EXTRA_EYE_NAME",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 60
+    }
+  ]
+}

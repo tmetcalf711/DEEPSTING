@@ -1,0 +1,29 @@
+{
+  "id": "obsidian_shard",
+  "name_key": "ITEM_OBSIDIAN_SHARD_NAME",
+  "desc_key": "ITEM_OBSIDIAN_SHARD_DESC",
+  "note_key": "ITEM_OBSIDIAN_SHARD_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "strata_bedrock"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "gem"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "pierce",
+      "params": {
+        "count": -1
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#2b2233",
+    "stretch": 1.4
+  }
+}

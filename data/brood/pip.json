@@ -1,0 +1,21 @@
+{
+  "id": "pip",
+  "name_key": "BROOD_PIP_NAME",
+  "hint_key": "BROOD_PIP_HINT",
+  "role": "scout",
+  "found": {
+    "strata": [
+      "topsoil"
+    ],
+    "room": "brood_cell"
+  },
+  "unlocks": [
+    {
+      "kind": "feature",
+      "id": "floor1_special_icons"
+    }
+  ],
+  "familiar": {
+    "type": "scout_buzz"
+  }
+}

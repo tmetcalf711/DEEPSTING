@@ -1,0 +1,30 @@
+{
+  "id": "gnome_hat",
+  "name_key": "ITEM_GNOME_HAT_NAME",
+  "desc_key": "ITEM_GNOME_HAT_DESC",
+  "note_key": "ITEM_GNOME_HAT_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "secret"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk",
+    "easter_egg"
+  ],
+  "effects": [
+    {
+      "type": "health",
+      "honeycomb": 2
+    },
+    {
+      "type": "flag",
+      "name": "rock_forage_bonus"
+    }
+  ],
+  "visual": {
+    "player_overlay": "gnome_hat"
+  }
+}

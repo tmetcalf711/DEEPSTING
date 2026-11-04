@@ -1,0 +1,7 @@
+{
+  "id": "cave_in",
+  "name_key": "CURSE_CAVE_IN_NAME",
+  "effect": "darkness",
+  "light_radius": 72,
+  "weight": 1.0
+}

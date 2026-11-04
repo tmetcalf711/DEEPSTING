@@ -1,0 +1,18 @@
+# Godot 4
+.godot/
+/android/
+*.translation
+export_presets.cfg.bak
+# Builds
+/build/
+/export/
+*.exe
+*.x86_64
+*.pck
+# OS / editor
+.DS_Store
+Thumbs.db
+*.tmp
+.vscode/
+# Test output
+/tests/results/

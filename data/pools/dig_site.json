@@ -1,0 +1,27 @@
+{
+  "id": "dig_site",
+  "name_key": "POOL_DIG_SITE_NAME",
+  "fallback": "dig_site",
+  "entries": [
+    {
+      "id": "raw_geode",
+      "weight": 1.0
+    },
+    {
+      "id": "obsidian_shard",
+      "weight": 1.0
+    },
+    {
+      "id": "bottle_cap",
+      "weight": 1.0
+    },
+    {
+      "id": "gnome_hat",
+      "weight": 1.0
+    },
+    {
+      "id": "sun_disk",
+      "weight": 0.8
+    }
+  ]
+}

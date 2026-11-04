@@ -1,0 +1,22 @@
+{
+  "id": "scarab_amulet",
+  "name_key": "ITEM_SCARAB_AMULET_NAME",
+  "desc_key": "ITEM_SCARAB_AMULET_DESC",
+  "note_key": "ITEM_SCARAB_AMULET_NOTE",
+  "quality": 4,
+  "kind": "passive",
+  "pools": [
+    "vault",
+    "royal"
+  ],
+  "locked_by_default": true,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "flag",
+      "name": "revive_once"
+    }
+  ]
+}

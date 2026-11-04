@@ -1,0 +1,31 @@
+{
+  "id": "raw_geode",
+  "name_key": "ITEM_RAW_GEODE_NAME",
+  "desc_key": "ITEM_RAW_GEODE_DESC",
+  "note_key": "ITEM_RAW_GEODE_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "strata_bedrock"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "gem"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "split",
+      "params": {
+        "count": 3,
+        "damage_mult": 0.4,
+        "on": "hit"
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#b9a7ff",
+    "shot_sprite": "facet"
+  }
+}

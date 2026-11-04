@@ -1,0 +1,19 @@
+{
+  "id": "twin_grub",
+  "name_key": "ENEMY_TWIN_GRUB_NAME",
+  "archetype": "chaser",
+  "family": "hive",
+  "hp": 10,
+  "speed": 55,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": "grub_hiss"
+  },
+  "behavior": {
+    "type": "chase",
+    "stutter_chance": 0.15
+  }
+}

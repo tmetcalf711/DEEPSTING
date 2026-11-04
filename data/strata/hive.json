@@ -1,0 +1,17 @@
+{
+  "id": "hive",
+  "name_key": "STRATUM_HIVE_NAME",
+  "chapter": 1,
+  "floor_slot": "A",
+  "always_first": true,
+  "resources": [
+    "wood_pulp",
+    "protein"
+  ],
+  "palette": {
+    "floor": "#3a2c1e",
+    "wall": "#5b4630",
+    "accent": "#d9a441"
+  },
+  "music": "hive_theme"
+}

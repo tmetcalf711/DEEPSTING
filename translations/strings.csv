@@ -1,0 +1,39 @@
+keys,en
+GAME_TITLE,DeepSting
+GAME_TAGLINE,Dig down. Sting everything. Bring the treasure home.
+MENU_DESCEND,Descend
+MENU_DESCEND_SOON,The tunnel opens in Milestone 1.
+MENU_QUIT,Quit
+MENU_SEED_PLACEHOLDER,Seed (optional)
+MENU_SEED_RANDOM,Random seed
+MENU_SEED_OK,Seed %s
+MENU_SEED_BAD,Invalid seed
+ITEM_RAW_GEODE_NAME,Raw Geode
+ITEM_RAW_GEODE_DESC,Shots shatter on impact
+ITEM_RAW_GEODE_NOTE,"Field note: cracked it open expecting quartz. Found more rock, but angrier."
+ITEM_OBSIDIAN_SHARD_NAME,Obsidian Shard
+ITEM_OBSIDIAN_SHARD_DESC,Piercing shots
+ITEM_OBSIDIAN_SHARD_NOTE,"Field note: volcanic glass, three hundred metres from the nearest volcano. Somebody brought it here."
+ITEM_BOTTLE_CAP_NAME,Bottle Cap
+ITEM_BOTTLE_CAP_DESC,Shots bounce off walls
+ITEM_BOTTLE_CAP_NOTE,"Field note: the brand is long gone, but the crimp still has some fight in it."
+ITEM_SCARAB_AMULET_NAME,Scarab Amulet
+ITEM_SCARAB_AMULET_DESC,One more chance
+ITEM_SCARAB_AMULET_NOTE,"Field note: the beetle on this amulet looks a lot like the beetles in the walls. Coincidence, surely."
+ITEM_GNOME_HAT_NAME,Garden Gnome Hat
+ITEM_GNOME_HAT_DESC,+1 Honeycomb. Rocks hide more Forage
+ITEM_GNOME_HAT_NOTE,"Field note: tiny, red and pointed. Fits perfectly. It may have been waiting for us."
+ITEM_SUN_DISK_NAME,Sun Disk
+ITEM_SUN_DISK_DESC,Charge a beam of buried light
+ITEM_SUN_DISK_NOTE,"Field note: still warm. Down here, nothing should still be warm."
+ENEMY_TWIN_GRUB_NAME,Twin-headed Grub
+BOSS_BROODLESS_MOTHER_NAME,The Broodless Mother
+CHAR_WORKER_NAME,Worker
+STRATUM_HIVE_NAME,The Abandoned Hive
+BROOD_PIP_NAME,Pip
+BROOD_PIP_HINT,Something small is lost among the roots.
+ACH_FIRST_SECRET_NAME,Hollow Wall
+ACH_FIRST_SECRET_DESC,Find a secret room.
+MUT_EXTRA_EYE_NAME,Extra Eye
+CURSE_CAVE_IN_NAME,Curse of the Cave-in
+POOL_DIG_SITE_NAME,Dig Site

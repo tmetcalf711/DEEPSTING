@@ -1,0 +1,26 @@
+{
+  "id": "broodless_mother",
+  "name_key": "BOSS_BROODLESS_MOTHER_NAME",
+  "chapter": 1,
+  "strata": [
+    "hive"
+  ],
+  "hp": 260,
+  "phases": [
+    {
+      "until_hp": 0.6,
+      "patterns": [
+        "spawn_mites",
+        "ring_burst"
+      ]
+    },
+    {
+      "until_hp": 0.0,
+      "patterns": [
+        "charge",
+        "spiral_burst",
+        "spawn_mites"
+      ]
+    }
+  ]
+}

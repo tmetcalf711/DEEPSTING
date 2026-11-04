@@ -1,0 +1,26 @@
+{
+  "id": "bottle_cap",
+  "name_key": "ITEM_BOTTLE_CAP_NAME",
+  "desc_key": "ITEM_BOTTLE_CAP_DESC",
+  "note_key": "ITEM_BOTTLE_CAP_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "trader",
+    "strata_landfill"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "bounce",
+      "params": {
+        "count": 2
+      }
+    }
+  ]
+}

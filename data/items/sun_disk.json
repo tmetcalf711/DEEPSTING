@@ -1,0 +1,29 @@
+{
+  "id": "sun_disk",
+  "name_key": "ITEM_SUN_DISK_NAME",
+  "desc_key": "ITEM_SUN_DISK_DESC",
+  "note_key": "ITEM_SUN_DISK_NOTE",
+  "quality": 3,
+  "kind": "active",
+  "pools": [
+    "dig_site",
+    "royal",
+    "strata_ruins"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "active",
+      "ability": "charged_beam",
+      "charge": 4,
+      "charge_type": "rooms",
+      "params": {
+        "damage_mult": 6.0,
+        "duration": 1.2
+      }
+    }
+  ]
+}
