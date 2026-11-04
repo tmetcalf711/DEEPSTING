@@ -3,5 +3,7 @@
 *.ogg binary
 *.wav binary
 *.ttf binary
-*.bat text eol=crlf
+# Windows batch files need CRLF line endings, even in GitHub zip/raw downloads
+*.bat -text
+# Keep the launcher runnable on macOS / Linux
 *.sh text eol=lf
