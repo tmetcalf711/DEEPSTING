@@ -1,14 +1,10 @@
 {
   "id": "dig_site",
   "name_key": "POOL_DIG_SITE_NAME",
-  "fallback": "dig_site",
+  "fallback": "",
   "entries": [
     {
-      "id": "raw_geode",
-      "weight": 1.0
-    },
-    {
-      "id": "obsidian_shard",
+      "id": "bent_fork",
       "weight": 1.0
     },
     {
@@ -16,12 +12,40 @@
       "weight": 1.0
     },
     {
+      "id": "dead_phone",
+      "weight": 1.0
+    },
+    {
+      "id": "frayed_shoelace",
+      "weight": 1.0
+    },
+    {
       "id": "gnome_hat",
       "weight": 1.0
     },
     {
+      "id": "obsidian_shard",
+      "weight": 1.0
+    },
+    {
+      "id": "quartz_lens",
+      "weight": 1.0
+    },
+    {
+      "id": "raw_geode",
+      "weight": 1.0
+    },
+    {
+      "id": "squeeze_bottle",
+      "weight": 1.0
+    },
+    {
       "id": "sun_disk",
-      "weight": 0.8
+      "weight": 1.0
+    },
+    {
+      "id": "toy_soldier",
+      "weight": 1.0
     }
   ]
 }

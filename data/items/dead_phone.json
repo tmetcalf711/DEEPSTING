@@ -1,0 +1,26 @@
+{
+  "id": "dead_phone",
+  "name_key": "ITEM_DEAD_PHONE_NAME",
+  "desc_key": "ITEM_DEAD_PHONE_DESC",
+  "note_key": "ITEM_DEAD_PHONE_NOTE",
+  "quality": 1,
+  "kind": "active",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "active",
+      "ability": "stun_flash",
+      "charge": 2,
+      "params": {
+        "duration": 2.5
+      }
+    }
+  ]
+}

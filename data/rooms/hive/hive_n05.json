@@ -1,9 +1,12 @@
 {
-  "id": "hive_basic_01",
+  "id": "hive_n05",
   "stratum": [
     "hive"
   ],
   "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
   "difficulty": 1,
   "weight": 1.0,
   "doors": [
@@ -17,38 +20,34 @@
   ],
   "grid": [
     ".............",
-    ".R.........R.",
+    "..###...###..",
+    "..#B#...#.#..",
     ".............",
-    "......B......",
+    "..R.......R..",
     ".............",
-    ".R.........R.",
     "............."
   ],
-  "legend": {
-    ".": "floor",
-    "R": "rock",
-    "B": "brood_cell",
-    "X": "pit",
-    "S": "spikes",
-    "T": "tinted_rock",
-    "#": "block",
-    "D": "deposit_slot"
-  },
   "spawns": [
     {
-      "enemy": "twin_grub",
+      "enemy": "bloat_tick",
       "at": [
-        3,
+        6,
         2
+      ]
+    },
+    {
+      "enemy": "bloat_tick",
+      "at": [
+        11,
+        1
       ]
     },
     {
       "enemy": "twin_grub",
       "at": [
-        9,
-        4
-      ],
-      "champion_ok": true
+        6,
+        5
+      ]
     }
   ]
 }

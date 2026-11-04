@@ -1,0 +1,72 @@
+{
+  "id": "hive_n04",
+  "stratum": [
+    "hive"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ],
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "....T...R....",
+    ".............",
+    "....R...R....",
+    ".............",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "feral_ant",
+      "at": [
+        2,
+        1
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        3,
+        1
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        2,
+        2
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        10,
+        5
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        9,
+        5
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        10,
+        4
+      ]
+    }
+  ]
+}

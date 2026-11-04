@@ -1,0 +1,35 @@
+{
+  "id": "boss",
+  "name_key": "POOL_BOSS_NAME",
+  "fallback": "dig_site",
+  "entries": [
+    {
+      "id": "bent_fork",
+      "weight": 1.0
+    },
+    {
+      "id": "dead_phone",
+      "weight": 1.0
+    },
+    {
+      "id": "frayed_shoelace",
+      "weight": 1.0
+    },
+    {
+      "id": "quartz_lens",
+      "weight": 1.0
+    },
+    {
+      "id": "raw_geode",
+      "weight": 1.0
+    },
+    {
+      "id": "squeeze_bottle",
+      "weight": 1.0
+    },
+    {
+      "id": "toy_soldier",
+      "weight": 1.0
+    }
+  ]
+}

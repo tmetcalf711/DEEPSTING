@@ -16,4 +16,11 @@ if ! echo "$out" | grep -q "All tests passed"; then
   status=1
 fi
 "$GODOT" --headless -s res://tools/validate_data.gd || status=1
+smoke="$("$GODOT" --headless -s res://tools/smoke_run.gd 2>&1)"
+echo "$smoke" | grep -E "smoke: (OK|FAIL|bench|door)"
+if echo "$smoke" | grep -qE "SCRIPT ERROR|Parse Error|smoke: FAIL|smoke: TIMEOUT" || ! echo "$smoke" | grep -q "smoke: OK"; then
+  echo "$smoke" | grep -E "SCRIPT ERROR|ERROR|FAIL" -A3 | head -40
+  echo "run_tests: smoke run failed" >&2
+  status=1
+fi
 exit $status

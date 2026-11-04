@@ -1,30 +1,29 @@
 keys,en
 GAME_TITLE,DeepSting
-GAME_TAGLINE,Dig down. Sting everything. Bring the treasure home.
+GAME_TAGLINE,Stung too deep.
 MENU_DESCEND,Descend
-MENU_DESCEND_SOON,The tunnel opens in Milestone 1.
 MENU_QUIT,Quit
 MENU_SEED_PLACEHOLDER,Seed (optional)
 MENU_SEED_RANDOM,Random seed
 MENU_SEED_OK,Seed %s
 MENU_SEED_BAD,Invalid seed
 ITEM_RAW_GEODE_NAME,Raw Geode
-ITEM_RAW_GEODE_DESC,Shots shatter on impact
+ITEM_RAW_GEODE_DESC,Shots shatter into shards on impact
 ITEM_RAW_GEODE_NOTE,"Field note: cracked it open expecting quartz. Found more rock, but angrier."
 ITEM_OBSIDIAN_SHARD_NAME,Obsidian Shard
-ITEM_OBSIDIAN_SHARD_DESC,Piercing shots
+ITEM_OBSIDIAN_SHARD_DESC,"Piercing shots, damage up"
 ITEM_OBSIDIAN_SHARD_NOTE,"Field note: volcanic glass, three hundred metres from the nearest volcano. Somebody brought it here."
 ITEM_BOTTLE_CAP_NAME,Bottle Cap
-ITEM_BOTTLE_CAP_DESC,Shots bounce off walls
+ITEM_BOTTLE_CAP_DESC,Shots ricochet off walls
 ITEM_BOTTLE_CAP_NOTE,"Field note: the brand is long gone, but the crimp still has some fight in it."
 ITEM_SCARAB_AMULET_NAME,Scarab Amulet
 ITEM_SCARAB_AMULET_DESC,One more chance
 ITEM_SCARAB_AMULET_NOTE,"Field note: the beetle on this amulet looks a lot like the beetles in the walls. Coincidence, surely."
 ITEM_GNOME_HAT_NAME,Garden Gnome Hat
-ITEM_GNOME_HAT_DESC,+1 Honeycomb. Rocks hide more Forage
+ITEM_GNOME_HAT_DESC,Heart up. Rocks hide mana chips
 ITEM_GNOME_HAT_NOTE,"Field note: tiny, red and pointed. Fits perfectly. It may have been waiting for us."
 ITEM_SUN_DISK_NAME,Sun Disk
-ITEM_SUN_DISK_DESC,Charge a beam of buried light
+ITEM_SUN_DISK_DESC,Release a burst of buried sunlight
 ITEM_SUN_DISK_NOTE,"Field note: still warm. Down here, nothing should still be warm."
 ENEMY_TWIN_GRUB_NAME,Twin-headed Grub
 BOSS_BROODLESS_MOTHER_NAME,The Broodless Mother
@@ -37,3 +36,78 @@ ACH_FIRST_SECRET_DESC,Find a secret room.
 MUT_EXTRA_EYE_NAME,Extra Eye
 CURSE_CAVE_IN_NAME,Curse of the Cave-in
 POOL_DIG_SITE_NAME,Dig Site
+ITEM_QUARTZ_LENS_NAME,Quartz Lens
+ITEM_QUARTZ_LENS_DESC,"Range up, seeking shots"
+ITEM_QUARTZ_LENS_NOTE,Field note: it bends light the wrong way. The stingers seem to like that.
+ITEM_BENT_FORK_NAME,Bent Fork
+ITEM_BENT_FORK_DESC,Damage up
+ITEM_BENT_FORK_NOTE,"Field note: one prong points north, one points at you. Both look hungry."
+ITEM_SQUEEZE_BOTTLE_NAME,Squeeze Bottle
+ITEM_SQUEEZE_BOTTLE_DESC,Fire rate up
+ITEM_SQUEEZE_BOTTLE_NOTE,Field note: still has a little something sloshing in it. Do not drink.
+ITEM_FRAYED_SHOELACE_NAME,Frayed Shoelace
+ITEM_FRAYED_SHOELACE_DESC,"Speed up, shot speed up"
+ITEM_FRAYED_SHOELACE_NOTE,Field note: the shoe is long gone. The lace remembers running.
+ITEM_TOY_SOLDIER_NAME,Toy Soldier
+ITEM_TOY_SOLDIER_DESC,A tiny ally that shoots with you
+ITEM_TOY_SOLDIER_NOTE,"Field note: green plastic, still at attention after all these years."
+ITEM_DEAD_PHONE_NAME,Dead Phone
+ITEM_DEAD_PHONE_DESC,Flash! Stuns the room
+ITEM_DEAD_PHONE_NOTE,"Field note: no signal, no battery, still somehow takes one last photo."
+ITEM_POCKET_LINT_NAME,Pocket Lint
+ITEM_POCKET_LINT_DESC,...it's lint
+ITEM_POCKET_LINT_NOTE,Field note: we dug all the way down here for this.
+ENEMY_BLOAT_TICK_NAME,Bloat Tick
+ENEMY_PAPER_MOTH_NAME,Paper Moth
+ENEMY_FERAL_ANT_NAME,Feral Ant
+BOSS_BROODLESS_MOTHER_TITLE,the hollow queen
+PICKUP_MANA_CHIP_NAME,Mana Chip
+PICKUP_MANA_FRAGMENT_NAME,Mana Fragment
+PICKUP_MANA_CHUNK_NAME,Mana Chunk
+PICKUP_MANA_CRYSTAL_NAME,Mana Crystal
+PICKUP_HEART_HALF_NAME,Half Heart
+PICKUP_HEART_FULL_NAME,Heart
+PICKUP_CHITIN_NAME,Chitin
+PICKUP_TOXIC_CHITIN_NAME,Toxic Spined Chitin
+PICKUP_DIG_CHARGE_NAME,Dig Charge
+PICKUP_ROYAL_JELLY_NAME,Royal Jelly
+RES_WOOD_PULP_NAME,Wood Pulp
+RES_NECTAR_NAME,Nectar
+RES_PROTEIN_NAME,Protein
+RES_AMBER_NAME,Amber
+RES_MINERALS_NAME,Minerals
+RES_RELIC_SHARD_NAME,Relic Shard
+POOL_BOSS_NAME,Boss
+POOL_SECRET_NAME,Secret
+TOAST_SECRET_FOUND,Secret room!
+TOAST_BROOD_RESCUED,Lost brood rescued! +%d (safe in the Hive)
+TOAST_HAULED,Workers hauled +%d to the floor stash
+TOAST_SHAFT_OPEN,A way up! The swarm is coming for the stash
+BANNER_BANKED,+%d Pulp banked
+BANNER_BANKED_SUB,The floor stash made it to the Hive
+BANNER_REVIVED,The scarab stirs...
+BANNER_FLOOR,Floor %d
+HUD_STASH,Stash %d
+PAUSE_TITLE,Paused
+PAUSE_RESUME,Resume
+PAUSE_RESTART,Restart (same seed)
+PAUSE_NEW_RUN,New run
+PAUSE_MAIN_MENU,Main menu
+PAUSE_INFO,"Seed  %s      Time %d:%02d
+Damage %.2f   Fire rate %.2f/s   Shot speed %.2f
+Range %.0f   Speed %.2f   Luck %.1f
+Floor stash (unbanked): %d
+Items: %s"
+END_VICTORY,Slice complete!
+END_DEATH,Stung too deep
+END_SEED,Seed  %s
+END_TIME,Time  %d:%02d
+END_ROOMS,Rooms cleared  %d
+END_KILLS,Mutants stung  %d
+END_ITEMS,Relics dug up  %d
+END_BROOD,Lost brood rescued  %d
+END_PULP,Pulp banked  %d
+END_STASH_LOST,Floor stash lost  %d Pulp
+END_TOTALS,"Hive total: %d Pulp, %d brood"
+END_NEW_RUN,Descend again
+END_RETRY_SEED,Retry this seed

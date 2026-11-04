@@ -5,7 +5,8 @@ enum Mode { BOOT, MENU, HIVE, RUN, PAUSED }
 
 const SCENES: Dictionary = {
 	"main_menu": "res://scenes/ui/main_menu.tscn",
-	# M1+: "run": "res://scenes/rooms/run.tscn", "hive": "res://scenes/hive/hive.tscn",
+	"run": "res://scenes/run/run.tscn",
+	# M5: "hive": "res://scenes/hive/hive.tscn",
 }
 
 var mode: Mode = Mode.BOOT
@@ -49,6 +50,17 @@ func aim_mode() -> String:
 
 func screen_shake_scale() -> float:
 	return float(MetaSave.settings.get("accessibility", {}).get("screen_shake", 1.0))
+
+
+## Brief freeze-frame for impact (toggleable in accessibility settings).
+func hitstop(duration: float = 0.045) -> void:
+	if not bool(MetaSave.settings.get("accessibility", {}).get("hit_stop", true)):
+		return
+	if Engine.time_scale < 1.0:
+		return
+	Engine.time_scale = 0.05
+	await get_tree().create_timer(duration, true, false, true).timeout
+	Engine.time_scale = 1.0
 
 
 func quit() -> void:

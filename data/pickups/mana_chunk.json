@@ -1,0 +1,6 @@
+{
+  "id": "mana_chunk",
+  "kind": "mana",
+  "value": 10,
+  "name_key": "PICKUP_MANA_CHUNK_NAME"
+}

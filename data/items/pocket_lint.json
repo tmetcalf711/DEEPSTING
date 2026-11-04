@@ -1,0 +1,20 @@
+{
+  "id": "pocket_lint",
+  "name_key": "ITEM_POCKET_LINT_NAME",
+  "desc_key": "ITEM_POCKET_LINT_DESC",
+  "note_key": "ITEM_POCKET_LINT_NOTE",
+  "quality": 0,
+  "kind": "passive",
+  "pools": [],
+  "locked_by_default": false,
+  "tags": [
+    "fallback"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "luck",
+      "add": 0.1
+    }
+  ]
+}

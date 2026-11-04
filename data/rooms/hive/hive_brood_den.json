@@ -1,0 +1,53 @@
+{
+  "id": "hive_brood_den",
+  "stratum": [
+    "hive"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "brood_cell"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ],
+  "tags": [
+    "brood_cell"
+  ],
+  "grid": [
+    ".............",
+    "...B.....B...",
+    ".............",
+    "......D......",
+    ".............",
+    "...B.....B...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "feral_ant",
+      "at": [
+        6,
+        1
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        5,
+        1
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        7,
+        1
+      ]
+    }
+  ]
+}

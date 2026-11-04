@@ -17,7 +17,7 @@
 **Elevator pitch**
 > *The world's most polluted basin is the last place left to build. You're a yellowjacket digging the colony down through rotting comb, buried landfill, crystal caverns and drowned ruins, toward the toxic heart of the basin. Shoot venom, dig through walls for secrets, rescue lost brood, and watch your worker swarm haul treasure home after every room. Every relic you dig up changes your stinger. Every win unlocks something deeper.*
 
-**One-liner (store tagline):** *Dig down. Sting everything. Bring the treasure home.*
+**Title (locked, Q6):** **DeepSting**. **Tagline:** *Stung too deep.*
 
 ### Design pillars
 1. **Every run teaches you something.** New items, rooms and brood unlock almost every run early on. Progression is horizontal (more content and options), never a stat treadmill.
@@ -43,7 +43,7 @@ We borrow structures only. No names, art, text or specific items from any existi
 | Slay the Spire | Ascension-style incremental difficulty | §13 Contamination |
 | Spelunky 2 | Multi-step secret routes shared as community knowledge | §10.5 alternate path |
 | Vampire Survivors | Very frequent early unlocks, evolutions from item pairs | §13 cadence |
-| Rogue Legacy (counter-example) | Heavy permanent stat inflation makes skill feel irrelevant, so we cap it | §13 Comb Upgrades |
+| Rogue Legacy (counter-example) | Heavy permanent stat inflation makes skill feel irrelevant, so we cap it | §13 Hive Upgrades |
 
 ---
 
@@ -90,18 +90,19 @@ The colony lives on the rim of **the Basin**, the most polluted place in the wor
 | Health (container slots) | 3 cells | 1 | 12 cells | 1 cell = 2 half-points |
 | Damage | 3.5 | 0.5 | — | multipliers applied after flat bonuses |
 | Fire Rate (shots/s) | 2.7 | 0.5 | 30 | expressed as shots/sec internally (not "tear delay") |
-| Shot Speed | 1.0 | 0.6 | 2.5 | × 240 px/s |
-| Range (px) | 260 | 60 | 900 | travel distance before the shot drops |
-| Move Speed | 1.0 | 0.4 | 2.0 | × 150 px/s |
+| Shot Speed | 1.0 | 0.6 | 2.5 | × 190 px/s |
+| Range (px) | 150 | 40 | 600 | travel distance before the shot drops |
+| Move Speed | 1.0 | 0.4 | 2.0 | × 95 px/s |
 | Luck | 0 | -5 | 10 | feeds proc chances: `chance = base + luck * per_luck` |
 
 **Stat formula:** `final = clamp((base + Σflat) × Π(mult), floor, cap)`. Damage also takes a per-caste multiplier. Stats recalculate whenever the inventory changes (an event, not every frame).
 
 ### 3.4 Health
-- **Honeycomb cells** (red hearts): containers that can be refilled with honey pickups.
-- **Royal Jelly** (soul hearts): temporary half-cells layered after the honeycomb. Lost first. Not refillable once gone.
-- **Toxic Venom** cells (black hearts): like Royal Jelly, but when one is lost it deals 40 damage to every enemy in the room.
-- **Damage order:** Royal Jelly / Toxic Venom (rightmost first) → honeycomb.
+*(User decision: health stays as hearts.)*
+- **Hearts** (red hearts): containers that can be refilled with heart pickups.
+- **Chitin** (soul hearts): temporary shield halves layered after the hearts. Lost first. Not refillable once gone.
+- **Toxic Spined Chitin** (black hearts): like Chitin, but each half that breaks deals 20 damage to every enemy in the room.
+- **Damage order:** shields (last gained first) → hearts.
 - **Max total cells (all types):** 12. Pickups past the cap are wasted, as in Isaac.
 - **Hits:** most enemy damage is a half cell, and from chapter 4 on it is a full cell. Damage taken grants 1.0 s of i-frames with a blinking sprite.
 
@@ -111,9 +112,9 @@ The colony lives on the rim of **the Basin**, the most polluted place in the wor
 
 | Isaac | DeepSting | Cap | Rules |
 |---|---|---|---|
-| Coins | **Forage** | 99 | in-run currency. Shops, Arcades, Vault donation |
+| Coins | **Mana** (crystalline chits) | 99 | in-run currency, dropped as crystal flakes: **Chip** = 1 (penny), **Fragment** = 5 (nickel), **Chunk** = 10 (dime), **Crystal** = 25 (quarter). Shops, Arcades, Vault donation |
 | Bombs | **Dig Charges** | 99 | 0.9 s fuse; 60 px radius; 60 dmg; destroys rocks, tinted rocks, cracked walls (secret entrances), poop-equivalent "trash heaps"; hurts the player (1 cell) |
-| Keys | **Pheromone Markers** | 99 | open locked doors (Dig Site from ch2+, Library, Vault ×2), sealed caches, key-blocks |
+| Keys | **Royal Jelly** *(for now, user decision)* | 99 | open locked doors (Dig Site from ch2+, Library, Vault ×2), sealed caches, key-blocks |
 | Pills | **Strange Fluids** | 1 slot (2 with item) | 20 effects, randomly mapped per run to 13 vial colors; identified after first use (Alchemist brood: identified on sight) |
 | Cards/Runes | **Fossils** | shared slot with fluids | 20 single-use powers, always identified |
 
@@ -135,17 +136,18 @@ When a room is cleared it spawns **resource deposits** (1–4 nodes, from the ro
 | Minerals | Landfill, Bedrock, Mine, Runoff | high-tier Comb Upgrades |
 | Relic Shards (rare) | Ruins, Catacombs, Basin, alt path | prestige upgrades and cosmetics |
 
-For simplicity of economy we keep **one banked currency, "Comb"**, plus resource *types*. The type only decides which hive decoration grows, and each Comb Upgrade lists a type requirement. *(See Open Question Q4.)*
+**One banked currency: Pulp** (user decision, Q4). Every banked material goes through **the Pulper** in the hive and becomes Pulp at its `pulp_value` (`/data/resources/*.json`: wood pulp, nectar and protein are 1, amber and minerals are 2, relic shards are 5). Lifetime per-type totals are still recorded, and they decide which hive decorations grow.
 
 ### 5.2 The worker swarm
 1. Room clears → doors unlock → deposits pop out of the ground (0.3 s).
 2. **Workers** (4–10, scaled to deposit value) fly in through the door that leads toward the **nest entrance**, which is the next step along the shortest path back to the start room. They swarm the deposits, harvest for about 1.5 s, then fly back out the same door.
-3. **Haul time** = `1.0 s + 0.35 s × (room distance from start)`. Hauling completes when the last worker leaves. A HUD ticker shows "+12 Amber ⇢ Hive".
+3. Hauling completes when the last worker leaves (about 2–3 s). If the player leaves mid-haul, the swarm finishes off-screen and the haul is credited at once. A toast shows "+12 → floor stash".
 4. Workers are **untargetable and invulnerable**, and enemies ignore them. They never appear in rooms that aren't cleared. They only exist for the visual and for timing.
-5. **Banking:** a completed haul is banked into `MetaSave` **immediately**. Dying while a haul is in flight loses that haul. Deposits in rooms you haven't cleared are never collected.
-6. **Forage share:** each completed haul also credits `ceil(value × 0.25)` Forage to the run wallet. Forage also drops as normal pickups from enemies, chests and rocks.
+5. **Floor stash (user decision, Q3):** hauls go into the **floor stash** (HUD: "Stash N"), not the bank. **Dying loses the whole unbanked stash.**
+6. **The way up:** killing the floor boss opens a **light shaft to the surface** in the boss room. The stash (plus the boss carcass as Protein) piles up under it, and a big worker swarm streams down the shaft and carries it all up, which you can watch. When the last worker is out, the stash goes through the Pulper and is **banked as Pulp**, and only then does the trapdoor down appear. If you leave the boss room mid-haul, it completes immediately.
+7. **Mana is separate:** in-run Mana is only found as pickups (from room-clear rewards, enemies, rocks with the right item, secret rooms). It is never converted from hauls.
 
-> Risk/reward lever: a cleared room with a haul in flight is "unbanked". Rushing into the next fight while a long haul is still running risks losing it on death. Later items modify haul speed and haul value.
+> Risk/reward lever: everything you've hauled on this floor is at risk until you beat the boss. A greedy, careful clear is worth a lot, and a death right before the boss costs a lot.
 
 ### 5.3 Brood rescue is always banked immediately (§12).
 
@@ -195,7 +197,7 @@ on_damage_taken    {...}
 familiar           {scene_id, params}
 orbital            {scene_id, radius, speed}
 active             {ability_id, charge, charge_type}
-health             {honeycomb?, royal?, toxic?, heal?}
+health             {heart_containers?, heal?, chitin?, toxic_chitin?}   (half-hearts, except containers)
 pickup_spawn       {pickup, count}
 flag               {name}   (e.g. "flight", "spectral", "see_secrets")
 ```
@@ -226,7 +228,7 @@ A shot is a `ShotSpec` assembled every time stats change:
 | quartz_lens | Quartz Lens | 2 | +80 range, 15% (+3%/luck) homing shots |
 | amber_gnat | Amber with a Gnat Inside | 2 | gnat familiar that bites |
 | opal_fragment | Opal Fragment | 2 | random element per room |
-| pyrite_tooth | Fool's Molar | 1 | +2 Forage per room clear |
+| pyrite_tooth | Fool's Molar | 1 | +2 Mana per room clear |
 | salt_crystal | Salt Lick | 1 | +0.3 shot speed, shots slow enemies |
 | glow_pebble | Glowing Pebble | 1 | +1 luck, emits light (counters Cave-in) |
 
@@ -238,24 +240,24 @@ A shot is a `ShotSpec` assembled every time stats change:
 | clay_idol | Clay Idol | 2 | orbital that blocks bullets |
 | cracked_crown | Cracked Crown | 4 | +all stats, take double damage |
 | sun_disk | Sun Disk | 3 | active (4 rooms): charged beam |
-| canopic_jar | Canopic Jar | 3 | on kill, 5% chance of a Royal Jelly half |
+| canopic_jar | Canopic Jar | 3 | on kill, 5% chance of a Chitin half |
 | temple_bell | Temple Bell | 2 | active (3): stun every enemy for 2 s |
 
 **Everyday buried objects**
 | id | Name | Q | Effect |
 |---|---|---|---|
 | bottle_cap | Bottle Cap | 2 | shots bounce off walls twice |
-| wedding_ring | Lost Wedding Ring | 2 | +1 luck, +1 Royal Jelly at floor start |
+| wedding_ring | Lost Wedding Ring | 2 | +1 luck, +1 Chitin at floor start |
 | rusty_spoon | Rusty Spoon | 1 | shots leave short sludge puddles that hurt enemies |
 | toy_soldier | Toy Soldier | 2 | familiar that shoots |
 | dead_phone | Dead Phone | 1 | active (2): stun flash |
 | marble | Marble | 1 | shots roll along the ground (low arc, ignore range drop) |
-| coin_purse | Old Coin Purse | 1 | +50% Forage share |
-| gnome_hat | Garden Gnome Hat | 2 | +1 cell, a tiny gnome hat on the wasp; rocks drop Forage more often (easter-egg nod to the developer's other game) |
+| coin_purse | Old Coin Purse | 1 | +50% Mana share |
+| gnome_hat | Garden Gnome Hat | 2 | +1 heart, a tiny gnome hat on the wasp; rocks drop Mana chips (easter-egg nod to the developer's other game) |
 | bent_fork | Bent Fork | 1 | +0.5 damage |
 | sports_bottle | Squeeze Bottle | 1 | +0.4 fire rate |
 | battery_9v | Swollen Battery | 2 | active items charge 1 extra per clear |
-| bubble_wrap | Bubble Wrap | 1 | +2 Royal Jelly halves |
+| bubble_wrap | Bubble Wrap | 1 | +2 Chitin halves |
 | shoelace | Frayed Shoelace | 1 | +0.15 move speed |
 | reading_glasses | Reading Glasses | 2 | shows secret-room hints on the map |
 | tin_can_phone | Tin Can Telephone | 2 | shots boomerang |
@@ -351,7 +353,7 @@ Base curse chance 15% per floor after floor 1, adjusted by items and Contaminati
 - The **Radiation meter** fills from killing mutants (1 per kill, 5 per champion, 20 per boss), from standing in glowing contamination (+5/s) and from some Fluids.
 - Threshold starts at 60, then +30 each time (60, 90, 120, …).
 - When it's full: at the next room clear (never mid-fight) a choice of **1 of 3 Mutations** appears.
-- Mutations are run-only, small and stackable, and have their own pool. Examples: *Extra Eye* (+range), *Thick Carapace* (+1 Royal Jelly, −speed), *Glow Glands* (light radius, enemies take damage near you), *Spiracles* (dash cooldown −30%), *Twin Stinger* (an extra side shot at 30% damage), *Hungry Gut* (healing from Protein deposits), *Static Fuzz* (shots chain lightning 10%).
+- Mutations are run-only, small and stackable, and have their own pool. Examples: *Extra Eye* (+range), *Thick Carapace* (+1 Chitin, −speed), *Glow Glands* (light radius, enemies take damage near you), *Spiracles* (dash cooldown −30%), *Twin Stinger* (an extra side shot at 30% damage), *Hungry Gut* (healing from Protein deposits), *Static Fuzz* (shots chain lightning 10%).
 - Some Mutations are unlockable via achievements (included in the unlock count).
 
 ### 8.3 Special rooms
@@ -361,8 +363,8 @@ Base curse chance 15% per floor after floor 1, adjusted by items and Contaminati
 | Boss | farthest dead end | boss + trapdoor + reward pedestal |
 | Dig Site (treasure) | dead end | 1 item from Dig Site / Strata pool; locked from ch2 |
 | Trader (shop) | dead end | 3–5 wares from Trader pool + consumables; NPC: **Mott**, a hoarding pack rat |
-| Vault | dead end, ch2+ | 2 Markers to open; Vault pool item; option to donate Forage |
-| Arcade | dead end, ch2+ | gamble Forage: slot beetle, fortune worm, crane game |
+| Vault | dead end, ch2+ | 2 Royal Jelly to open; Vault pool item; option to donate Mana |
+| Arcade | dead end, ch2+ | gamble Mana: slot beetle, fortune worm, crane game |
 | Sacrifice Altar | dead end | spikes: take damage for escalating rewards |
 | Curse room | dead end | spiked door; cursed pool item / pickups |
 | Library | dead end, rarer | fossils + Library pool items (requires Archivist unlock) |
@@ -375,7 +377,7 @@ Base curse chance 15% per floor after floor 1, adjusted by items and Contaminati
 
 ### 8.4 Royal Chamber / Mutation Den (angel/devil)
 - After the boss dies, a door may appear. Base chance 0% on floor 1, 30% on floor 2+, with +35% if no damage was taken in the boss fight, −20% if the player took a red-cell hit from any source this floor, etc. (Isaac-like modifiers in config).
-- **Mutation Den** offers Mutation pool items that cost honeycomb containers (1–2). Taking any Den item locks out Royal Chambers for the run.
+- **Mutation Den** offers Mutation pool items that cost heart containers (1–2). Taking any Den item locks out Royal Chambers for the run.
 - **Royal Chamber** offers 1 free Royal pool item. The chance of Royal vs Den is 50% by default, shifted by Den items taken (→Den) and by having never taken one (→Royal).
 
 ---
@@ -390,7 +392,7 @@ A single screen of the restored Abandoned Hive. Most players should spend **unde
 | **Brood Roster** | choose playable caste |
 | **Trove** | collection log (items, knick-knacks, fossils, fluids, enemies, bosses, brood, achievements) with field notes and unlock hints |
 | **Larder** | pick 1 unlocked starting boon |
-| **Comb Upgrades** | spend banked Comb on ~16–20 content-adding upgrades |
+| **The Pulper / Hive Upgrades** | the Pulper turns banked materials into Pulp; spend Pulp on ~16–20 content-adding upgrades |
 
 Rescued brood visibly fill the hive: normal brood as ambient wandering larvae and workers (density scales with population), mutated brood as named NPCs at a station doing their job. Resource-type milestones grow decorations (pulp walls, nectar pots, amber windows, mineral pillars).
 
@@ -502,13 +504,13 @@ The Trove shows silhouettes plus hints for brood you haven't found ("*Something 
 
 | Caste | Unlock | Health | Twist | Starting kit |
 |---|---|---|---|---|
-| **Worker** (Yellowjacket) | default | 3 honeycomb | baseline; hauls +10% faster | 1 Dig Charge |
-| **Soldier** | Brace (Guard brood) | 4 honeycomb | shots knock back hard; −fire rate | Bronze Arrowhead |
-| **Paper Wasp** | beat ch2 | 2 honeycomb + 2 Royal | can chew walls: dash into a cracked wall to open it (no charge needed), slow | Dead Phone (active) |
-| **Hornet** | beat ch4 | 3 honeycomb | huge damage, short range, big body | Cracked Crown (variant: −1 cell) |
-| **Cuckoo Wasp** | rescue 4 mutated brood | 1 honeycomb + 2 Toxic | parasite: kills steal a stat point temporarily (decays per room) | Raw Geode |
-| **Tarantula Hawk** | beat a boss in under 30 s | 3 honeycomb | stinger paralyzes (first hit stuns 1 s); flies | flight flag |
-| **Queen** | beat ch6 | 4 honeycomb | cannot shoot; commands 3 drone familiars that inherit all shot modifiers | 3 drones |
+| **Worker** (Yellowjacket) | default | 3 hearts | baseline; hauls +10% faster | 1 Dig Charge |
+| **Soldier** | Brace (Guard brood) | 4 hearts | shots knock back hard; −fire rate | Bronze Arrowhead |
+| **Paper Wasp** | beat ch2 | 2 hearts + 2 Chitin | can chew walls: dash into a cracked wall to open it (no charge needed), slow | Dead Phone (active) |
+| **Hornet** | beat ch4 | 3 hearts | huge damage, short range, big body | Cracked Crown (variant: −1 cell) |
+| **Cuckoo Wasp** | rescue 4 mutated brood | 1 heart + 2 Toxic Chitin | parasite: kills steal a stat point temporarily (decays per room) | Raw Geode |
+| **Tarantula Hawk** | beat a boss in under 30 s | 3 hearts | stinger paralyzes (first hit stuns 1 s); flies | flight flag |
+| **Queen** | beat ch6 | 4 hearts | cannot shoot; commands 3 drone familiars that inherit all shot modifiers | 3 drones |
 
 **Mutated castes** (tainted equivalents, M6): each caste gets a reworked version unlocked by a secret objective on the alt path.
 
@@ -526,8 +528,8 @@ The Trove shows silhouettes plus hints for brood you haven't found ("*Something 
 ### 13.2 Completion marks
 Per caste, a mark for each of: ch4 boss, ch5 boss, ch6 boss, alt-path final, Queen's Chamber, Hollow Swarm, Challenge-mode win, Daily win. Each mark unlocks a specific item. They're shown as stamps on the caste's Roster card.
 
-### 13.3 Comb Upgrades (~18, mostly content)
-Examples: *+5 items to Dig Site pool*, *Arcade rooms* (if not via Sprocket, cheaper path), *Shop restocks once*, *Start at Chapter 3* (shortcut after beating ch3, no achievements in shortcut runs), *+1 Larder slot choice*, *Haul speed +15%*, *Trove: show item pool* … plus **the only stat upgrades in the game: +1 honeycomb (one time, max)** and *+1 starting Forage*. No trees.
+### 13.3 Hive Upgrades (~18, mostly content, bought with Pulp)
+Examples: *+5 items to Dig Site pool*, *Arcade rooms* (if not via Sprocket, cheaper path), *Shop restocks once*, *Start at Chapter 3* (shortcut after beating ch3, no achievements in shortcut runs), *+1 Larder slot choice*, *Haul speed +15%*, *Trove: show item pool*, and, late-game, **Brood Bond** (a starting perk: pick one already-rescued mutated brood to join you as a familiar from the start of the run, user decision Q7) … plus **the only stat upgrades in the game: +1 heart container (one time, max)** and *+3 starting Mana*. No trees.
 
 ### 13.4 Contamination Levels (Heat/Ascension)
 Unlocked after the first true win (ch6). There are 15 stacking levels, each adding one modifier (faster enemies, more champions, less healing, curse every floor, shorter haul windows, Den deals cost more…). The rewards are cosmetic hive decorations, a Trove star and higher Daily score multipliers.
@@ -541,7 +543,7 @@ A seed from the UTC date (`hash("DEEPSTING-" + YYYYMMDD)`), fixed caste, one att
 ---
 
 ## 14. Game loop
-`Hive (pick caste/boon, <1 min) → Floor 1 Abandoned Hive (rescue lost brood) → clear rooms (workers haul) → items / secrets / mutated brood → floor boss → [Royal/Den offer] → trapdoor → … → die or win → banked Comb and brood shown → unlock pop-ups → new content in pools → descend again`
+`Hive (pick caste/boon, <1 min) → Floor 1 Abandoned Hive (rescue lost brood) → clear rooms (workers haul) → items / secrets / mutated brood → floor boss → [Royal/Den offer] → trapdoor → … → die or win → banked Pulp and brood shown → unlock pop-ups → new content in pools → descend again`
 
 ---
 
@@ -566,7 +568,7 @@ A seed from the UTC date (`hash("DEEPSTING-" + YYYYMMDD)`), fixed caste, one att
 | `Events` | global signal bus (decoupled systems) |
 | `RNG` | seeded RNG with independent named streams (`map`, `rooms`, `items`, `enemies`, `drops`, `fx`, `misc`), derived per floor so streams never desync |
 | `Platform` | Steam/no-Steam wrapper (achievements, cloud, leaderboards, presence). Falls back to stubs |
-| `MetaSave` | versioned meta save (unlocks, counters, brood, comb, settings ref), mid-run save file, migrations, atomic writes |
+| `MetaSave` | versioned meta save (unlocks, counters, brood, pulp, settings ref), mid-run save file, migrations, atomic writes |
 | `Content` | loads and validates `/data/**.json` into dictionaries indexed by id; the single gateway for content lookups |
 | `Art` | resolves `res://assets/sprites/<category>/<id>.png`; generates placeholder textures if missing |
 | `Audio` | buses, SFX/music by id (`res://assets/audio/sfx/<id>.ogg`), missing files are silent no-ops |
@@ -581,7 +583,7 @@ A seed from the UTC date (`hash("DEEPSTING-" + YYYYMMDD)`), fixed caste, one att
 - Room-local enemy RNG: `stream("enemies", floor)` is re-derived per room by `(floor, room_index)` so that visiting rooms in a different order doesn't change what spawns.
 
 ### 16.4 Data and content
-- **Format: JSON** in `/data/<category>/<id>.json` (one entry per file, diff-friendly, hand-authorable). `Content` validates required fields at load, and `tools/validate_data.gd` runs the same validation from the CLI (also covered by tests).
+- **Format: JSON** in `/data/<category>/<id>.json` (one entry per file, diff-friendly, hand-authorable). Mods (D16) mirror the same layout under `user://mods/<mod>/data/`. `Content` validates required fields at load, and `tools/validate_data.gd` runs the same validation from the CLI (also covered by tests).
 - `.tres` is reserved for engine resources (themes, tilesets, particle materials).
 - **Effects** are referenced by type key and implemented in `/scripts/effects/<type>.gd`, registered in an effect registry.
 
@@ -598,7 +600,7 @@ A seed from the UTC date (`hash("DEEPSTING-" + YYYYMMDD)`), fixed caste, one att
 
 ### 16.7 Saves
 - Directory: `user://save/` (single folder; small JSON files; Steam Cloud friendly).
-  - `meta.json`: unlocks, counters, brood, comb balance, completion marks, trove-seen sets, version.
+  - `meta.json`: unlocks, counters, brood, pulp balance, completion marks, trove-seen sets, version.
   - `settings.json`: video/audio/controls/accessibility, bindings.
   - `run.json`: mid-run snapshot written on quit / floor start; deleted on death/win.
 - Every file has `"version": N`. `MetaSave.migrate(data)` applies `_migrate_vN_to_vN+1` steps in order.
@@ -628,7 +630,7 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | 2 | Full floorgen + all special rooms, 40 ch1 templates, room editor, curses, Royal/Den, Trader | invariant tests green; seeds reproduce |
 | 3 | Generic modifier stack at scale, all pools, trinkets, fossils, fluids, radiation + mutations, 60 items, synergy test scene | stacking tests green; 500-bullet perf test passes |
 | 4 | Ch1–4 + alts, 3 bosses/chapter, champions, difficulty curve, first ending | full run to ending 1 |
-| 5 | Achievements → unlocks, pool locking, completion marks, 6 mutated brood, hive, Trove, banking, Comb Upgrades, 3 castes, save/resume | fresh save → unlocks flow across runs |
+| 5 | Achievements → unlocks, pool locking, completion marks, 6 mutated brood, hive + Pulper, Trove, Hive Upgrades, 3 castes, save/resume | fresh save → unlocks flow across runs |
 | 6 | Ch5–6, alt path, secret bosses, mutated castes, Contamination, challenges, Daily, 120+ items | content complete |
 | 7 | Polish and accessibility, rebinding UI, palettes, SFX hooks, perf, Deck check | Deck 1280×800 at 60 fps |
 | 8 | GodotSteam, achievements, cloud, leaderboards, exports, credits, store asset checklist | Steam build uploads |
@@ -648,9 +650,9 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | D2 | Logical res 640×360, `canvas_items` + `expand` | clean 2×/3× at 720p/1080p; 1280×800 gains vertical space instead of letterboxing |
 | D3 | Content as **JSON**, one file per entry | hand-authorable, diffable, validator-friendly; `.tres` only for engine resources |
 | D4 | Fire Rate stored as **shots/second** | easier to reason about and display than Isaac's "tear delay" |
-| D5 | Single banked meta-currency (Comb) with resource *types* as flavor/decor and upgrade requirements | avoids a multi-currency grind; see Q4 |
-| D6 | Hauls bank on completion (literal spec); haul time scales with distance from start | gives a real "unbanked" window without a floor-end bank step; see Q3 |
-| D7 | Forage = 25% of each haul + regular pickups | ties the in-run economy to clearing, while keeping Isaac's coin-pickup feel |
+| D5 | **Superseded by user decision:** all banked materials go through the Pulper and become **Pulp**, the single meta-currency | user answer to Q4 |
+| D6 | **Superseded by user decision:** hauls go to a floor stash, lost on death, banked when the swarm carries it up the boss shaft | user answer to Q3 |
+| D7 | **Superseded:** in-run currency is **Mana** (Chip 1 / Fragment 5 / Chunk 10 / Crystal 25), from pickups only | user decision |
 | D8 | Projectile modifiers ordered by fixed priority, not pickup order | deterministic, testable, order-independent builds |
 | D9 | Projectiles simulated in one system node with arrays, not per-bullet nodes | required for 500+ bullets at 60 fps |
 | D10 | Own FNV-1a hashing for seed derivation | `String.hash()` isn't guaranteed stable across engine versions |
@@ -658,16 +660,34 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | D12 | Input map defined in code, not `project.godot` | rebinding is a data operation; clean diffs |
 | D13 | GUT 9.6.1 vendored in `addons/gut` | headless-runnable test framework; pinned version |
 | D14 | Brood rescue persists to disk on the rescue event | spec says "banked immediately, not lost if you die" |
-| D15 | Mutated brood familiars only in the run they're rescued (per spec) | keeps it special; a later unlock could make them selectable companions (Q7) |
+| D15 | Mutated brood familiars only in the run they're rescued; a late-game **Brood Bond** upgrade lets you pick one to start with | user answer to Q7 |
+| D16 | Data-only mods: `Content` also loads `user://mods/<mod>/data/<category>/**.json` when `settings.gameplay.mods_enabled` is true; a mod entry with an existing id overrides it | Q5 answer; costs nothing now |
+| D17 | Aim mode `auto` (default): arrow keys snap to 4 directions (Isaac), mouse and right stick aim freely | best default per device |
+| D18 | One room is instantiated at a time; all per-room state lives in the floor layout dict | simple and save-friendly |
+| D19 | Pedestal items and the boss are rolled at floor-generation time, in fixed room order | exploration order can't change what a seed gives |
+| D20 | Enemies/drops use per-room RNG streams `(seed, floor, room_index)` | same seed gives the same fights in any visiting order |
+| D21 | Validator rule: door entry lanes and spawn tiles must be walkable | stops templates from trapping the player in rocks |
+| D22 | Enemies get a 0.5 s wake-up on room entry, plus a 0.45 s spawn-in animation | Isaac-fair room entries |
+| D23 | Player shots stay amber-family; item tints blend at most 45% | bullet readability (§7.1) |
+| D24 | Dig Charge: 38 px radius, 60 damage, 1 heart to the player if caught | rescaled for 16 px tiles (Isaac ≈ 2.5 tiles) |
 
 ---
 
-## 20. Open questions (expensive to change later — need your call)
-1. **Q1: Art style and resolution.** Pixel art at 16 px tiles on a 640×360 canvas (current assumption), or HD hand-drawn sprites (e.g. 64 px tiles at 1920×1080)? This decides camera, collision sizes, tile sizes and UI layout. **Recommendation: pixel art, 16 px**, the fastest for a solo artist and Isaac-adjacent.
-2. **Q2: Co-op.** Local co-op (2 players, shared screen) is much cheaper to plan for now than to retrofit (input routing, camera, RunState with player arrays, UI). **Recommendation: design data structures for N players now, but ship single-player first.** Is co-op a launch goal, a post-launch goal, or never?
-3. **Q3: Banking risk.** Literal spec (each haul banks when it completes, D6) vs. a Dead Cells-style **floor stash** (hauls go to a stash banked only when you take the trapdoor, lost on death). The stash makes death sting more and makes "clear efficiently" matter more. **Recommendation: try the literal spec in M1 and playtest the stash variant behind a config flag.**
-4. **Q4: One currency or many.** Is the single "Comb" with type requirements (D5) OK, or do you want separate wallets per resource (more hub bookkeeping, more grind)?
-5. **Q5: Mod support.** Isaac-style mod loading (external data packs + effect scripts from `user://mods`) is cheap if `Content` is designed for it now. **Recommendation: yes, data-only mods post-launch, with the loader path reserved now.**
-6. **Q6: Title.** DeepSting vs Undercomb / Sludgehive / Stinger Below. It affects the Steam store page, the save directory name (`user://` uses the project name) and the achievement API names. **It needs to be locked before M8, because changing the save path later needs a migration.**
-7. **Q7: Mutated brood familiars** only in the rescue run (current spec), or selectable as a companion in later runs (Hades-style keepsake slot)?
-8. **Q8: Daily Run and online.** Steam leaderboards only, or also a web leaderboard? (Affects backend costs. Steam-only is the default.)
+## 20. Open questions
+All eight Milestone 0 questions were answered (2026-11-04):
+
+| Q | Answer | Where it landed |
+|---|---|---|
+| Q1 Art | **16-bit-style pixel art, 16 px tiles**, 640×360 canvas | D2, D11; placeholders built to that grid |
+| Q2 Co-op | **Much later.** Ship single-player; keep RunState/Player free of single-player-only shortcuts where it's cheap | — |
+| Q3 Banking | **Floor stash, lost on death.** Defeating the boss opens a way up, and you watch the swarm carry the floor's loot out | §5.2, D6 |
+| Q4 Currency | In-run: **Mana chits** (Chip/Fragment/Chunk/Crystal = 1/5/10/25). Meta: everything goes through **the Pulper** into **Pulp** | §4, §5.1, D5, D7 |
+| Q5 Mods | **Yes.** Data-only mod loading from `user://mods/<mod>/data/` is reserved now (off by default, `gameplay.mods_enabled`) | §16.4, D16 |
+| Q6 Title | **DeepSting**, tagline *"Stung too deep."* | §0 |
+| Q7 Brood familiars | Only in the rescue run, until a late-game **Brood Bond** perk lets you pick one to start with | §13.3, D15 |
+| Q8 Leaderboards | **Steam only** | §13.6 |
+| Extra | Health stays **hearts**; **Chitin** = soul-heart shields; **Toxic Spined Chitin** = black hearts; **Royal Jelly** = keys for now | §3.4, §4 |
+
+### New open questions (Milestone 1 review)
+1. **Q9: Mana and Royal Jelly have no sinks yet.** Shops (Mana) and locked rooms/caches (Royal Jelly) arrive in M2. Are a Trader shop plus locked Dig Sites from chapter 2 enough, or do you want Royal Jelly to have a second use (e.g. feeding rescued brood for a bonus)?
+2. **Q10: Shaft haul pacing.** The shaft sequence takes ~3–6 s depending on stash size, and the trapdoor appears only afterwards. Too slow? It can be skipped by leaving the room.

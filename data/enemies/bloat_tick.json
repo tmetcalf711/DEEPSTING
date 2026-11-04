@@ -1,0 +1,22 @@
+{
+  "id": "bloat_tick",
+  "name_key": "ENEMY_BLOAT_TICK_NAME",
+  "archetype": "turret",
+  "family": "hive",
+  "hp": 14,
+  "radius": 7,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.55,
+    "sfx": "tick_swell"
+  },
+  "behavior": {
+    "type": "turret",
+    "interval": 2.4,
+    "bullet_speed": 85,
+    "pattern": "alternate_cross"
+  }
+}

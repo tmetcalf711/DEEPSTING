@@ -1,0 +1,122 @@
+extends RefCounted
+## Phase-driven boss. Each phase lists pattern names; patterns are generic (ring, fan, spiral,
+## charge, spawn) and parameterized by data, so new bosses are mostly JSON.
+var speed := 18.0
+var phases: Array = []
+var gap := 1.1
+var minion := "feral_ant"
+var max_minions := 4
+var windup := 0.6
+
+var _phase := 0
+var _step := 0
+var _wait := 1.2
+var _active := ""
+var _t := 0.0
+var _charge_dir := Vector2.ZERO
+var _spiral_ang := 0.0
+var _fired := false
+
+
+func init(e: Enemy, p: Dictionary) -> void:
+	speed = float(p.get("speed", 18))
+	phases = p.get("phases", [])
+	gap = float(p.get("pattern_gap", 1.1))
+	minion = str(p.get("minion", "feral_ant"))
+	max_minions = int(p.get("max_minions", 4))
+	windup = float(e.data.get("telegraph", {}).get("windup", 0.6))
+
+
+func tick(e: Enemy, delta: float) -> void:
+	_update_phase(e)
+	if _active == "":
+		e.velocity = e.to_player().normalized() * speed
+		_wait -= delta
+		if _wait <= 0.0:
+			var list: Array = phases[_phase]["patterns"]
+			_active = str(list[_step % list.size()])
+			_step += 1
+			_t = 0.0
+			_fired = false
+			e.telegraph(windup)
+		return
+	_t += delta
+	match _active:
+		"ring_burst": _ring(e)
+		"aimed_fan": _fan(e)
+		"spiral_burst": _spiral(e, delta)
+		"spawn_minions": _spawn(e)
+		"charge": _charge(e)
+		_: _end()
+
+
+func _update_phase(e: Enemy) -> void:
+	var frac: float = e.hp / e.max_hp
+	while _phase < phases.size() - 1 and frac <= float(phases[_phase]["until_hp"]):
+		_phase += 1
+		_step = 0
+		e.telegraph(0.8)
+		RunController.instance.shake(0.4)
+
+
+func _end() -> void:
+	_active = ""
+	_wait = gap * (0.75 if _phase > 0 else 1.0)
+
+
+func _ring(e: Enemy) -> void:
+	e.velocity = Vector2.ZERO
+	if _t >= windup and not _fired:
+		_fired = true
+		var n := 12 if _phase == 0 else 16
+		var off: float = e.rng.randf() * TAU
+		for i in n:
+			e.fire(Vector2.from_angle(off + TAU * i / n) * 70.0)
+		_end()
+
+
+func _fan(e: Enemy) -> void:
+	e.velocity = Vector2.ZERO
+	if _t >= windup and not _fired:
+		_fired = true
+		var base: float = e.to_player().angle()
+		for i in 5:
+			e.fire(Vector2.from_angle(base + (i - 2) * 0.26) * 95.0, ProjectileSystem.ENEMY_RED, 3.5)
+		_end()
+
+
+func _spiral(e: Enemy, _delta: float) -> void:
+	e.velocity = Vector2.ZERO
+	if _t < windup:
+		return
+	var k := int((_t - windup) / 0.07)
+	while _spiral_ang < k:
+		_spiral_ang += 1.0
+		for arm in 2:
+			e.fire(Vector2.from_angle(_spiral_ang * 0.42 + arm * PI) * 65.0, ProjectileSystem.ENEMY_GREEN)
+	if _t >= windup + 1.4:
+		_spiral_ang = 0.0
+		_end()
+
+
+func _spawn(e: Enemy) -> void:
+	e.velocity = Vector2.ZERO
+	if _t >= windup and not _fired:
+		_fired = true
+		var alive := e.get_tree().get_nodes_in_group("enemies").size() - 1
+		var data: Dictionary = Content.get_entry("enemies", minion)
+		for i in mini(2, max_minions - alive):
+			e.room.spawn_enemy(data, e.global_position + Vector2.from_angle(e.rng.randf() * TAU) * 14.0)
+		_end()
+
+
+func _charge(e: Enemy) -> void:
+	if _t < windup:
+		e.velocity = Vector2.ZERO
+		_charge_dir = e.to_player().normalized()
+		return
+	e.velocity = _charge_dir * 150.0
+	if _t > windup + 0.9 or (e.get_slide_collision_count() > 0 and _t > windup + 0.1):
+		RunController.instance.shake(0.3)
+		e.stun(0.5)
+		_end()

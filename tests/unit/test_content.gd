@@ -29,3 +29,11 @@ func test_item_lookup() -> void:
 	var geode: Dictionary = Content.get_entry("items", "raw_geode")
 	assert_eq(geode.get("quality"), 3)
 	assert_typeof(geode["quality"], TYPE_INT, "JSON numbers normalized to int")
+
+
+func test_room_door_lanes_and_spawns_checked() -> void:
+	var grid := [".............", "......#......", ".............", "R............", ".............", ".............", "............."]
+	var room := {"id": "r", "stratum": ["hive"], "shape": "1x1", "doors": ["N", "W", "S"], "grid": grid,
+		"spawns": [{"enemy": "twin_grub", "at": [0, 3]}]}
+	var problems: PackedStringArray = ContentScript.validate("rooms", room)
+	assert_eq(problems.size(), 3, "N lane blocked, W lane blocked, spawn on rock: %s" % [problems])

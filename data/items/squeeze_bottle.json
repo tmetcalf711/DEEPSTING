@@ -1,0 +1,23 @@
+{
+  "id": "squeeze_bottle",
+  "name_key": "ITEM_SQUEEZE_BOTTLE_NAME",
+  "desc_key": "ITEM_SQUEEZE_BOTTLE_DESC",
+  "note_key": "ITEM_SQUEEZE_BOTTLE_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "fire_rate",
+      "add": 0.8
+    }
+  ]
+}

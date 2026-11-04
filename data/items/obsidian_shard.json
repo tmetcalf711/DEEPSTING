@@ -7,7 +7,7 @@
   "kind": "passive",
   "pools": [
     "dig_site",
-    "strata_bedrock"
+    "secret"
   ],
   "locked_by_default": false,
   "tags": [
@@ -20,10 +20,15 @@
       "params": {
         "count": -1
       }
+    },
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.3
     }
   ],
   "visual": {
-    "tint": "#2b2233",
-    "stretch": 1.4
+    "tint": "#6a4f8a",
+    "stretch": 1.6
   }
 }

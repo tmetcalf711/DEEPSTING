@@ -7,8 +7,7 @@
   "kind": "passive",
   "pools": [
     "dig_site",
-    "trader",
-    "strata_landfill"
+    "secret"
   ],
   "locked_by_default": false,
   "tags": [
@@ -22,5 +21,8 @@
         "count": 2
       }
     }
-  ]
+  ],
+  "visual": {
+    "tint": "#e0e0e8"
+  }
 }

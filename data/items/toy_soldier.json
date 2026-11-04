@@ -1,0 +1,27 @@
+{
+  "id": "toy_soldier",
+  "name_key": "ITEM_TOY_SOLDIER_NAME",
+  "desc_key": "ITEM_TOY_SOLDIER_DESC",
+  "note_key": "ITEM_TOY_SOLDIER_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "familiar",
+      "behavior": "shooter",
+      "sprite": "toy_soldier",
+      "params": {
+        "fire_interval": 0.75,
+        "damage": 3.5
+      }
+    }
+  ]
+}

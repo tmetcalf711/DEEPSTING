@@ -1,0 +1,23 @@
+{
+  "id": "bent_fork",
+  "name_key": "ITEM_BENT_FORK_NAME",
+  "desc_key": "ITEM_BENT_FORK_DESC",
+  "note_key": "ITEM_BENT_FORK_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 1.0
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "hive_n06",
+  "stratum": [
+    "hive"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ],
+  "tags": [],
+  "grid": [
+    ".............",
+    ".RR.......RR.",
+    ".R.........R.",
+    "......D......",
+    ".R.........R.",
+    ".RR.......RR.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "paper_moth",
+      "at": [
+        6,
+        1
+      ]
+    },
+    {
+      "enemy": "paper_moth",
+      "at": [
+        6,
+        5
+      ]
+    },
+    {
+      "enemy": "twin_grub",
+      "at": [
+        3,
+        3
+      ]
+    },
+    {
+      "enemy": "twin_grub",
+      "at": [
+        9,
+        3
+      ]
+    }
+  ]
+}

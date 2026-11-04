@@ -1,0 +1,44 @@
+{
+  "id": "hive_n02",
+  "stratum": [
+    "hive"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ],
+  "tags": [],
+  "grid": [
+    ".............",
+    "...RR...RR...",
+    ".............",
+    "......D......",
+    ".............",
+    "...RR...RR...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "bloat_tick",
+      "at": [
+        6,
+        1
+      ]
+    },
+    {
+      "enemy": "bloat_tick",
+      "at": [
+        6,
+        5
+      ]
+    }
+  ]
+}

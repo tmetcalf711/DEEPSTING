@@ -3,7 +3,7 @@ extends Node
 ## Files live in one directory (Steam Cloud friendly). Writes are atomic (tmp -> rename) and the
 ## previous good copy is kept as .bak, which is used if the main file fails to parse.
 
-const META_VERSION := 1
+const META_VERSION := 2
 const SETTINGS_VERSION := 1
 const RUN_VERSION := 1
 
@@ -28,7 +28,7 @@ func load_all() -> void:
 static func default_meta() -> Dictionary:
 	return {
 		"version": META_VERSION,
-		"comb": 0,                    # banked meta-currency
+		"pulp": 0,                    # banked meta-currency (all materials go through the Pulper)
 		"resources": {},              # resource_type -> lifetime banked (drives hive decor)
 		"unlocks": {},                # "kind:id" -> true
 		"achievements": {},           # id -> unix time unlocked
@@ -36,7 +36,7 @@ static func default_meta() -> Dictionary:
 		"brood": {"lost_rescued": 0, "mutated": {}},  # mutated: id -> true
 		"completion_marks": {},       # caste_id -> {mark_id: true}
 		"trove_seen": {},             # "kind:id" -> true
-		"comb_upgrades": {},          # upgrade_id -> level
+		"upgrades": {},               # hive upgrade_id -> level
 		"runs": {"started": 0, "won": 0, "best_depth": 0},
 	}
 
@@ -58,7 +58,8 @@ static func migrate_meta(d: Dictionary) -> Dictionary:
 	var v: int = int(d.get("version", 0))
 	if v < 1:
 		d = _migrate_meta_v0_to_v1(d)
-	# Future: if v < 2: d = _migrate_meta_v1_to_v2(d)
+	if v < 2:
+		d = _migrate_meta_v1_to_v2(d)
 	# Fill any keys added since (forward-compatible defaults).
 	var defaults := default_meta()
 	for k in defaults:
@@ -70,29 +71,47 @@ static func migrate_meta(d: Dictionary) -> Dictionary:
 
 ## v0 was the pre-release prototype format: {"currency": n, "brood": n}.
 static func _migrate_meta_v0_to_v1(d: Dictionary) -> Dictionary:
-	var out := default_meta()
-	out["comb"] = int(d.get("currency", d.get("comb", 0)))
+	var out := {"version": 1, "comb": int(d.get("currency", d.get("comb", 0))), "brood": {"lost_rescued": 0, "mutated": {}}}
 	var b: Variant = d.get("brood", 0)
 	if b is int or b is float:
 		out["brood"]["lost_rescued"] = int(b)
 	elif b is Dictionary:
 		out["brood"] = b
 	for k in d:
-		if k not in ["currency", "brood", "version"] and out.has(k):
+		if k not in ["currency", "brood", "version", "comb"]:
 			out[k] = d[k]
+	return out
+
+
+## v2: "Comb" currency renamed to "Pulp"; "comb_upgrades" renamed to "upgrades" (user decision Q4).
+static func _migrate_meta_v1_to_v2(d: Dictionary) -> Dictionary:
+	var out := d.duplicate(true)
+	out["pulp"] = int(out.get("pulp", 0)) + int(out.get("comb", 0))
+	out.erase("comb")
+	if out.has("comb_upgrades"):
+		out["upgrades"] = out["comb_upgrades"]
+		out.erase("comb_upgrades")
+	out["version"] = 2
 	return out
 
 
 # Convenience mutators. Callers that must persist immediately (brood rescue, hauls) pass flush=true.
 
-func bank_comb(amount: int, resource_type: String = "", flush: bool = true) -> void:
-	data["comb"] = int(data.get("comb", 0)) + amount
-	if resource_type != "":
-		var res: Dictionary = data["resources"]
-		res[resource_type] = int(res.get(resource_type, 0)) + amount
-	Events.comb_banked.emit(amount)
+## Banks Pulp. `materials` (resource_type -> raw amount) feeds lifetime per-type totals (hive decor).
+func bank_pulp(amount: int, materials: Dictionary = {}, flush: bool = true) -> void:
+	data["pulp"] = int(data.get("pulp", 0)) + amount
+	var res: Dictionary = data["resources"]
+	for t in materials:
+		res[t] = int(res.get(t, 0)) + int(materials[t])
+	Events.pulp_banked.emit(amount)
 	if flush:
 		save_meta()
+
+
+## Lost brood rescue: persisted immediately (DESIGN.md D14).
+func rescue_lost_brood(count: int) -> void:
+	data["brood"]["lost_rescued"] = int(data["brood"].get("lost_rescued", 0)) + count
+	save_meta()
 
 
 func add_counter(key: String, amount: int = 1) -> void:
@@ -127,12 +146,12 @@ static func default_settings() -> Dictionary:
 		"version": SETTINGS_VERSION,
 		"video": {"fullscreen": false, "vsync": true},
 		"audio": {"master": 1.0, "music": 0.7, "sfx": 0.9},
-		"controls": {"aim_mode": "free", "bindings": {}},  # aim_mode: 4dir | 8dir | free
+		"controls": {"aim_mode": "auto", "bindings": {}},  # aim_mode: auto | 4dir | 8dir | free
 		"accessibility": {
 			"screen_shake": 1.0, "hit_stop": true, "flash_reduction": false,
 			"bullet_palette": "default", "high_contrast_projectiles": false, "text_scale": 1.0,
 		},
-		"gameplay": {"show_seed": true},
+		"gameplay": {"show_seed": true, "mods_enabled": false},
 		"locale": "en",
 	}
 

@@ -1,0 +1,33 @@
+{
+  "id": "quartz_lens",
+  "name_key": "ITEM_QUARTZ_LENS_NAME",
+  "desc_key": "ITEM_QUARTZ_LENS_DESC",
+  "note_key": "ITEM_QUARTZ_LENS_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "gem"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 60
+    },
+    {
+      "type": "projectile_mod",
+      "modifier": "homing",
+      "params": {
+        "strength": 1.2
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#a8f0ff"
+  }
+}

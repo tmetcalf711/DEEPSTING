@@ -42,7 +42,10 @@ func execute(line: String) -> String:
 	var args := parts.slice(1)
 	if not _commands.has(cmd):
 		return "Unknown command '%s'. Type 'help'." % cmd
-	var result: Variant = _commands[cmd]["fn"].call(args)
+	var fn: Callable = _commands[cmd]["fn"]
+	if not fn.is_valid():
+		return "'%s' is only available during a run" % cmd
+	var result: Variant = fn.call(args)
 	return str(result) if result != null else ""
 
 
@@ -147,7 +150,7 @@ func _register_builtins() -> void:
 	register("clear", _cmd_clear, "clear")
 	register("seed", _cmd_seed, "seed [XXXX XXXX]  show or set the run seed")
 	register("god", _cmd_god, "god  toggle invulnerability")
-	register("bank", _cmd_bank, "bank <n>  add n Comb to the hive bank")
+	register("bank", _cmd_bank, "bank <n>  add n Pulp to the hive bank")
 	register("unlock_all", _cmd_unlock_all, "unlock_all  unlock every content entry")
 	register("content", _cmd_content, "content  list loaded content counts")
 	register("save", func(_a: PackedStringArray) -> String: return "saved" if MetaSave.save_meta() else "save FAILED", "save")
@@ -196,8 +199,8 @@ func _cmd_god(_args: PackedStringArray) -> String:
 func _cmd_bank(args: PackedStringArray) -> String:
 	if args.is_empty() or not args[0].is_valid_int():
 		return "usage: bank <n>"
-	MetaSave.bank_comb(int(args[0]))
-	return "banked %s, total Comb %d" % [args[0], MetaSave.data["comb"]]
+	MetaSave.bank_pulp(int(args[0]))
+	return "banked %s, total Pulp %d" % [args[0], MetaSave.data["pulp"]]
 
 
 func _cmd_unlock_all(_args: PackedStringArray) -> String:

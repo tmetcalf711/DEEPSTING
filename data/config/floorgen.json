@@ -25,5 +25,9 @@
   "floor1_brood_cells": [
     2,
     4
-  ]
+  ],
+  "required_specials": [
+    "treasure"
+  ],
+  "brood_cell_room_chance": 0.5
 }

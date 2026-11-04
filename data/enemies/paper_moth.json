@@ -1,0 +1,22 @@
+{
+  "id": "paper_moth",
+  "name_key": "ENEMY_PAPER_MOTH_NAME",
+  "archetype": "flyer",
+  "family": "hive",
+  "hp": 6,
+  "radius": 6,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": true,
+  "telegraph": {
+    "windup": 0.4,
+    "sfx": "moth_flutter"
+  },
+  "behavior": {
+    "type": "flyer",
+    "speed": 38,
+    "dive_speed": 120,
+    "dive_interval": 3.0
+  }
+}

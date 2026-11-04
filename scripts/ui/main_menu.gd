@@ -17,10 +17,9 @@ func _ready() -> void:
 	_title.text = tr("GAME_TITLE")
 	_subtitle.text = tr("GAME_TAGLINE")
 	_descend.text = tr("MENU_DESCEND")
-	_descend.tooltip_text = tr("MENU_DESCEND_SOON")
 	_quit.text = tr("MENU_QUIT")
 	_seed_edit.placeholder_text = tr("MENU_SEED_PLACEHOLDER")
-	_version.text = "v%s  ·  Comb %d" % [ProjectSettings.get_setting("application/config/version"), MetaSave.data.get("comb", 0)]
+	_version.text = "v%s  ·  Pulp %d  ·  Brood %d" % [ProjectSettings.get_setting("application/config/version"), MetaSave.data.get("pulp", 0), MetaSave.data["brood"].get("lost_rescued", 0)]
 	_icon.texture = Art.texture("player", "worker")
 	_descend.pressed.connect(_on_descend)
 	_quit.pressed.connect(GameState.quit)
@@ -42,8 +41,7 @@ func _on_descend() -> void:
 	if s < 0:
 		s = RNG.random_seed()
 	RunState.start_new(s)
-	# Milestone 1 replaces this with GameState.goto_scene("run").
-	_seed_status.text = tr("MENU_DESCEND_SOON") + "  [" + RunState.seed_string() + "]"
+	GameState.goto_scene("run")
 
 
 func _unhandled_input(event: InputEvent) -> void:

@@ -9,6 +9,7 @@ extends Node
 ## non-resource include filter (see CLAUDE.md).
 
 const DATA_ROOT := "res://data"
+const MOD_ROOT := "user://mods"  # D16: user://mods/<mod>/data/<category>/**.json
 const MetaSaveScript := preload("res://scripts/autoload/meta_save.gd")
 
 ## Required fields per category: field -> expected Variant.Type (TYPE_NIL = any).
@@ -28,9 +29,13 @@ const SCHEMA: Dictionary = {
 	"curses": {"id": TYPE_STRING, "name_key": TYPE_STRING},
 	"strata": {"id": TYPE_STRING, "name_key": TYPE_STRING, "chapter": TYPE_INT},
 	"config": {"id": TYPE_STRING},
+	"pickups": {"id": TYPE_STRING, "kind": TYPE_STRING, "value": TYPE_INT},
+	"resources": {"id": TYPE_STRING, "name_key": TYPE_STRING, "pulp_value": TYPE_INT},
 }
 
 const ITEM_KINDS: PackedStringArray = ["passive", "active"]
+const PICKUP_KINDS: PackedStringArray = ["mana", "heart", "chitin", "toxic_chitin", "dig_charge", "royal_jelly"]
+const ROOM_TYPES: PackedStringArray = ["normal", "start", "boss", "treasure", "secret", "super_secret", "brood_cell", "shop", "miniboss"]
 const ROOM_SHAPES: PackedStringArray = ["1x1", "2x1", "1x2", "2x2", "L_ne", "L_nw", "L_se", "L_sw"]
 
 var _db: Dictionary = {}     # category -> {id -> entry}
@@ -48,6 +53,11 @@ func reload() -> void:
 		_db[category] = {}
 		for path in list_json_files(DATA_ROOT.path_join(category)):
 			_load_file(category, path)
+	if mods_enabled():
+		for mod in DirAccess.get_directories_at(MOD_ROOT):
+			for category in SCHEMA:
+				for path in list_json_files(MOD_ROOT.path_join(mod).path_join("data").path_join(category)):
+					_load_file(category, path, true)
 	errors.append_array(cross_check())
 	if not errors.is_empty():
 		for e in errors:
@@ -61,6 +71,12 @@ func cross_check() -> PackedStringArray:
 		for e in pool["entries"]:
 			if not (has_entry("items", e["id"]) or has_entry("trinkets", e["id"])):
 				out.append("pool '%s' references unknown item '%s'" % [pool["id"], e["id"]])
+	for table_name in get_entry("config", "drops"):
+		var t: Variant = get_entry("config", "drops")[table_name]
+		if t is Dictionary and t.has("table"):
+			for e in t["table"]:
+				if not has_entry("pickups", e["id"]):
+					out.append("drop table '%s' references unknown pickup '%s'" % [table_name, e["id"]])
 	for ach in all("achievements"):
 		for u in ach["unlocks"]:
 			if _db.has(u.get("kind", "")) and not has_entry(u["kind"], u.get("id", "")):
@@ -68,7 +84,7 @@ func cross_check() -> PackedStringArray:
 	for room in all("rooms"):
 		for sp in room.get("spawns", []):
 			var eid: String = sp.get("enemy", "")
-			if not (has_entry("enemies", eid) or has_entry("bosses", eid)):
+			if eid != "@boss" and not (has_entry("enemies", eid) or has_entry("bosses", eid)):
 				out.append("room '%s' spawns unknown enemy '%s'" % [room["id"], eid])
 	return out
 
@@ -95,7 +111,14 @@ func count(category: String) -> int:
 	return _db.get(category, {}).size()
 
 
-func _load_file(category: String, path: String) -> void:
+func mods_enabled() -> bool:
+	if not is_inside_tree():
+		return false
+	var ms: Node = get_node_or_null("/root/MetaSave")
+	return ms != null and bool(ms.settings.get("gameplay", {}).get("mods_enabled", false)) and DirAccess.dir_exists_absolute(MOD_ROOT)
+
+
+func _load_file(category: String, path: String, allow_override: bool = false) -> void:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not parsed is Dictionary:
 		errors.append("%s: not a JSON object" % path)
@@ -109,7 +132,7 @@ func _load_file(category: String, path: String) -> void:
 	if path.get_file().get_basename() != entry["id"]:
 		errors.append("%s: id '%s' must match file name" % [path, entry["id"]])
 		return
-	if _db[category].has(entry["id"]):
+	if _db[category].has(entry["id"]) and not allow_override:
 		errors.append("%s: duplicate id '%s'" % [path, entry["id"]])
 		return
 	entry["_path"] = path
@@ -153,9 +176,29 @@ static func validate(category: String, entry: Dictionary) -> PackedStringArray:
 					if str(row).length() != w:
 						out.append("grid rows must all be the same width")
 						break
+			if grid.size() == 7 and str(grid[0]).length() == 13:
+				# Door entry lanes must stay walkable (the player spawns there on entry).
+				var lanes := {"N": [Vector2i(6, 0), Vector2i(6, 1)], "S": [Vector2i(6, 5), Vector2i(6, 6)],
+					"W": [Vector2i(0, 3), Vector2i(1, 3)], "E": [Vector2i(11, 3), Vector2i(12, 3)]}
+				for d in entry["doors"]:
+					for t in lanes.get(str(d), []):
+						var ch := str(grid[t.y])[t.x]
+						if not ch in [".", "S", "D"]:
+							out.append("door %s entry tile %s must be walkable (found '%s')" % [d, t, ch])
+				for sp in entry.get("spawns", []):
+					var at: Array = sp.get("at", [0, 0])
+					var ch2 := str(grid[int(at[1])])[int(at[0])]
+					if not ch2 in [".", "D"]:
+						out.append("spawn %s at %s is on '%s'" % [sp.get("enemy", "?"), at, ch2])
+			for t in entry.get("room_types", ["normal"]):
+				if not ROOM_TYPES.has(str(t)):
+					out.append("unknown room type '%s'" % t)
 			for d in entry["doors"]:
 				if not str(d) in ["N", "E", "S", "W", "N2", "E2", "S2", "W2"]:
 					out.append("bad door '%s'" % d)
+		"pickups":
+			if not PICKUP_KINDS.has(entry["kind"]):
+				out.append("pickup kind must be one of %s" % [PICKUP_KINDS])
 		"pools":
 			for e in entry["entries"]:
 				if not (e is Dictionary and e.has("id")):

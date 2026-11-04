@@ -5,13 +5,31 @@
   "floor_slot": "A",
   "always_first": true,
   "resources": [
-    "wood_pulp",
-    "protein"
+    {
+      "id": "wood_pulp",
+      "weight": 3
+    },
+    {
+      "id": "protein",
+      "weight": 2
+    },
+    {
+      "id": "nectar",
+      "weight": 1
+    }
   ],
   "palette": {
     "floor": "#3a2c1e",
-    "wall": "#5b4630",
+    "floor_alt": "#33261a",
+    "wall": "#6b5236",
+    "wall_top": "#8a6a45",
     "accent": "#d9a441"
   },
-  "music": "hive_theme"
+  "music": "hive_theme",
+  "enemies": [
+    "twin_grub",
+    "bloat_tick",
+    "paper_moth",
+    "feral_ant"
+  ]
 }

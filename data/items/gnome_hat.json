@@ -17,11 +17,12 @@
   "effects": [
     {
       "type": "health",
-      "honeycomb": 2
+      "heart_containers": 1,
+      "heal": 2
     },
     {
       "type": "flag",
-      "name": "rock_forage_bonus"
+      "name": "rock_mana_bonus"
     }
   ],
   "visual": {

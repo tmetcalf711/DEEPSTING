@@ -24,13 +24,16 @@ signal consumables_changed()
 
 # --- Economy / colony ---
 signal haul_started(room_index: int, value: int)
-signal haul_completed(room_index: int, resource_type: String, value: int)
+signal haul_completed(room_index: int, value: int)
 signal brood_rescued(brood_id: String, mutated: bool)
-signal comb_banked(amount: int)
+signal pulp_banked(amount: int)
+signal stash_changed(total: int)
 
 # --- Combat ---
 signal enemy_killed(enemy_id: String, champion: bool)
 signal boss_killed(boss_id: String, no_damage: bool)
+signal boss_health_changed(fraction: float)
+signal boss_spawned(boss_id: String)
 
 # --- Meta ---
 signal achievement_unlocked(achievement_id: String)
@@ -38,3 +41,6 @@ signal content_unlocked(kind: String, id: String)
 
 # --- Debug ---
 signal debug_message(text: String)
+signal toast(text: String)
+signal banner(title: String, subtitle: String)
+signal minimap_changed()

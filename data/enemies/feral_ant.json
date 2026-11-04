@@ -1,0 +1,21 @@
+{
+  "id": "feral_ant",
+  "name_key": "ENEMY_FERAL_ANT_NAME",
+  "archetype": "swarmer",
+  "family": "hive",
+  "hp": 4,
+  "radius": 4,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.0,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "swarm",
+    "speed": 62,
+    "flank": 22
+  }
+}

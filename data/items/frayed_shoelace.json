@@ -1,0 +1,28 @@
+{
+  "id": "frayed_shoelace",
+  "name_key": "ITEM_FRAYED_SHOELACE_NAME",
+  "desc_key": "ITEM_FRAYED_SHOELACE_DESC",
+  "note_key": "ITEM_FRAYED_SHOELACE_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "move_speed",
+      "add": 0.2
+    },
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": 0.15
+    }
+  ]
+}

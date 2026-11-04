@@ -1,0 +1,6 @@
+{
+  "id": "mana_fragment",
+  "kind": "mana",
+  "value": 5,
+  "name_key": "PICKUP_MANA_FRAGMENT_NAME"
+}

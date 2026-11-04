@@ -1,0 +1,6 @@
+{
+  "id": "mana_chip",
+  "kind": "mana",
+  "value": 1,
+  "name_key": "PICKUP_MANA_CHIP_NAME"
+}

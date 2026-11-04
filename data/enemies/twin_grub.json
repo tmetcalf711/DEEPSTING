@@ -4,16 +4,18 @@
   "archetype": "chaser",
   "family": "hive",
   "hp": 10,
-  "speed": 55,
+  "radius": 6,
   "contact_damage": 1,
   "radiation": 1,
   "champion_ok": true,
+  "flying": false,
   "telegraph": {
     "windup": 0.5,
     "sfx": "grub_hiss"
   },
   "behavior": {
     "type": "chase",
-    "stutter_chance": 0.15
+    "speed": 42,
+    "stutter_chance": 0.2
   }
 }

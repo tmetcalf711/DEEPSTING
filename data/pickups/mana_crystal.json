@@ -1,0 +1,6 @@
+{
+  "id": "mana_crystal",
+  "kind": "mana",
+  "value": 25,
+  "name_key": "PICKUP_MANA_CRYSTAL_NAME"
+}

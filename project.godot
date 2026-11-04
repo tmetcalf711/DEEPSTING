@@ -6,8 +6,8 @@ config_version=5
 [application]
 
 config/name="DeepSting"
-config/description="Top-down 2.5D roguelite twin-stick shooter. Dig down. Sting everything. Bring the treasure home."
-config/version="0.0.1-m0"
+config/description="Top-down 2.5D roguelite twin-stick shooter. Stung too deep."
+config/version="0.1.0-m1"
 run/main_scene="res://scenes/ui/main_menu.tscn"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="DeepSting"

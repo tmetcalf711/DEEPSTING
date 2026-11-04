@@ -27,7 +27,7 @@ func _wipe_dir() -> void:
 
 
 func test_meta_round_trip() -> void:
-	save.data["comb"] = 321
+	save.data["pulp"] = 321
 	save.data["unlocks"]["items:raw_geode"] = true
 	save.data["brood"]["lost_rescued"] = 7
 	save.data["brood"]["mutated"]["pip"] = true
@@ -42,29 +42,32 @@ func test_missing_file_gives_defaults() -> void:
 
 
 func test_corrupt_main_falls_back_to_backup() -> void:
-	save.data["comb"] = 10
+	save.data["pulp"] = 10
 	save.save_meta()
-	save.data["comb"] = 20
+	save.data["pulp"] = 20
 	save.save_meta()  # 10 is now in .bak
 	var f := FileAccess.open(DIR.path_join("meta.json"), FileAccess.WRITE)
 	f.store_string("{ not json")
 	f.close()
-	assert_eq(int(save.load_meta()["comb"]), 10)
+	assert_eq(int(save.load_meta()["pulp"]), 10)
 
 
 func test_migrate_v0() -> void:
 	var v0 := {"currency": 55, "brood": 3}
 	var m: Dictionary = MetaSaveScript.migrate_meta(v0)
 	assert_eq(m["version"], MetaSaveScript.META_VERSION)
-	assert_eq(m["comb"], 55)
+	assert_eq(m["pulp"], 55, "v0 currency -> v1 comb -> v2 pulp")
+	assert_false(m.has("comb"))
 	assert_eq(m["brood"]["lost_rescued"], 3)
 	assert_true(m.has("unlocks"))
 
 
 func test_migrate_fills_new_keys() -> void:
-	var partial := {"version": 1, "comb": 4}
+	var partial := {"version": 1, "comb": 4, "comb_upgrades": {"x": 1}}
 	var m: Dictionary = MetaSaveScript.migrate_meta(partial)
-	assert_eq(m["comb"], 4)
+	assert_eq(m["pulp"], 4)
+	assert_eq(m["upgrades"], {"x": 1})
+	assert_false(m.has("comb_upgrades"))
 	assert_true(m.has("completion_marks"))
 
 

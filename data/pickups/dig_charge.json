@@ -1,0 +1,6 @@
+{
+  "id": "dig_charge",
+  "kind": "dig_charge",
+  "value": 1,
+  "name_key": "PICKUP_DIG_CHARGE_NAME"
+}
