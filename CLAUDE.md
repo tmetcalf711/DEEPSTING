@@ -19,6 +19,7 @@ godot --headless -s res://tools/validate_data.gd   # data validator only
 godot --headless -s res://tools/smoke_run.gd       # smoke run only
 xvfb-run -a godot --rendering-driver opengl3 --resolution 1280x720 -s res://tools/capture_screens.gd -- /some/dir   # review screenshots
 ```
+- `play.bat` / `play.sh`: end-user launchers (update via git or zip, fetch Godot, import, play). Keep `GODOT_VERSION` in them in sync with the engine version.
 - After adding a new `class_name`, run `godot --headless --import` once so the global class cache knows it.
 - Headless input in tools: use `Input.action_press/release`, not `parse_input_event`.
 - Engine: **Godot 4.7.2 stable** (Compatibility renderer). Set `GODOT=/path/to/godot` for run_tests.sh if it's not on PATH.
