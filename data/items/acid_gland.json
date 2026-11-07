@@ -1,0 +1,33 @@
+{
+  "id": "acid_gland",
+  "name_key": "ITEM_ACID_GLAND_NAME",
+  "desc_key": "ITEM_ACID_GLAND_DESC",
+  "note_key": "ITEM_ACID_GLAND_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "boss",
+    "mutation"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "mutation"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "element",
+      "params": {
+        "element": "poison"
+      }
+    },
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.3
+    }
+  ],
+  "visual": {
+    "tint": "#7dff3a"
+  }
+}

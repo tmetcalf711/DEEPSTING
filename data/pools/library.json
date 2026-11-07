@@ -1,0 +1,27 @@
+{
+  "id": "library",
+  "name_key": "POOL_LIBRARY_NAME",
+  "fallback": "dig_site",
+  "entries": [
+    {
+      "id": "field_journal",
+      "weight": 1.0
+    },
+    {
+      "id": "mole_map",
+      "weight": 1.0
+    },
+    {
+      "id": "pressed_flower",
+      "weight": 1.0
+    },
+    {
+      "id": "quartz_lens",
+      "weight": 1.0
+    },
+    {
+      "id": "reading_glasses",
+      "weight": 1.0
+    }
+  ]
+}

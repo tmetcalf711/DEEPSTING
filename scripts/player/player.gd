@@ -85,6 +85,9 @@ func _physics_process(delta: float) -> void:
 	_flash = maxf(0.0, _flash - delta)
 	var move := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var speed := RunState.stat("move_speed") * SPEED_UNIT
+	var rc := RunController.instance
+	if rc.room and rc.room.hazard_at(global_position) == "sludge" and not RunState.flags.get("flight", false):
+		speed *= 0.55  # sludge sticks to wings
 	if _dash_t > 0.0:
 		_dash_t -= delta
 	else:
@@ -97,7 +100,7 @@ func _physics_process(delta: float) -> void:
 			_dash_t = DASH_TIME
 			_dash_cd = DASH_COOLDOWN
 			_iframes = maxf(_iframes, DASH_TIME + 0.04)
-			RunController.instance.fx.burst(global_position, Color(1, 0.9, 0.5, 0.6), 6, 30.0, 1.0)
+			rc.fx.burst(global_position, Color(1, 0.9, 0.5, 0.6), 6, 30.0, 1.0)
 			Audio.play_sfx("dash")
 	if move != Vector2.ZERO:
 		facing = move.normalized()

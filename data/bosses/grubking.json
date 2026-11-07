@@ -1,0 +1,50 @@
+{
+  "id": "grubking",
+  "name_key": "BOSS_GRUBKING_NAME",
+  "title_key": "BOSS_GRUBKING_TITLE",
+  "chapter": 1,
+  "strata": [
+    "hive",
+    "topsoil"
+  ],
+  "hp": 200,
+  "radius": 15,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": "grubking_roar"
+  },
+  "split_into": {
+    "enemy": "grubling",
+    "count": 2
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 26,
+    "minion": "twin_grub",
+    "max_minions": 3,
+    "kill_minions_on_death": false,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "aimed_fan",
+          "charge",
+          "spawn_minions"
+        ]
+      },
+      {
+        "until_hp": 0.0,
+        "patterns": [
+          "charge",
+          "ring_burst",
+          "aimed_fan",
+          "charge"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

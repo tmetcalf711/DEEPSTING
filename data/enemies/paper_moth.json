@@ -18,5 +18,9 @@
     "speed": 38,
     "dive_speed": 120,
     "dive_interval": 3.0
-  }
+  },
+  "strata": [
+    "hive",
+    "topsoil"
+  ]
 }

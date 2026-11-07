@@ -21,7 +21,7 @@ func _ready() -> void:
 	_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.draw.connect(_draw_hud)
 	add_child(_root)
-	for k in ["mana", "dig_charge", "royal_jelly", "stash"]:
+	for k in ["mana", "dig_charge", "royal_jelly", "stash", "curse"]:
 		var l := _label(8)
 		_root.add_child(l)
 		_labels[k] = l
@@ -107,6 +107,10 @@ func _process(delta: float) -> void:
 	_labels["dig_charge"].position = Vector2(20, 41)
 	_labels["royal_jelly"].position = Vector2(20, 52)
 	_labels["stash"].position = Vector2(vp.x - 100, 72)
+	var rc := RunController.instance
+	_labels["curse"].text = tr(Content.get_entry("curses", rc.curse_id).get("name_key", "")) if rc and rc.curse_id != "" else ""
+	_labels["curse"].position = Vector2(8, 64)
+	_labels["curse"].add_theme_color_override("font_color", Color(0.75, 0.55, 0.95))
 	_root.queue_redraw()
 
 

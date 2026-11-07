@@ -1,0 +1,29 @@
+{
+  "id": "wax_wings",
+  "name_key": "ITEM_WAX_WINGS_NAME",
+  "desc_key": "ITEM_WAX_WINGS_DESC",
+  "note_key": "ITEM_WAX_WINGS_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "royal"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "royal"
+  ],
+  "effects": [
+    {
+      "type": "flag",
+      "name": "flight"
+    },
+    {
+      "type": "stat_mod",
+      "stat": "move_speed",
+      "add": 0.1
+    }
+  ],
+  "visual": {
+    "player_overlay": "wax_wings"
+  }
+}

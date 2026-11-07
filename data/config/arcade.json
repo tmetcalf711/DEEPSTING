@@ -1,0 +1,79 @@
+{
+  "id": "arcade",
+  "machines": {
+    "slot_beetle": {
+      "cost": 1,
+      "outcomes": [
+        {
+          "weight": 55,
+          "result": "nothing"
+        },
+        {
+          "weight": 20,
+          "result": "pickup",
+          "id": "mana_chip",
+          "count": 2
+        },
+        {
+          "weight": 8,
+          "result": "pickup",
+          "id": "mana_fragment"
+        },
+        {
+          "weight": 8,
+          "result": "pickup",
+          "id": "heart_half"
+        },
+        {
+          "weight": 6,
+          "result": "pickup",
+          "id": "dig_charge"
+        },
+        {
+          "weight": 3,
+          "result": "enemy",
+          "id": "paper_moth"
+        }
+      ]
+    },
+    "fortune_worm": {
+      "cost": 1,
+      "outcomes": [
+        {
+          "weight": 65,
+          "result": "fortune"
+        },
+        {
+          "weight": 12,
+          "result": "pickup",
+          "id": "chitin"
+        },
+        {
+          "weight": 12,
+          "result": "pickup",
+          "id": "royal_jelly"
+        },
+        {
+          "weight": 11,
+          "result": "pickup",
+          "id": "mana_chip",
+          "count": 3
+        }
+      ]
+    },
+    "crane": {
+      "cost": 5,
+      "outcomes": [
+        {
+          "weight": 70,
+          "result": "nothing"
+        },
+        {
+          "weight": 30,
+          "result": "item",
+          "pool": "dig_site"
+        }
+      ]
+    }
+  }
+}

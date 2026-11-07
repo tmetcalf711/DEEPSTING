@@ -17,5 +17,9 @@
     "type": "chase",
     "speed": 42,
     "stutter_chance": 0.2
-  }
+  },
+  "strata": [
+    "hive",
+    "topsoil"
+  ]
 }

@@ -1,0 +1,22 @@
+{
+  "id": "key_ring",
+  "name_key": "ITEM_KEY_RING_NAME",
+  "desc_key": "ITEM_KEY_RING_DESC",
+  "note_key": "ITEM_KEY_RING_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "consumables",
+      "royal_jelly": 2,
+      "mana": 3
+    }
+  ]
+}

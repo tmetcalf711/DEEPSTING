@@ -1,0 +1,32 @@
+{
+  "id": "glowing_tumor",
+  "name_key": "ITEM_GLOWING_TUMOR_NAME",
+  "desc_key": "ITEM_GLOWING_TUMOR_DESC",
+  "note_key": "ITEM_GLOWING_TUMOR_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "mutation"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "mutation"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 1.5
+    },
+    {
+      "type": "projectile_mod",
+      "modifier": "size",
+      "params": {
+        "mult": 1.3
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#9cff5a"
+  }
+}

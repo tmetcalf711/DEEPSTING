@@ -1,0 +1,33 @@
+{
+  "id": "salt_lick",
+  "name_key": "ITEM_SALT_LICK_NAME",
+  "desc_key": "ITEM_SALT_LICK_DESC",
+  "note_key": "ITEM_SALT_LICK_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "gem"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": 0.3
+    },
+    {
+      "type": "projectile_mod",
+      "modifier": "element",
+      "params": {
+        "element": "slow"
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#e8f6ff"
+  }
+}

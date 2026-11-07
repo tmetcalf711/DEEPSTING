@@ -75,7 +75,11 @@ func _set_open(on: bool) -> void:
 			names.append(tr(Content.get_entry("items", id).get("name_key", id)))
 		if RunState.active_item != "":
 			names.append(tr(Content.get_entry("items", RunState.active_item).get("name_key", "")) + " *")
-		_info.text = tr("PAUSE_INFO") % [RunState.seed_string(), int(RunState.elapsed) / 60, int(RunState.elapsed) % 60,
+		var rc := RunController.instance
+		var where := tr(rc.stratum.get("name_key", "")) + "  ·  " + (tr("BANNER_FLOOR") % (RunState.floor_index + 1))
+		if rc.curse_id != "":
+			where += "  ·  " + tr(Content.get_entry("curses", rc.curse_id).get("name_key", ""))
+		_info.text = where + "\n" + tr("PAUSE_INFO") % [RunState.seed_string(), int(RunState.elapsed) / 60, int(RunState.elapsed) % 60,
 			s["damage"], s["fire_rate"], s["shot_speed"], s["range"], s["move_speed"], s["luck"],
 			RunState.stash_total(), ", ".join(names) if not names.is_empty() else "-"]
 		_resume.grab_focus()

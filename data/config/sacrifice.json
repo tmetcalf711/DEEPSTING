@@ -1,0 +1,73 @@
+{
+  "id": "sacrifice",
+  "damage": 1,
+  "uses": [
+    [
+      {
+        "weight": 1,
+        "result": "pickup",
+        "id": "mana_fragment"
+      },
+      {
+        "weight": 1,
+        "result": "nothing"
+      }
+    ],
+    [
+      {
+        "weight": 1,
+        "result": "pickup",
+        "id": "chitin"
+      },
+      {
+        "weight": 1,
+        "result": "nothing"
+      }
+    ],
+    [
+      {
+        "weight": 2,
+        "result": "pickups",
+        "id": "mana_chip",
+        "count": 4
+      },
+      {
+        "weight": 1,
+        "result": "nothing"
+      }
+    ],
+    [
+      {
+        "weight": 1,
+        "result": "item",
+        "pool": "dig_site"
+      },
+      {
+        "weight": 1,
+        "result": "nothing"
+      }
+    ],
+    [
+      {
+        "weight": 1,
+        "result": "item",
+        "pool": "royal"
+      },
+      {
+        "weight": 2,
+        "result": "nothing"
+      }
+    ],
+    [
+      {
+        "weight": 1,
+        "result": "pickup",
+        "id": "toxic_chitin"
+      },
+      {
+        "weight": 1,
+        "result": "nothing"
+      }
+    ]
+  ]
+}

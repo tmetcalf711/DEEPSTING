@@ -10,7 +10,7 @@ class P:
 	var max_life := 1.0
 	var size := 1.0
 	var color := Color.WHITE
-	var kind := 0  # 0 dot, 1 ring, 2 flash
+	var kind := 0  # 0 dot, 1 ring, 2 warning circle
 	var grav := 0.0
 
 var parts: Array[P] = []
@@ -59,6 +59,11 @@ func ring(pos: Vector2, radius: float, color: Color, life: float = 0.3) -> void:
 	_add(1, pos, Vector2.ZERO, life, radius, color)
 
 
+## Telegraph circle on the ground (falling rubble etc.) that fills up until it lands.
+func warn(pos: Vector2, radius: float, duration: float) -> void:
+	_add(2, pos, Vector2.ZERO, duration, radius, Color(0.9, 0.2, 0.2, 0.8))
+
+
 func dust(pos: Vector2) -> void:
 	var r := _rng()
 	for i in 3:
@@ -92,9 +97,15 @@ func _draw() -> void:
 	for p in parts:
 		var t := p.life / p.max_life
 		var c := p.color
-		c.a *= t
+		if p.kind != 2:
+			c.a *= t
 		match p.kind:
 			0:
 				draw_rect(Rect2(p.pos - Vector2.ONE * p.size * 0.5, Vector2.ONE * p.size), c)
 			1:
 				draw_arc(p.pos, p.size * (1.0 - t * 0.6), 0, TAU, 24, c, 2.0)
+			2:
+				var k := 1.0 - t
+				draw_circle(p.pos, p.size, Color(0, 0, 0, 0.25 + 0.25 * k))
+				draw_circle(p.pos, p.size * k, Color(p.color.r, p.color.g, p.color.b, 0.35))
+				draw_arc(p.pos, p.size, 0, TAU, 20, Color(p.color.r, p.color.g, p.color.b, 0.9), 1.0)

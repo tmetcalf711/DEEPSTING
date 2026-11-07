@@ -1,0 +1,22 @@
+{
+  "id": "royal_wax_seal",
+  "name_key": "ITEM_ROYAL_WAX_SEAL_NAME",
+  "desc_key": "ITEM_ROYAL_WAX_SEAL_DESC",
+  "note_key": "ITEM_ROYAL_WAX_SEAL_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "royal",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "royal"
+  ],
+  "effects": [
+    {
+      "type": "health",
+      "chitin": 4
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "jelly_crown",
+  "name_key": "ITEM_JELLY_CROWN_NAME",
+  "desc_key": "ITEM_JELLY_CROWN_DESC",
+  "note_key": "ITEM_JELLY_CROWN_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "royal",
+    "vault"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "royal"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "spectral",
+      "params": {}
+    },
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "mult": 1.2
+    }
+  ],
+  "visual": {
+    "tint": "#fff3b0"
+  }
+}

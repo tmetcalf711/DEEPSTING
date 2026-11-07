@@ -1,0 +1,7 @@
+{
+  "id": "tremor",
+  "name_key": "CURSE_TREMOR_NAME",
+  "desc_key": "CURSE_TREMOR_DESC",
+  "effect": "lost_map",
+  "weight": 1.0
+}

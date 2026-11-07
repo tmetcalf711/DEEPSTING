@@ -122,5 +122,56 @@
       2,
       5
     ]
+  },
+  "miniboss": {
+    "chance": 1.0,
+    "table": [
+      {
+        "id": "heart_full",
+        "weight": 2
+      },
+      {
+        "id": "chitin",
+        "weight": 2
+      },
+      {
+        "id": "royal_jelly",
+        "weight": 2
+      },
+      {
+        "id": "dig_charge",
+        "weight": 2
+      },
+      {
+        "id": "mana_fragment",
+        "weight": 2
+      }
+    ]
+  },
+  "curse_room": {
+    "chance": 1.0,
+    "table": [
+      {
+        "id": "chitin",
+        "weight": 2
+      },
+      {
+        "id": "toxic_chitin",
+        "weight": 2
+      }
+    ]
+  },
+  "vault": {
+    "chance": 1.0,
+    "table": [
+      {
+        "id": "mana_fragment",
+        "weight": 2
+      },
+      {
+        "id": "mana_chunk",
+        "weight": 1
+      }
+    ]
   }
 }

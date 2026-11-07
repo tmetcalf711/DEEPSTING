@@ -1,0 +1,51 @@
+{
+  "id": "topsoil_t05",
+  "stratum": [
+    "topsoil"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".T.........R.",
+    ".............",
+    "..R..R.R..R..",
+    ".............",
+    ".R.........T.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "paper_moth",
+      "at": [
+        3,
+        1
+      ]
+    },
+    {
+      "enemy": "paper_moth",
+      "at": [
+        9,
+        5
+      ]
+    },
+    {
+      "enemy": "root_grub",
+      "at": [
+        6,
+        1
+      ]
+    }
+  ],
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ]
+}

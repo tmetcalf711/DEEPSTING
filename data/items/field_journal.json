@@ -1,0 +1,24 @@
+{
+  "id": "field_journal",
+  "name_key": "ITEM_FIELD_JOURNAL_NAME",
+  "desc_key": "ITEM_FIELD_JOURNAL_DESC",
+  "note_key": "ITEM_FIELD_JOURNAL_NOTE",
+  "quality": 2,
+  "kind": "active",
+  "pools": [
+    "library",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "active",
+      "ability": "reveal_map",
+      "charge": 3,
+      "params": {}
+    }
+  ]
+}

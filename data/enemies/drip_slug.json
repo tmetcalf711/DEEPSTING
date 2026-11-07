@@ -1,0 +1,26 @@
+{
+  "id": "drip_slug",
+  "name_key": "ENEMY_DRIP_SLUG_NAME",
+  "archetype": "creep",
+  "family": "topsoil",
+  "strata": [
+    "topsoil"
+  ],
+  "hp": 14,
+  "radius": 6,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "creep",
+    "speed": 22,
+    "drop_interval": 0.55,
+    "creep": "sludge",
+    "creep_life": 5.0
+  }
+}

@@ -39,16 +39,18 @@ func _physics_process(delta: float) -> void:
 	var d := player.global_position.distance_to(global_position)
 	if data["kind"] == "mana" and d < 26.0:
 		position = position.move_toward(player.global_position, 90.0 * delta)
-	if d < 10.0 and _try_collect():
+	if d < 10.0 and apply_pickup(data):
 		collected = true
 		RunController.instance.fx.burst(global_position, Color(1, 1, 0.8), 6, 40.0, 1.0)
 		Audio.play_sfx("pickup_" + str(data["kind"]))
 		queue_free()
 
 
-func _try_collect() -> bool:
-	var v: int = int(data["value"])
-	match str(data["kind"]):
+## Applies a pickup's effect to the run. Returns false (and changes nothing) if it wouldn't help,
+## e.g. a heart at full health. Shared with shop wares.
+static func apply_pickup(d: Dictionary) -> bool:
+	var v: int = int(d["value"])
+	match str(d["kind"]):
 		"mana":
 			if RunState.mana >= RunState.MAX_CONSUMABLE:
 				return false
@@ -61,7 +63,7 @@ func _try_collect() -> bool:
 		"chitin", "toxic_chitin":
 			if not RunState.can_add_shield():
 				return false
-			RunState.add_shield("chitin" if data["kind"] == "chitin" else "toxic", v)
+			RunState.add_shield("chitin" if d["kind"] == "chitin" else "toxic", v)
 			Events.player_healed.emit(v)
 		"dig_charge":
 			RunState.add_dig_charges(v)

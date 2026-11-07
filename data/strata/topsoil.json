@@ -1,0 +1,40 @@
+{
+  "id": "topsoil",
+  "name_key": "STRATUM_TOPSOIL_NAME",
+  "chapter": 1,
+  "floor_slot": "B",
+  "resources": [
+    {
+      "id": "wood_pulp",
+      "weight": 2
+    },
+    {
+      "id": "protein",
+      "weight": 2
+    },
+    {
+      "id": "nectar",
+      "weight": 2
+    },
+    {
+      "id": "minerals",
+      "weight": 1
+    }
+  ],
+  "palette": {
+    "floor": "#3b2d1d",
+    "floor_alt": "#35281a",
+    "wall": "#5a4a2c",
+    "wall_top": "#6f8a3a",
+    "accent": "#9ccf5a"
+  },
+  "music": "topsoil_theme",
+  "enemies": [
+    "root_grub",
+    "mole_cricket",
+    "drip_slug",
+    "rust_beetle",
+    "paper_moth",
+    "feral_ant"
+  ]
+}

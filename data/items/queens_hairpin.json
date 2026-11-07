@@ -1,0 +1,28 @@
+{
+  "id": "queens_hairpin",
+  "name_key": "ITEM_QUEENS_HAIRPIN_NAME",
+  "desc_key": "ITEM_QUEENS_HAIRPIN_DESC",
+  "note_key": "ITEM_QUEENS_HAIRPIN_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "royal",
+    "vault"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "royal"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.7
+    },
+    {
+      "type": "stat_mod",
+      "stat": "fire_rate",
+      "add": 0.3
+    }
+  ]
+}

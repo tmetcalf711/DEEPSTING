@@ -1,0 +1,33 @@
+{
+  "id": "rusted_nail",
+  "name_key": "ITEM_RUSTED_NAIL_NAME",
+  "desc_key": "ITEM_RUSTED_NAIL_DESC",
+  "note_key": "ITEM_RUSTED_NAIL_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "cursed",
+    "secret"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 1.0
+    },
+    {
+      "type": "projectile_mod",
+      "modifier": "element",
+      "params": {
+        "element": "poison"
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#b5652d"
+  }
+}

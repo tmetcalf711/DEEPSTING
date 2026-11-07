@@ -1,0 +1,19 @@
+{
+  "id": "cursed",
+  "name_key": "POOL_CURSED_NAME",
+  "fallback": "dig_site",
+  "entries": [
+    {
+      "id": "cursed_locket",
+      "weight": 1.0
+    },
+    {
+      "id": "rad_heart",
+      "weight": 1.0
+    },
+    {
+      "id": "rusted_nail",
+      "weight": 1.0
+    }
+  ]
+}

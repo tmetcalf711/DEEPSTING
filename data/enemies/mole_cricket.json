@@ -1,0 +1,27 @@
+{
+  "id": "mole_cricket",
+  "name_key": "ENEMY_MOLE_CRICKET_NAME",
+  "archetype": "burrower",
+  "family": "topsoil",
+  "strata": [
+    "topsoil"
+  ],
+  "hp": 12,
+  "radius": 6,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": "cricket_chirp"
+  },
+  "behavior": {
+    "type": "burrow",
+    "dig_speed": 70,
+    "under_time": 1.3,
+    "surface_time": 1.6,
+    "ring": 6,
+    "bullet_speed": 75
+  }
+}

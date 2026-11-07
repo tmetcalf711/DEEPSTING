@@ -1,0 +1,34 @@
+{
+  "id": "shop",
+  "item_slots": 2,
+  "consumable_slots": 3,
+  "item_prices_by_quality": [
+    10,
+    15,
+    15,
+    20,
+    25
+  ],
+  "consumables": [
+    {
+      "id": "heart_full",
+      "price": 3,
+      "weight": 3
+    },
+    {
+      "id": "dig_charge",
+      "price": 5,
+      "weight": 3
+    },
+    {
+      "id": "royal_jelly",
+      "price": 5,
+      "weight": 3
+    },
+    {
+      "id": "chitin",
+      "price": 5,
+      "weight": 1.5
+    }
+  ]
+}

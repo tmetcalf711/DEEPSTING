@@ -1,7 +1,7 @@
 {
   "id": "hive_brood_den",
   "stratum": [
-    "hive"
+    "*"
   ],
   "shape": "1x1",
   "room_types": [

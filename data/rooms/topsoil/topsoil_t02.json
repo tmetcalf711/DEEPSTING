@@ -1,0 +1,44 @@
+{
+  "id": "topsoil_t02",
+  "stratum": [
+    "topsoil"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".X.........X.",
+    ".............",
+    "....R...R....",
+    ".............",
+    ".X.........X.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "mole_cricket",
+      "at": [
+        3,
+        2
+      ]
+    },
+    {
+      "enemy": "mole_cricket",
+      "at": [
+        9,
+        4
+      ]
+    }
+  ],
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ]
+}

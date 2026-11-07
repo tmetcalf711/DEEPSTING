@@ -1,0 +1,27 @@
+{
+  "id": "cursed_locket",
+  "name_key": "ITEM_CURSED_LOCKET_NAME",
+  "desc_key": "ITEM_CURSED_LOCKET_DESC",
+  "note_key": "ITEM_CURSED_LOCKET_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "cursed"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 2.0
+    },
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": -40
+    }
+  ]
+}

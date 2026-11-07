@@ -1,0 +1,7 @@
+{
+  "id": "toxic_fog",
+  "name_key": "CURSE_TOXIC_FOG_NAME",
+  "desc_key": "CURSE_TOXIC_FOG_DESC",
+  "effect": "blind_items",
+  "weight": 1.0
+}

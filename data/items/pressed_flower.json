@@ -1,0 +1,28 @@
+{
+  "id": "pressed_flower",
+  "name_key": "ITEM_PRESSED_FLOWER_NAME",
+  "desc_key": "ITEM_PRESSED_FLOWER_DESC",
+  "note_key": "ITEM_PRESSED_FLOWER_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "library"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 40
+    },
+    {
+      "type": "stat_mod",
+      "stat": "luck",
+      "add": 1
+    }
+  ]
+}

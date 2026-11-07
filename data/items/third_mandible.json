@@ -1,0 +1,27 @@
+{
+  "id": "third_mandible",
+  "name_key": "ITEM_THIRD_MANDIBLE_NAME",
+  "desc_key": "ITEM_THIRD_MANDIBLE_DESC",
+  "note_key": "ITEM_THIRD_MANDIBLE_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "mutation"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "mutation"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 1.0
+    },
+    {
+      "type": "stat_mod",
+      "stat": "fire_rate",
+      "add": 0.4
+    }
+  ]
+}

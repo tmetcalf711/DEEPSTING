@@ -6,7 +6,8 @@
   "quality": 4,
   "kind": "passive",
   "pools": [
-    "secret"
+    "secret",
+    "vault"
   ],
   "locked_by_default": true,
   "tags": [

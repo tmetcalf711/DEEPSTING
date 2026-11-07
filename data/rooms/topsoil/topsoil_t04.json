@@ -1,0 +1,58 @@
+{
+  "id": "topsoil_t04",
+  "stratum": [
+    "topsoil"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "..#.......#..",
+    "......D......",
+    "..#.......#..",
+    ".............",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "drip_slug",
+      "at": [
+        3,
+        1
+      ]
+    },
+    {
+      "enemy": "drip_slug",
+      "at": [
+        9,
+        5
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        11,
+        1
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        1,
+        5
+      ]
+    }
+  ],
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ]
+}

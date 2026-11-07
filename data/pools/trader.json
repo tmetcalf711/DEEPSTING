@@ -1,0 +1,51 @@
+{
+  "id": "trader",
+  "name_key": "POOL_TRADER_NAME",
+  "fallback": "dig_site",
+  "entries": [
+    {
+      "id": "bag_of_fuses",
+      "weight": 1.0
+    },
+    {
+      "id": "bent_fork",
+      "weight": 1.0
+    },
+    {
+      "id": "dead_phone",
+      "weight": 1.0
+    },
+    {
+      "id": "field_journal",
+      "weight": 1.0
+    },
+    {
+      "id": "frayed_shoelace",
+      "weight": 1.0
+    },
+    {
+      "id": "key_ring",
+      "weight": 1.0
+    },
+    {
+      "id": "mole_map",
+      "weight": 1.0
+    },
+    {
+      "id": "reading_glasses",
+      "weight": 1.0
+    },
+    {
+      "id": "royal_wax_seal",
+      "weight": 1.0
+    },
+    {
+      "id": "salt_lick",
+      "weight": 1.0
+    },
+    {
+      "id": "squeeze_bottle",
+      "weight": 1.0
+    }
+  ]
+}

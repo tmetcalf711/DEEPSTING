@@ -1,0 +1,26 @@
+{
+  "id": "rust_beetle",
+  "name_key": "ENEMY_RUST_BEETLE_NAME",
+  "archetype": "charger",
+  "family": "topsoil",
+  "strata": [
+    "topsoil"
+  ],
+  "hp": 18,
+  "radius": 7,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.4,
+    "sfx": "beetle_click"
+  },
+  "behavior": {
+    "type": "charger",
+    "speed": 20,
+    "charge_speed": 165,
+    "align": 9,
+    "sight": 170
+  }
+}

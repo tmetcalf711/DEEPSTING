@@ -1,0 +1,8 @@
+{
+  "id": "labyrinth",
+  "name_key": "CURSE_LABYRINTH_NAME",
+  "desc_key": "CURSE_LABYRINTH_DESC",
+  "effect": "labyrinth",
+  "weight": 0.6,
+  "not_last_floor": false
+}

@@ -112,7 +112,9 @@ func _physics_process(delta: float) -> void:
 	if bullets.is_empty():
 		queue_redraw()
 		return
-	var targets: Array = get_tree().get_nodes_in_group("shootable")
+	# Only targets in the current room (a room being freed this frame may still be in the tree).
+	var targets: Array = get_tree().get_nodes_in_group("shootable").filter(func(t: Node) -> bool:
+		return room != null and room.is_ancestor_of(t))
 	var spawned: Array[Bullet] = []
 	for b in bullets:
 		if not b.alive:
@@ -141,7 +143,7 @@ func _physics_process(delta: float) -> void:
 			continue
 		if b.friendly:
 			for t in targets:
-				if not is_instance_valid(t) or b.hit.has(t.get_instance_id()):
+				if not is_instance_valid(t) or b.hit.has(t.get_instance_id()) or t.get("untargetable"):
 					continue
 				var tp: Vector2 = t.global_position
 				var rr: float = b.radius + float(t.get("hit_radius"))
@@ -177,7 +179,7 @@ func _steer(b: Bullet, targets: Array, delta: float) -> void:
 	var best: Node2D = null
 	var best_d := 110.0 * 110.0
 	for t in targets:
-		if not is_instance_valid(t) or t.get("team") != "enemy":
+		if not is_instance_valid(t) or t.get("team") != "enemy" or t.get("untargetable"):
 			continue
 		var d: float = t.global_position.distance_squared_to(b.pos)
 		if d < best_d:

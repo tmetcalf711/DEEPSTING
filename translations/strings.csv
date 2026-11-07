@@ -98,7 +98,7 @@ Damage %.2f   Fire rate %.2f/s   Shot speed %.2f
 Range %.0f   Speed %.2f   Luck %.1f
 Floor stash (unbanked): %d
 Items: %s"
-END_VICTORY,Slice complete!
+END_VICTORY,Chapter 1 complete!
 END_DEATH,Stung too deep
 END_SEED,Seed  %s
 END_TIME,Time  %d:%02d
@@ -111,3 +111,113 @@ END_STASH_LOST,Floor stash lost  %d Pulp
 END_TOTALS,"Hive total: %d Pulp, %d brood"
 END_NEW_RUN,Descend again
 END_RETRY_SEED,Retry this seed
+ITEM_WAX_WINGS_NAME,Wax Wings
+ITEM_WAX_WINGS_DESC,Flight!
+ITEM_WAX_WINGS_NOTE,Field note: molded from royal comb. They hold. For now.
+ITEM_QUEENS_HAIRPIN_NAME,Queen's Hairpin
+ITEM_QUEENS_HAIRPIN_DESC,"Damage up, fire rate up"
+ITEM_QUEENS_HAIRPIN_NOTE,"Field note: tiny, golden, sharpened. A queen's last line of defense."
+ITEM_ROYAL_WAX_SEAL_NAME,Royal Wax Seal
+ITEM_ROYAL_WAX_SEAL_DESC,+2 Chitin
+ITEM_ROYAL_WAX_SEAL_NOTE,Field note: the seal on the queen's chamber. Unbroken until just now.
+ITEM_JELLY_CROWN_NAME,Jelly Crown
+ITEM_JELLY_CROWN_DESC,"Shots pass through rocks, damage up"
+ITEM_JELLY_CROWN_NOTE,Field note: wobbles regally.
+ITEM_GLOWING_TUMOR_NAME,Glowing Tumor
+ITEM_GLOWING_TUMOR_DESC,"Big damage, bigger shots"
+ITEM_GLOWING_TUMOR_NOTE,Field note: it hums. Do not name it.
+ITEM_THIRD_MANDIBLE_NAME,Third Mandible
+ITEM_THIRD_MANDIBLE_DESC,"Damage up, fire rate up"
+ITEM_THIRD_MANDIBLE_NOTE,Field note: grew back wrong. Bites better.
+ITEM_ACID_GLAND_NAME,Acid Gland
+ITEM_ACID_GLAND_DESC,Poison shots
+ITEM_ACID_GLAND_NOTE,Field note: squeeze gently. Then let go immediately.
+ITEM_RAD_HEART_NAME,Rad Heart
+ITEM_RAD_HEART_DESC,+3 Toxic Spined Chitin
+ITEM_RAD_HEART_NOTE,Field note: still beating. Faster than ours.
+ITEM_KEY_RING_NAME,Key Ring
+ITEM_KEY_RING_DESC,"+2 Royal Jelly, +3 Mana"
+ITEM_KEY_RING_NOTE,Field note: none of these keys fit anything down here. The jelly in the ring does.
+ITEM_BAG_OF_FUSES_NAME,Bag of Fuses
+ITEM_BAG_OF_FUSES_DESC,+5 Dig Charges
+ITEM_BAG_OF_FUSES_NOTE,Field note: rattles ominously.
+ITEM_MOLE_MAP_NAME,Mole Map
+ITEM_MOLE_MAP_DESC,Reveals the floor layout
+ITEM_MOLE_MAP_NOTE,"Field note: drawn in dirt, on dirt, with dirt."
+ITEM_READING_GLASSES_NAME,Reading Glasses
+ITEM_READING_GLASSES_DESC,"See secret rooms, range up"
+ITEM_READING_GLASSES_NOTE,Field note: the cracks in the walls were always there. Now we can read them.
+ITEM_SALT_LICK_NAME,Salt Lick
+ITEM_SALT_LICK_DESC,"Shot speed up, slowing shots"
+ITEM_SALT_LICK_NOTE,Field note: slugs hate it. Everything down here is a little bit slug.
+ITEM_CURSED_LOCKET_NAME,Cursed Locket
+ITEM_CURSED_LOCKET_DESC,"Big damage, range down"
+ITEM_CURSED_LOCKET_NOTE,Field note: the picture inside keeps changing. It's always looking at us.
+ITEM_RUSTED_NAIL_NAME,Rusted Nail
+ITEM_RUSTED_NAIL_DESC,"Damage up, poison shots"
+ITEM_RUSTED_NAIL_NOTE,Field note: tetanus is a surface problem.
+ITEM_GOLDEN_THIMBLE_NAME,Golden Thimble
+ITEM_GOLDEN_THIMBLE_DESC,All stats up
+ITEM_GOLDEN_THIMBLE_NOTE,Field note: a tiny golden cup. Fits a wasp perfectly as a helmet.
+ITEM_FIELD_JOURNAL_NAME,Field Journal
+ITEM_FIELD_JOURNAL_DESC,Reveal the whole floor
+ITEM_FIELD_JOURNAL_NOTE,Field note: someone else's field notes. Their handwriting is worse than ours.
+ITEM_PRESSED_FLOWER_NAME,Pressed Flower
+ITEM_PRESSED_FLOWER_DESC,"Range up, luck up"
+ITEM_PRESSED_FLOWER_NOTE,"Field note: from the surface, from before. It still smells like sun."
+ENEMY_ROOT_GRUB_NAME,Root Grub
+ENEMY_MOLE_CRICKET_NAME,Mole Cricket
+ENEMY_DRIP_SLUG_NAME,Drip Slug
+ENEMY_RUST_BEETLE_NAME,Rust Beetle
+ENEMY_GRUBLING_NAME,Grubling
+ENEMY_MATRIARCH_TICK_NAME,Matriarch Tick
+ENEMY_BRUTE_GRUB_NAME,Brute Grub
+BOSS_GRUBKING_NAME,The Grubking
+BOSS_GRUBKING_TITLE,"two heads, one appetite"
+BOSS_TUNNEL_MOLE_NAME,Tunnel Mole
+BOSS_TUNNEL_MOLE_TITLE,it heard you coming
+STRATUM_TOPSOIL_NAME,Topsoil
+CURSE_CAVE_IN_DESC,The lights are out.
+CURSE_TREMOR_NAME,Curse of the Tremor
+CURSE_TREMOR_DESC,Your map won't stay still.
+CURSE_TOXIC_FOG_NAME,Curse of the Toxic Fog
+CURSE_TOXIC_FOG_DESC,You can't make out what you're digging up.
+CURSE_LABYRINTH_NAME,Curse of the Labyrinth
+CURSE_LABYRINTH_DESC,The tunnels go on and on.
+CURSE_SILT_NAME,Curse of the Silt
+CURSE_SILT_DESC,Every room looks the same.
+CURSE_SPORE_BLOOM_NAME,Curse of the Spore Bloom
+CURSE_SPORE_BLOOM_DESC,Something is growing on everything.
+POOL_TRADER_NAME,Trader
+POOL_ROYAL_NAME,Royal
+POOL_MUTATION_NAME,Mutation
+POOL_CURSED_NAME,Cursed
+POOL_VAULT_NAME,Vault
+POOL_LIBRARY_NAME,Library
+TOAST_DEAL_ROYAL,A Royal Chamber has opened...
+TOAST_DEAL_DEN,A Mutation Den has opened...
+TOAST_WAVE,Wave %d / %d
+TOAST_MAP_REVEALED,The floor is mapped
+BANNER_ROOM_TEST,Room test
+BANNER_CHALLENGE,Challenge!
+BANNER_MINIBOSS,mini-boss
+BANNER_CHAPTER_DONE,Chapter complete
+SHOP_GREET_1,"Mott: ""Everything's for sale. Everything."""
+SHOP_GREET_2,"Mott: ""Found it, cleaned it, priced it. Mostly cleaned it."""
+SHOP_GREET_3,"Mott: ""No refunds. No questions. Some answers, for a price."""
+FORTUNE_1,The worm says: dig where the dust falls.
+FORTUNE_2,The worm says: the deepest treasure is a good nap.
+FORTUNE_3,The worm says: three rooms meet where secrets sleep.
+FORTUNE_4,The worm says: never trust a chest that breathes.
+FORTUNE_5,The worm says: the queen remembers.
+FORTUNE_6,The worm says: you will find exactly what you lost.
+FORTUNE_7,The worm says: a kind heart is worth two containers.
+FORTUNE_8,The worm says: ...wiggle.
+EDITOR_TITLE,Room Editor
+EDITOR_SAVE,Save
+EDITOR_LOAD,Load
+EDITOR_NEW,New
+EDITOR_TEST,Test
+EDITOR_SAVED,Saved %s
+EDITOR_ERRORS,Not saved: %s
+MENU_EDITOR,Room Editor (dev)

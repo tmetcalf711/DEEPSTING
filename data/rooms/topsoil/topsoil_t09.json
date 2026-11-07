@@ -1,0 +1,58 @@
+{
+  "id": "topsoil_t09",
+  "stratum": [
+    "topsoil"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "..R..T..R....",
+    ".............",
+    "..R...R...R..",
+    ".............",
+    "....R..R..R..",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "rust_beetle",
+      "at": [
+        11,
+        1
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        1,
+        5
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        2,
+        5
+      ]
+    },
+    {
+      "enemy": "drip_slug",
+      "at": [
+        4,
+        3
+      ]
+    }
+  ],
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ]
+}

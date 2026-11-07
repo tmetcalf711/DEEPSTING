@@ -1,0 +1,23 @@
+{
+  "id": "mutation",
+  "name_key": "POOL_MUTATION_NAME",
+  "fallback": "boss",
+  "entries": [
+    {
+      "id": "acid_gland",
+      "weight": 1.0
+    },
+    {
+      "id": "glowing_tumor",
+      "weight": 1.0
+    },
+    {
+      "id": "rad_heart",
+      "weight": 1.0
+    },
+    {
+      "id": "third_mandible",
+      "weight": 1.0
+    }
+  ]
+}

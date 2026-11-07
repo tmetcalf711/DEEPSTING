@@ -1,0 +1,47 @@
+{
+  "id": "golden_thimble",
+  "name_key": "ITEM_GOLDEN_THIMBLE_NAME",
+  "desc_key": "ITEM_GOLDEN_THIMBLE_DESC",
+  "note_key": "ITEM_GOLDEN_THIMBLE_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "vault"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.5
+    },
+    {
+      "type": "stat_mod",
+      "stat": "fire_rate",
+      "add": 0.3
+    },
+    {
+      "type": "stat_mod",
+      "stat": "move_speed",
+      "add": 0.1
+    },
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 20
+    },
+    {
+      "type": "stat_mod",
+      "stat": "luck",
+      "add": 1
+    },
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": 0.1
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "reading_glasses",
+  "name_key": "ITEM_READING_GLASSES_NAME",
+  "desc_key": "ITEM_READING_GLASSES_DESC",
+  "note_key": "ITEM_READING_GLASSES_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "library",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "flag",
+      "name": "see_secrets"
+    },
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 20
+    }
+  ]
+}

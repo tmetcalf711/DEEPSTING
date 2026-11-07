@@ -1,0 +1,23 @@
+{
+  "id": "royal",
+  "name_key": "POOL_ROYAL_NAME",
+  "fallback": "boss",
+  "entries": [
+    {
+      "id": "jelly_crown",
+      "weight": 1.0
+    },
+    {
+      "id": "queens_hairpin",
+      "weight": 1.0
+    },
+    {
+      "id": "royal_wax_seal",
+      "weight": 1.0
+    },
+    {
+      "id": "wax_wings",
+      "weight": 1.0
+    }
+  ]
+}

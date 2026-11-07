@@ -1,0 +1,45 @@
+{
+  "id": "tunnel_mole",
+  "name_key": "BOSS_TUNNEL_MOLE_NAME",
+  "title_key": "BOSS_TUNNEL_MOLE_TITLE",
+  "chapter": 1,
+  "strata": [
+    "topsoil"
+  ],
+  "hp": 260,
+  "radius": 16,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": "mole_snort"
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 16,
+    "minion": "mole_cricket",
+    "max_minions": 2,
+    "phases": [
+      {
+        "until_hp": 0.55,
+        "patterns": [
+          "burrow_strike",
+          "rubble_rain",
+          "aimed_fan"
+        ]
+      },
+      {
+        "until_hp": 0.0,
+        "patterns": [
+          "burrow_strike",
+          "rubble_rain",
+          "spawn_minions",
+          "burrow_strike",
+          "ring_burst"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

@@ -17,5 +17,9 @@
     "type": "swarm",
     "speed": 62,
     "flank": 22
-  }
+  },
+  "strata": [
+    "hive",
+    "topsoil"
+  ]
 }

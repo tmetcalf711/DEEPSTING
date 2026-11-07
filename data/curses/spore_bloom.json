@@ -1,0 +1,8 @@
+{
+  "id": "spore_bloom",
+  "name_key": "CURSE_SPORE_BLOOM_NAME",
+  "desc_key": "CURSE_SPORE_BLOOM_DESC",
+  "effect": "champions",
+  "weight": 1.0,
+  "unlock": "curse:spore_bloom"
+}

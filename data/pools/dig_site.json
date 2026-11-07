@@ -4,6 +4,10 @@
   "fallback": "",
   "entries": [
     {
+      "id": "bag_of_fuses",
+      "weight": 1.0
+    },
+    {
       "id": "bent_fork",
       "weight": 1.0
     },
@@ -28,11 +32,19 @@
       "weight": 1.0
     },
     {
+      "id": "pressed_flower",
+      "weight": 1.0
+    },
+    {
       "id": "quartz_lens",
       "weight": 1.0
     },
     {
       "id": "raw_geode",
+      "weight": 1.0
+    },
+    {
+      "id": "salt_lick",
       "weight": 1.0
     },
     {

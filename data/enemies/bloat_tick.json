@@ -18,5 +18,9 @@
     "interval": 2.4,
     "bullet_speed": 85,
     "pattern": "alternate_cross"
-  }
+  },
+  "strata": [
+    "hive",
+    "topsoil"
+  ]
 }

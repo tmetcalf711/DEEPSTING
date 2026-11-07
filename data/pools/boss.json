@@ -4,6 +4,10 @@
   "fallback": "dig_site",
   "entries": [
     {
+      "id": "acid_gland",
+      "weight": 1.0
+    },
+    {
       "id": "bent_fork",
       "weight": 1.0
     },

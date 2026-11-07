@@ -21,7 +21,7 @@ const SCHEMA: Dictionary = {
 	"enemies": {"id": TYPE_STRING, "name_key": TYPE_STRING, "archetype": TYPE_STRING, "hp": TYPE_NIL},
 	"bosses": {"id": TYPE_STRING, "name_key": TYPE_STRING, "chapter": TYPE_INT, "hp": TYPE_NIL},
 	"pools": {"id": TYPE_STRING, "entries": TYPE_ARRAY},
-	"rooms": {"id": TYPE_STRING, "stratum": TYPE_ARRAY, "shape": TYPE_STRING, "grid": TYPE_ARRAY, "doors": TYPE_ARRAY},
+	"rooms": {"id": TYPE_STRING, "stratum": TYPE_ARRAY, "shape": TYPE_STRING, "grid": TYPE_ARRAY},
 	"characters": {"id": TYPE_STRING, "name_key": TYPE_STRING, "stats": TYPE_DICTIONARY},
 	"achievements": {"id": TYPE_STRING, "name_key": TYPE_STRING, "condition": TYPE_DICTIONARY, "unlocks": TYPE_ARRAY},
 	"mutations": {"id": TYPE_STRING, "name_key": TYPE_STRING, "effects": TYPE_ARRAY},
@@ -35,8 +35,11 @@ const SCHEMA: Dictionary = {
 
 const ITEM_KINDS: PackedStringArray = ["passive", "active"]
 const PICKUP_KINDS: PackedStringArray = ["mana", "heart", "chitin", "toxic_chitin", "dig_charge", "royal_jelly"]
-const ROOM_TYPES: PackedStringArray = ["normal", "start", "boss", "treasure", "secret", "super_secret", "brood_cell", "shop", "miniboss"]
-const ROOM_SHAPES: PackedStringArray = ["1x1", "2x1", "1x2", "2x2", "L_ne", "L_nw", "L_se", "L_sw"]
+const ROOM_TYPES: PackedStringArray = ["normal", "start", "boss", "treasure", "secret", "super_secret", "brood_cell",
+	"shop", "miniboss", "sacrifice", "curse", "challenge", "vault", "arcade", "library", "royal", "den"]
+## L-shaped rooms are deferred (DESIGN.md D27); rectangles only for now.
+const ROOM_SHAPES: PackedStringArray = ["1x1", "2x1", "1x2", "2x2"]
+const SHAPE_CELLS: Dictionary = {"1x1": Vector2i(1, 1), "2x1": Vector2i(2, 1), "1x2": Vector2i(1, 2), "2x2": Vector2i(2, 2)}
 
 var _db: Dictionary = {}     # category -> {id -> entry}
 var errors: PackedStringArray = []
@@ -168,33 +171,34 @@ static func validate(category: String, entry: Dictionary) -> PackedStringArray:
 			if not ROOM_SHAPES.has(entry["shape"]):
 				out.append("unknown shape '%s'" % entry["shape"])
 			var grid: Array = entry["grid"]
-			if grid.is_empty():
-				out.append("grid is empty")
-			else:
-				var w: int = str(grid[0]).length()
-				for row in grid:
-					if str(row).length() != w:
-						out.append("grid rows must all be the same width")
-						break
-			if grid.size() == 7 and str(grid[0]).length() == 13:
-				# Door entry lanes must stay walkable (the player spawns there on entry).
-				var lanes := {"N": [Vector2i(6, 0), Vector2i(6, 1)], "S": [Vector2i(6, 5), Vector2i(6, 6)],
-					"W": [Vector2i(0, 3), Vector2i(1, 3)], "E": [Vector2i(11, 3), Vector2i(12, 3)]}
-				for d in entry["doors"]:
-					for t in lanes.get(str(d), []):
-						var ch := str(grid[t.y])[t.x]
-						if not ch in [".", "S", "D"]:
-							out.append("door %s entry tile %s must be walkable (found '%s')" % [d, t, ch])
-				for sp in entry.get("spawns", []):
-					var at: Array = sp.get("at", [0, 0])
-					var ch2 := str(grid[int(at[1])])[int(at[0])]
-					if not ch2 in [".", "D"]:
-						out.append("spawn %s at %s is on '%s'" % [sp.get("enemy", "?"), at, ch2])
+			var sc: Vector2i = SHAPE_CELLS.get(entry["shape"], Vector2i.ONE)
+			var cols: int = 13 * sc.x
+			var rows: int = 7 * sc.y
+			if grid.size() != rows:
+				out.append("grid must have %d rows for shape %s (has %d)" % [rows, entry["shape"], grid.size()])
+				return out
+			for row in grid:
+				if str(row).length() != cols:
+					out.append("grid rows must all be %d wide for shape %s" % [cols, entry["shape"]])
+					return out
+			# Door entry lanes must stay walkable on every wall slot (the player spawns there).
+			for lane in door_lanes(entry["shape"]):
+				var ch := str(grid[lane.y])[lane.x]
+				if not ch in [".", "S", "D"]:
+					out.append("door entry tile %s must be walkable (found '%s')" % [lane, ch])
+			for sp in entry.get("spawns", []):
+				var at: Array = sp.get("at", [0, 0])
+				if int(at[0]) >= cols or int(at[1]) >= rows:
+					out.append("spawn %s at %s is outside the grid" % [sp.get("enemy", "?"), at])
+					continue
+				var ch2 := str(grid[int(at[1])])[int(at[0])]
+				if not ch2 in [".", "D"]:
+					out.append("spawn %s at %s is on '%s'" % [sp.get("enemy", "?"), at, ch2])
 			for t in entry.get("room_types", ["normal"]):
 				if not ROOM_TYPES.has(str(t)):
 					out.append("unknown room type '%s'" % t)
-			for d in entry["doors"]:
-				if not str(d) in ["N", "E", "S", "W", "N2", "E2", "S2", "W2"]:
+			for d in entry.get("doors", []):
+				if not str(d) in ["N", "E", "S", "W"]:
 					out.append("bad door '%s'" % d)
 		"pickups":
 			if not PICKUP_KINDS.has(entry["kind"]):
@@ -203,6 +207,20 @@ static func validate(category: String, entry: Dictionary) -> PackedStringArray:
 			for e in entry["entries"]:
 				if not (e is Dictionary and e.has("id")):
 					out.append("pool entries need an 'id'")
+	return out
+
+
+## Tiles that must stay walkable next to every door slot of a shape: the door tile and the one
+## inside it, at each cell's wall center.
+static func door_lanes(shape: String) -> Array[Vector2i]:
+	var sc: Vector2i = SHAPE_CELLS.get(shape, Vector2i.ONE)
+	var cols: int = 13 * sc.x
+	var rows: int = 7 * sc.y
+	var out: Array[Vector2i] = []
+	for cx in sc.x:
+		out.append_array([Vector2i(cx * 13 + 6, 0), Vector2i(cx * 13 + 6, 1), Vector2i(cx * 13 + 6, rows - 1), Vector2i(cx * 13 + 6, rows - 2)])
+	for cy in sc.y:
+		out.append_array([Vector2i(0, cy * 7 + 3), Vector2i(1, cy * 7 + 3), Vector2i(cols - 1, cy * 7 + 3), Vector2i(cols - 2, cy * 7 + 3)])
 	return out
 
 

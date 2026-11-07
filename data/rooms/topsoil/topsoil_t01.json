@@ -1,0 +1,44 @@
+{
+  "id": "topsoil_t01",
+  "stratum": [
+    "topsoil"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "..RR.....RR..",
+    ".............",
+    ".............",
+    ".............",
+    "..RR.....RR..",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "root_grub",
+      "at": [
+        3,
+        3
+      ]
+    },
+    {
+      "enemy": "root_grub",
+      "at": [
+        9,
+        3
+      ]
+    }
+  ],
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "id": "hive_n11",
+  "stratum": [
+    "hive"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".T.R.....R.T.",
+    ".............",
+    "...R.....R...",
+    ".............",
+    ".T.R.....R.T.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "bloat_tick",
+      "at": [
+        6,
+        3
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        2,
+        1
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        10,
+        5
+      ]
+    },
+    {
+      "enemy": "twin_grub",
+      "at": [
+        10,
+        1
+      ]
+    }
+  ],
+  "doors": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ]
+}

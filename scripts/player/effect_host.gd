@@ -34,6 +34,7 @@ func add_item(id: String) -> void:
 	if item.get("kind", "") != "active":
 		RunState.items.append(id)
 	RunState.bump("items")
+	Events.item_picked_up.emit(id)
 	MetaSave.data["trove_seen"]["items:" + id] = true
 	for e in item.get("effects", []):
 		var s := effect_script(str(e["type"]))

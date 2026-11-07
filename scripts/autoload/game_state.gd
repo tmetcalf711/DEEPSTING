@@ -12,6 +12,8 @@ const SCENES: Dictionary = {
 var mode: Mode = Mode.BOOT
 ## Dev flag toggled by the console's `god` command; gameplay systems read it from M1 on.
 var god_mode: bool = false
+## Set by the room editor's Test button: the next run builds just this template (empty = normal run).
+var room_test_template: String = ""
 
 
 func _ready() -> void:

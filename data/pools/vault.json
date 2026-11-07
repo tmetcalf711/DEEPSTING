@@ -1,0 +1,27 @@
+{
+  "id": "vault",
+  "name_key": "POOL_VAULT_NAME",
+  "fallback": "boss",
+  "entries": [
+    {
+      "id": "golden_thimble",
+      "weight": 1.0
+    },
+    {
+      "id": "jelly_crown",
+      "weight": 1.0
+    },
+    {
+      "id": "queens_hairpin",
+      "weight": 1.0
+    },
+    {
+      "id": "scarab_amulet",
+      "weight": 1.0
+    },
+    {
+      "id": "sun_disk",
+      "weight": 1.0
+    }
+  ]
+}

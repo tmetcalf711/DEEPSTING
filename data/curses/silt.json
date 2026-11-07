@@ -1,0 +1,7 @@
+{
+  "id": "silt",
+  "name_key": "CURSE_SILT_NAME",
+  "desc_key": "CURSE_SILT_DESC",
+  "effect": "unknown_rooms",
+  "weight": 1.0
+}

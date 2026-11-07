@@ -1,21 +1,32 @@
 class_name Room
 extends Node2D
 ## One room of the floor, built from a hand-authored template (DESIGN.md §10.4).
-## Room-local coordinates: the interior spans (0,0)-(W,H); walls sit outside it.
-## Persistent state (cleared, destroyed rocks, leftover pickups, opened secret walls...) is
-## written back into the floor layout's room `info` dictionary on exit.
+## Rooms are 1x1, 2x1, 1x2 or 2x2 cells; one cell is 13x7 tiles of 16 px. Room-local coordinates:
+## the interior spans (0,0)-(room_w, room_h) and walls sit outside it.
+##
+## Doors are addressed by wall slot keys "ox,oy,D" (see FloorGen). Door kinds come from the
+## layout: normal, secret (cracked wall), locked (Royal Jelly), spiked (curse room), challenge
+## (full health only), deal (Royal Chamber / Mutation Den).
+##
+## Persistent state (cleared, destroyed rocks, leftover pickups, opened walls/locks, special-room
+## state) lives in the layout's room `info` dictionary, so it survives leaving the room.
+## Special rooms add behavior through res://scripts/run/specials/<type>.gd (a "feature" node).
 
 signal cleared_room()
 
 const TILE := 16
-const COLS := 13
-const ROWS := 7
-const W := COLS * TILE  # 208
-const H := ROWS * TILE  # 112
+const CELL_COLS := 13
+const CELL_ROWS := 7
+const CELL_W := CELL_COLS * TILE  # 208
+const CELL_H := CELL_ROWS * TILE  # 112
+## 1x1 room size; kept for code that only deals with single-cell rooms (camera defaults, tools).
+const W := CELL_W
+const H := CELL_H
 const WALL := 16
 const TOP_WALL := 22     # top wall is taller to fake depth (2.5D)
 const DOOR_W := 24
 const DIRS: Dictionary = {"N": Vector2i(0, -1), "E": Vector2i(1, 0), "S": Vector2i(0, 1), "W": Vector2i(-1, 0)}
+const SPECIALS_DIR := "res://scripts/run/specials/"
 
 const LAYER_WALLS := 1
 const LAYER_OBSTACLES := 2
@@ -31,19 +42,28 @@ const BroodCellScript := preload("res://scripts/actors/brood_cell.gd")
 const TrapdoorScript := preload("res://scripts/actors/trapdoor.gd")
 const LootPileScript := preload("res://scripts/actors/loot_pile.gd")
 
-var cell: Vector2i
+var anchor: Vector2i
 var info: Dictionary
 var template: Dictionary
-var neighbor_types: Dictionary = {}   # dir -> neighbor room type
+var neighbor_types: Dictionary = {}   # slot -> neighbor room type
 var palette: Dictionary = {}
+var shape_cells := Vector2i.ONE       # room size in cells
+var cols := CELL_COLS
+var rows := CELL_ROWS
+var room_w := float(CELL_W)
+var room_h := float(CELL_H)
 var grid: Array = []                  # Array[Array[String]] of tile chars
 var entities: Node2D
+var feature: Node = null              # special-room behavior, if any
 var rng_enemies: RandomNumberGenerator
 var rng_drops: RandomNumberGenerator
 
 var enemies_alive: int = 0
 var had_enemies: bool = false
 var is_cleared: bool = false
+var shaft_x: float = CELL_W / 2.0 - 64.0  # boss shaft column (left of the top door / deal door)
+var creeps: Array = []                # [{pos, r, life, kind}] floor hazards (sludge...)
+
 var _wall_body: StaticBody2D
 var _obstacles: Dictionary = {}       # Vector2i -> Node2D
 var _haul_workers: int = 0
@@ -54,15 +74,21 @@ var _shaft_open: float = 0.0          # 0..1 light shaft animation (boss rooms)
 var _shaft_active: bool = false
 var _boss_shaft_done: bool = false
 var _enter_grace: float = 0.0
-var shaft_x: float = W / 2.0             # boss shaft column; moved aside if a north door exists
+var _door_sig := ""
+var _door_check_t := 0.0
 
 
-func setup(p_cell: Vector2i, p_info: Dictionary, p_template: Dictionary, p_neighbors: Dictionary, p_palette: Dictionary) -> void:
-	cell = p_cell
+func setup(p_anchor: Vector2i, p_info: Dictionary, p_template: Dictionary, p_neighbors: Dictionary, p_palette: Dictionary) -> void:
+	anchor = p_anchor
 	info = p_info
 	template = p_template
 	neighbor_types = p_neighbors
 	palette = p_palette
+	shape_cells = FloorGen.shape_size(str(info.get("shape", "1x1")))
+	cols = CELL_COLS * shape_cells.x
+	rows = CELL_ROWS * shape_cells.y
+	room_w = cols * TILE
+	room_h = rows * TILE
 	rng_enemies = RNG.room_stream("enemies", int(info["index"]))
 	rng_drops = RNG.room_stream("drops", int(info["index"]))
 
@@ -76,12 +102,16 @@ func _ready() -> void:
 	_build_obstacles()
 	is_cleared = bool(info.get("cleared", false))
 	_boss_shaft_done = bool(info.get("shaft_done", false))
-	if info["doors"].has("N"):
-		shaft_x = W / 2.0 - 64.0
 	_rebuild_walls()
 	_restore_pickups()
-	_spawn_pedestal()
+	_spawn_pedestals()
 	_spawn_brood_cells()
+	var fpath := SPECIALS_DIR + str(info["type"]) + ".gd"
+	if ResourceLoader.exists(fpath):
+		feature = load(fpath).new()
+		feature.name = "Feature"
+		add_child(feature)
+		feature.setup(self)
 	if not is_cleared:
 		_spawn_enemies()
 	if enemies_alive == 0 and not is_cleared:
@@ -89,12 +119,13 @@ func _ready() -> void:
 	if info["type"] == "boss" and is_cleared:
 		_spawn_trapdoor()
 		_shaft_open = 1.0
-	if info["type"] in ["secret", "super_secret"] and not info.get("visited", false):
+	if info["type"] in FloorGen.SECRET_TYPES and not info.get("visited", false):
 		RunState.bump("secrets_found")
 		MetaSave.add_counter("secret_rooms_found")
 		Events.toast.emit(tr("TOAST_SECRET_FOUND"))
 	info["visited"] = true
 	_enter_grace = 0.5
+	_door_sig = _door_signature()
 	queue_redraw()
 
 
@@ -125,7 +156,7 @@ func world_to_tile(p: Vector2) -> Vector2i:
 
 
 func tile_at(t: Vector2i) -> String:
-	if t.x < 0 or t.y < 0 or t.x >= COLS or t.y >= ROWS:
+	if t.x < 0 or t.y < 0 or t.x >= cols or t.y >= rows:
 		return "#"
 	return grid[t.y][t.x]
 
@@ -135,17 +166,21 @@ func is_walkable_tile(t: Vector2i) -> bool:
 
 
 func is_bullet_blocked(p: Vector2, spectral: bool) -> bool:
-	if p.x < 0.0 or p.y < 0.0 or p.x >= W or p.y >= H:
+	if p.x < 0.0 or p.y < 0.0 or p.x >= room_w or p.y >= room_h:
 		return true
 	if spectral:
 		return false
 	return tile_at(world_to_tile(p)) in ["R", "T", "#"]
 
 
+func center() -> Vector2:
+	return Vector2(room_w / 2.0, room_h / 2.0)
+
+
 func free_tiles() -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
-	for y in ROWS:
-		for x in COLS:
+	for y in rows:
+		for x in cols:
 			if tile_at(Vector2i(x, y)) == ".":
 				out.append(Vector2i(x, y))
 	return out
@@ -153,7 +188,7 @@ func free_tiles() -> Array[Vector2i]:
 
 ## Nearest walkable tile center to a point (used to place drops so they never land in rocks).
 func nearest_free_point(p: Vector2) -> Vector2:
-	var best := Vector2(W / 2.0, H / 2.0)
+	var best := center()
 	var best_d := INF
 	for t in free_tiles():
 		var c := tile_center(t)
@@ -169,8 +204,8 @@ func _build_obstacles() -> void:
 	pit_body.collision_layer = LAYER_PITS
 	pit_body.collision_mask = 0
 	add_child(pit_body)
-	for y in ROWS:
-		for x in COLS:
+	for y in rows:
+		for x in cols:
 			var t := Vector2i(x, y)
 			match tile_at(t):
 				"R", "T", "#":
@@ -200,38 +235,98 @@ func destroy_tile(t: Vector2i) -> void:
 		_obstacles.erase(t)
 	var c := tile_center(t)
 	if ch == "T":
-		_drop_from_table("tinted_rock", c)
+		drop_from_table("tinted_rock", c)
 	elif RunState.flags.get("rock_mana_bonus", false):
-		_drop_from_table("rock_bonus", c)
+		drop_from_table("rock_bonus", c)
 	MetaSave.add_counter("rocks_broken")
 
 
-# ---------------------------------------------------------------- walls and doors
+# ---------------------------------------------------------------- doors
 
-func door_state(dir: String) -> String:
-	## "none" | "closed" | "open" | "cracked" (unopened secret wall)
-	if not info["doors"].has(dir):
+func door_kind(slot: String) -> String:
+	return str(info["doors"].get(slot, ""))
+
+
+## "none" | "closed" | "open" | "cracked" (unopened secret wall) | "locked" (needs Royal Jelly)
+## | "barred" (challenge door while not at full health)
+func door_state(slot: String) -> String:
+	if not info["doors"].has(slot):
 		return "none"
-	if info["doors"][dir] == "secret":
-		return "open" if info.get("opened_secret", {}).has(dir) else "cracked"
+	match door_kind(slot):
+		"secret":
+			return "open" if info.get("opened_secret", {}).has(slot) else "cracked"
+		"locked":
+			if not info.get("unlocked", {}).has(slot):
+				return "locked"
+		"challenge":
+			if info["type"] != "challenge" and not _challenge_door_allowed(slot):
+				return "barred"
 	return "open" if is_cleared else "closed"
 
 
-func door_pos(dir: String) -> Vector2:
-	match dir:
-		"N": return Vector2(W / 2.0, 0)
-		"S": return Vector2(W / 2.0, H)
-		"W": return Vector2(0, H / 2.0)
-		_: return Vector2(W, H / 2.0)
+func _challenge_door_allowed(slot: String) -> bool:
+	var link: Array = info["links"].get(slot, [])
+	if link.is_empty():
+		return true
+	var other: Dictionary = RunController.instance.layout["rooms"].get(link[0], {})
+	return other.get("cleared", false) or RunState.hearts >= RunState.hearts_max
+
+
+func door_pos(slot: String) -> Vector2:
+	var ps := FloorGen.parse_slot(slot)
+	var off: Vector2i = ps[0]
+	match str(ps[1]):
+		"N": return Vector2(off.x * CELL_W + CELL_W / 2.0, 0)
+		"S": return Vector2(off.x * CELL_W + CELL_W / 2.0, room_h)
+		"W": return Vector2(0, off.y * CELL_H + CELL_H / 2.0)
+		_: return Vector2(room_w, off.y * CELL_H + CELL_H / 2.0)
+
+
+func slot_dir(slot: String) -> String:
+	return str(FloorGen.parse_slot(slot)[1])
 
 
 ## Just outside the door, where workers appear from.
-func door_outside(dir: String) -> Vector2:
-	return door_pos(dir) + Vector2(DIRS[dir]) * 20.0
+func door_outside(slot: String) -> Vector2:
+	return door_pos(slot) + Vector2(DIRS[slot_dir(slot)]) * 20.0
 
 
-func entry_point(dir: String) -> Vector2:
-	return door_pos(dir) - Vector2(DIRS[dir]) * 16.0
+func entry_point(slot: String) -> Vector2:
+	return door_pos(slot) - Vector2(DIRS[slot_dir(slot)]) * 16.0
+
+
+## The wall slot a point outside the interior is passing through ("" if none).
+func slot_at(p: Vector2) -> String:
+	var dir := ""
+	if p.y < -6.0:
+		dir = "N"
+	elif p.y > room_h + 6.0:
+		dir = "S"
+	elif p.x < -6.0:
+		dir = "W"
+	elif p.x > room_w + 6.0:
+		dir = "E"
+	if dir == "":
+		return ""
+	var ox := clampi(floori(p.x / CELL_W), 0, shape_cells.x - 1)
+	var oy := clampi(floori(p.y / CELL_H), 0, shape_cells.y - 1)
+	match dir:
+		"N": oy = 0
+		"S": oy = shape_cells.y - 1
+		"W": ox = 0
+		"E": ox = shape_cells.x - 1
+	return FloorGen.slot_key(Vector2i(ox, oy), dir)
+
+
+func all_slots() -> Array:
+	return FloorGen.shape_slots(str(info.get("shape", "1x1")))
+
+
+func _door_signature() -> String:
+	var parts: PackedStringArray = []
+	for s in all_slots():
+		parts.append(door_state(s))
+	return ",".join(parts)
 
 
 func _rebuild_walls() -> void:
@@ -241,25 +336,32 @@ func _rebuild_walls() -> void:
 	_wall_body.collision_layer = LAYER_WALLS
 	_wall_body.collision_mask = 0
 	add_child(_wall_body)
-	var half := DOOR_W / 2.0
-	var cx := W / 2.0
-	var cy := H / 2.0
 	var t := 40.0  # collision thickness (deeper than the visual wall so nothing tunnels)
-	# Each side is split into two segments around the door gap; the gap is filled when the door
-	# is not open.
-	_side(Rect2(-t, -t, cx - half + t, t), Rect2(cx + half, -t, W - cx - half + t, t), Rect2(cx - half, -t, DOOR_W, t), "N")
-	_side(Rect2(-t, H, cx - half + t, t), Rect2(cx + half, H, W - cx - half + t, t), Rect2(cx - half, H, DOOR_W, t), "S")
-	_side(Rect2(-t, -t, t, cy - half + t), Rect2(-t, cy + half, t, H - cy - half + t), Rect2(-t, cy - half, t, DOOR_W), "W")
-	_side(Rect2(W, -t, t, cy - half + t), Rect2(W, cy + half, t, H - cy - half + t), Rect2(W, cy - half, t, DOOR_W), "E")
-	# Alcove depth limiter: doors lead into a short tunnel; going past it triggers the transition.
+	var gaps := {"N": [], "S": [], "W": [], "E": []}
+	for s in all_slots():
+		if door_state(s) == "open":
+			var p := door_pos(s)
+			var d := slot_dir(s)
+			gaps[d].append(p.x if d in ["N", "S"] else p.y)
+	_side_rects(gaps["N"], -t, room_w + t, func(a: float, b: float) -> Rect2: return Rect2(a, -t, b - a, t))
+	_side_rects(gaps["S"], -t, room_w + t, func(a: float, b: float) -> Rect2: return Rect2(a, room_h, b - a, t))
+	_side_rects(gaps["W"], -t, room_h + t, func(a: float, b: float) -> Rect2: return Rect2(-t, a, t, b - a))
+	_side_rects(gaps["E"], -t, room_h + t, func(a: float, b: float) -> Rect2: return Rect2(room_w, a, t, b - a))
+	_door_sig = _door_signature()
 	queue_redraw()
 
 
-func _side(a: Rect2, b: Rect2, gap: Rect2, dir: String) -> void:
-	_add_rect(a)
-	_add_rect(b)
-	if door_state(dir) != "open":
-		_add_rect(gap)
+## Splits one wall side into solid segments around the open door gaps.
+func _side_rects(gap_centers: Array, from: float, to: float, mk: Callable) -> void:
+	gap_centers.sort()
+	var cur := from
+	for g in gap_centers:
+		var a: float = float(g) - DOOR_W / 2.0
+		if a > cur:
+			_add_rect(mk.call(cur, a))
+		cur = float(g) + DOOR_W / 2.0
+	if to > cur:
+		_add_rect(mk.call(cur, to))
 
 
 func _add_rect(r: Rect2) -> void:
@@ -271,16 +373,42 @@ func _add_rect(r: Rect2) -> void:
 	_wall_body.add_child(cs)
 
 
-func open_secret(dir: String) -> void:
-	var o: Dictionary = info.get("opened_secret", {})
-	if o.has(dir):
-		return
-	o[dir] = true
-	info["opened_secret"] = o
-	RunController.instance.on_secret_opened(cell, dir)
-	Audio.play_sfx("wall_crumble")
-	RunController.instance.fx.burst(door_pos(dir), Color(0.6, 0.5, 0.4), 18, 80.0, 2.0)
+func refresh_doors() -> void:
 	call_deferred("_rebuild_walls")
+
+
+func open_secret(slot: String) -> void:
+	var o: Dictionary = info.get("opened_secret", {})
+	if o.has(slot):
+		return
+	o[slot] = true
+	info["opened_secret"] = o
+	RunController.instance.mirror_door_flag(info, slot, "opened_secret")
+	Audio.play_sfx("wall_crumble")
+	RunController.instance.fx.burst(door_pos(slot), Color(0.6, 0.5, 0.4), 18, 80.0, 2.0)
+	refresh_doors()
+
+
+func _try_unlock_doors() -> void:
+	var p: Node2D = RunController.instance.player
+	if p == null:
+		return
+	for s in info["doors"]:
+		if door_state(s) != "locked":
+			continue
+		if p.global_position.distance_to(door_pos(s)) > 18.0:
+			continue
+		var cost: int = int(info.get("lock_cost", {}).get(s, 1))
+		if RunState.royal_jelly < cost:
+			continue
+		RunState.add_royal_jelly(-cost)
+		var u: Dictionary = info.get("unlocked", {})
+		u[s] = true
+		info["unlocked"] = u
+		RunController.instance.mirror_door_flag(info, s, "unlocked")
+		Audio.play_sfx("door_unlock")
+		RunController.instance.fx.burst(door_pos(s), Color(1.0, 0.95, 0.6), 14, 60.0, 1.5)
+		refresh_doors()
 
 
 # ---------------------------------------------------------------- spawning
@@ -307,42 +435,93 @@ func spawn_enemy(data: Dictionary, pos: Vector2, is_boss: bool = false) -> Node2
 	entities.add_child(e)
 	enemies_alive += 1
 	had_enemies = true
+	if is_cleared:
+		# Something spawned in a cleared room (arcade, console): close up again until it's dead.
+		is_cleared = false
+		info["cleared"] = false
+		refresh_doors()
 	return e
 
 
-func on_enemy_died(e: Node) -> void:
-	enemies_alive -= 1
-	if e.get("is_boss"):
-		# Minions die with their mother (Isaac convention).
-		for other in get_tree().get_nodes_in_group("enemies"):
-			if other != e and is_instance_valid(other) and other.get_parent() == entities:
-				other.die(false)
-	else:
-		if rng_drops.randf() < float(_drops("enemy_kill").get("chance", 0.0)):
-			_drop_from_table("enemy_kill", e.global_position)
+## Undo a reservation made by a splitting enemy once its children have been spawned.
+func _release_reserved(n: int) -> void:
+	enemies_alive -= n
 	if enemies_alive <= 0 and not is_cleared:
 		_mark_cleared(true)
 
 
-func _spawn_pedestal() -> void:
-	if not info.has("pedestal"):
-		return
+func on_enemy_died(e: Node) -> void:
+	enemies_alive -= 1
+	if e.get("is_boss") and bool(e.data.get("behavior", {}).get("kill_minions_on_death", true)):
+		# Minions die with their mother (Isaac convention).
+		for other in get_tree().get_nodes_in_group("enemies"):
+			if other != e and is_instance_valid(other) and other.get_parent() == entities:
+				other.die(false)
+	elif not e.get("is_boss"):
+		if rng_drops.randf() < float(_drops("enemy_kill").get("chance", 0.0)):
+			drop_from_table("enemy_kill", e.global_position)
+	if enemies_alive <= 0 and not is_cleared:
+		if feature and feature.has_method("on_enemies_cleared") and feature.on_enemies_cleared():
+			return  # the feature spawned more (challenge waves)
+		_mark_cleared(true)
+
+
+## Pedestals: the template's "P" tile holds info.pedestal; specials may add extra pedestals
+## (info.extra_pedestals: [{id, x, y, group}]). Taking one from a group empties the rest.
+func _spawn_pedestals() -> void:
+	if info.has("pedestal"):
+		var at := center()
+		for y in rows:
+			for x in cols:
+				if tile_at(Vector2i(x, y)) == "P":
+					at = tile_center(Vector2i(x, y))
+		if info["type"] == "boss":
+			at = center() + Vector2(0, 4)
+		_add_pedestal(str(info["pedestal"]), at, -1)
+	var extra: Array = info.get("extra_pedestals", [])
+	for i in extra.size():
+		var e: Dictionary = extra[i]
+		_add_pedestal(str(e["id"]), Vector2(float(e["x"]), float(e["y"])), i)
+
+
+func _add_pedestal(id: String, at: Vector2, extra_index: int) -> Node2D:
 	var p: Node2D = PedestalScript.new()
-	p.setup(self, str(info["pedestal"]))
-	var at := Vector2(W / 2.0, H / 2.0)
-	for y in ROWS:
-		for x in COLS:
-			if tile_at(Vector2i(x, y)) == "P":
-				at = tile_center(Vector2i(x, y))
-	if info["type"] == "boss":
-		at = Vector2(W / 2.0, H / 2.0 + 4)
+	p.setup(self, id, extra_index)
 	p.position = at
 	entities.add_child(p)
+	return p
+
+
+func add_extra_pedestal(id: String, at: Vector2, group: String = "") -> Node2D:
+	var extra: Array = info.get("extra_pedestals", [])
+	extra.append({"id": id, "x": at.x, "y": at.y, "group": group})
+	info["extra_pedestals"] = extra
+	return _add_pedestal(id, at, extra.size() - 1)
+
+
+## Called by a pedestal when its item changes (taken or swapped).
+func on_pedestal_changed(extra_index: int, new_id: String) -> void:
+	if extra_index < 0:
+		info["pedestal"] = new_id
+		return
+	var extra: Array = info["extra_pedestals"]
+	extra[extra_index]["id"] = new_id
+	var group: String = extra[extra_index].get("group", "")
+	if group == "":
+		return
+	# Choice group (Royal Chamber): taking one makes the others vanish.
+	for i in extra.size():
+		if i != extra_index and extra[i].get("group", "") == group:
+			extra[i]["id"] = ""
+	for n in entities.get_children():
+		if n.has_method("set_item") and n.get("extra_index") != extra_index and n.get("extra_index") >= 0:
+			if extra[int(n.get("extra_index"))].get("group", "") == group:
+				n.set_item("")
 
 
 func _spawn_brood_cells() -> void:
-	for y in ROWS:
-		for x in COLS:
+	for y in rows:
+		for x in cols:
 			var t := Vector2i(x, y)
 			if tile_at(t) == "B":
 				var b: StaticBody2D = BroodCellScript.new()
@@ -363,7 +542,7 @@ func on_brood_cell_broken(t: Vector2i, larvae: int) -> void:
 	RunState.bump("brood_rescued", larvae)
 	Events.brood_rescued.emit("lost_brood", false)
 	Events.toast.emit(tr("TOAST_BROOD_RESCUED") % larvae)
-	var home := _home_door()
+	var home := home_slot()
 	for i in larvae:
 		var w: Node2D = WorkerScript.new()
 		var lpos := tile_center(t) + Vector2(rng_drops.randf_range(-6, 6), rng_drops.randf_range(-4, 4))
@@ -392,16 +571,33 @@ func _drops(table: String) -> Dictionary:
 	return Content.get_entry("config", "drops").get(table, {})
 
 
-func _drop_from_table(table: String, pos: Vector2, force: bool = false) -> void:
+func drop_from_table(table: String, pos: Vector2, force: bool = false, r: RandomNumberGenerator = null) -> void:
+	var rng := r if r else rng_drops
 	var t := _drops(table)
 	if t.is_empty():
 		return
-	if not force and rng_drops.randf() >= float(t.get("chance", 1.0)):
+	if not force and rng.randf() >= float(t.get("chance", 1.0)):
 		return
 	var entries: Array = t["table"]
-	var idx := RNG.weighted_index(rng_drops, entries.map(func(e: Dictionary) -> float: return float(e["weight"])))
-	var v := Vector2.from_angle(rng_drops.randf() * TAU) * rng_drops.randf_range(20, 50)
+	var idx := RNG.weighted_index(rng, entries.map(func(e: Dictionary) -> float: return float(e["weight"])))
+	var v := Vector2.from_angle(rng.randf() * TAU) * rng.randf_range(20, 50)
 	spawn_pickup(entries[idx]["id"], pos, v)
+
+
+# ---------------------------------------------------------------- hazards
+
+func add_creep(pos: Vector2, kind: String, life: float, radius: float = 7.0) -> void:
+	if creeps.size() > 80:
+		creeps.pop_front()
+	creeps.append({"pos": pos, "r": radius, "life": life, "max": life, "kind": kind})
+
+
+## The creep kind under a point ("" if none). Player hover ignores ground creep except sludge.
+func hazard_at(p: Vector2) -> String:
+	for c in creeps:
+		if p.distance_squared_to(c["pos"]) <= float(c["r"]) * float(c["r"]):
+			return str(c["kind"])
+	return ""
 
 
 # ---------------------------------------------------------------- clearing / hauling
@@ -409,49 +605,52 @@ func _drop_from_table(table: String, pos: Vector2, force: bool = false) -> void:
 func _mark_cleared(from_combat: bool) -> void:
 	is_cleared = true
 	info["cleared"] = true
-	call_deferred("_rebuild_walls")
+	refresh_doors()
 	for n in get_tree().get_nodes_in_group("brood_cells"):
 		if n.get_parent() == entities:
 			n.unlock()
 	if not from_combat:
-		if info["type"] == "secret" or info["type"] == "super_secret":
-			if not info.get("loot_spawned", false):
-				info["loot_spawned"] = true
-				var sr := _drops("secret_room")
-				var cnt: Array = sr.get("count", [3, 5])
-				for i in rng_drops.randi_range(int(cnt[0]), int(cnt[1])):
-					_drop_from_table("secret_room", Vector2(W / 2.0, H / 2.0 + 18), true)
+		if info["type"] in FloorGen.SECRET_TYPES and not info.get("loot_spawned", false):
+			info["loot_spawned"] = true
+			var sr := _drops("secret_room")
+			var cnt: Array = sr.get("count", [3, 5])
+			for i in rng_drops.randi_range(int(cnt[0]), int(cnt[1])):
+				drop_from_table("secret_room", center() + Vector2(0, 18), true)
 		return
 	Audio.play_sfx("doors_open")
 	RunState.bump("rooms_cleared")
 	MetaSave.add_counter("rooms_cleared")
 	RunController.instance.on_room_cleared(self)
+	if feature and feature.has_method("on_cleared"):
+		feature.on_cleared()
 	if info["type"] == "boss":
 		_start_boss_shaft()
-	else:
+	elif info["type"] in ["normal", "brood_cell"]:
 		_spawn_deposits_and_haul()
-		_drop_from_table("room_clear", nearest_free_point(Vector2(W / 2.0, H / 2.0)))
+		drop_from_table("room_clear", nearest_free_point(center()))
 	cleared_room.emit()
 
 
-func _home_door() -> String:
-	var hd: String = info.get("home_dir", "")
-	if hd == "" or not info["doors"].has(hd):
-		for d in ["S", "N", "W", "E"]:
-			if info["doors"].has(d) and info["doors"][d] != "secret":
-				return d
-		return "S"
-	return hd
+func home_slot() -> String:
+	var hs: String = info.get("home_slot", "")
+	if hs == "" or not info["doors"].has(hs):
+		var keys: Array = info["doors"].keys()
+		keys.sort()
+		for s in keys:
+			if info["doors"][s] != "secret":
+				return s
+		return "0,0,S"
+	return hs
 
 
 func _spawn_deposits_and_haul() -> void:
 	var dep := _drops("deposits")
 	var cnt: Array = dep.get("count", [1, 3])
 	var val: Array = dep.get("value", [2, 5])
-	var n: int = rng_drops.randi_range(int(cnt[0]), int(cnt[1]))
+	var n: int = rng_drops.randi_range(int(cnt[0]), int(cnt[1])) * (shape_cells.x * shape_cells.y + 1) / 2
 	var slots: Array[Vector2i] = []
-	for y in ROWS:
-		for x in COLS:
+	for y in rows:
+		for x in cols:
 			if tile_at(Vector2i(x, y)) == "D":
 				slots.append(Vector2i(x, y))
 	var free := free_tiles()
@@ -474,7 +673,7 @@ func _spawn_deposits_and_haul() -> void:
 	for d in _haul_deposits:
 		total += int(d.value)
 	Events.haul_started.emit(int(info["index"]), total)
-	var from := door_outside(_home_door())
+	var from := door_outside(home_slot())
 	var delay := 0.4
 	for d in _haul_deposits:
 		var workers: int = clampi(ceili(float(d.value) / 2.0), 1, 3)
@@ -562,7 +761,7 @@ func _complete_boss_shaft() -> void:
 
 func _spawn_trapdoor() -> void:
 	var t: Node2D = TrapdoorScript.new()
-	t.position = Vector2(W / 2.0, H - 26)
+	t.position = Vector2(room_w / 2.0, room_h - 26)
 	entities.add_child(t)
 
 
@@ -586,18 +785,18 @@ func explode(pos: Vector2, radius: float, damage: float) -> void:
 	rc.shake(0.55)
 	Audio.play_sfx("dig_charge_boom")
 	for t in get_tree().get_nodes_in_group("shootable"):
-		if is_instance_valid(t) and t.global_position.distance_to(pos) <= radius + float(t.get("hit_radius")):
+		if is_instance_valid(t) and is_ancestor_of(t) and t.global_position.distance_to(pos) <= radius + float(t.get("hit_radius")):
 			t.take_hit(damage, (t.global_position - pos).normalized(), ["blast"])
 	if rc.player and rc.player.global_position.distance_to(pos) <= radius:
 		rc.player.hurt(2, "dig_charge")
-	for y in ROWS:
-		for x in COLS:
+	for y in rows:
+		for x in cols:
 			var t := Vector2i(x, y)
 			if tile_center(t).distance_to(pos) <= radius + 4.0:
 				destroy_tile(t)
-	for dir in DIRS:
-		if door_state(dir) == "cracked" and door_pos(dir).distance_to(pos) <= radius + 12.0:
-			open_secret(dir)
+	for s in all_slots():
+		if door_state(s) == "cracked" and door_pos(s).distance_to(pos) <= radius + 12.0:
+			open_secret(s)
 
 
 # ---------------------------------------------------------------- per-frame
@@ -607,12 +806,34 @@ func _process(delta: float) -> void:
 	# Secret walls leak a faint dust trickle every few seconds (the readable tell, §4).
 	_dust_t -= delta
 	if _dust_t <= 0.0:
-		_dust_t = rng_drops.randf_range(2.5, 4.5)
-		for dir in DIRS:
-			if door_state(dir) == "cracked":
-				RunController.instance.fx.dust(door_pos(dir) - Vector2(DIRS[dir]) * 2.0)
+		var see: bool = RunState.flags.get("see_secrets", false)
+		_dust_t = rng_drops.randf_range(2.5, 4.5) * (0.4 if see else 1.0)
+		for s in all_slots():
+			if door_state(s) == "cracked":
+				RunController.instance.fx.dust(door_pos(s) - Vector2(DIRS[slot_dir(s)]) * 2.0)
 	if _shaft_active and _shaft_open > 0.0:
 		queue_redraw()
+	if not creeps.is_empty():
+		var i := 0
+		while i < creeps.size():
+			creeps[i]["life"] = float(creeps[i]["life"]) - delta
+			if float(creeps[i]["life"]) <= 0.0:
+				creeps.remove_at(i)
+			else:
+				i += 1
+		queue_redraw()
+	# Door states can change without a clear (challenge door at full health, locks): re-check.
+	_door_check_t -= delta
+	if _door_check_t <= 0.0:
+		_door_check_t = 0.2
+		_try_unlock_doors()
+		if _door_signature() != _door_sig:
+			refresh_doors()
+
+
+## Live enemies belonging to this room (a room being freed this frame may still be in the tree).
+func room_enemies() -> Array:
+	return get_tree().get_nodes_in_group("enemies").filter(func(e: Node) -> bool: return is_ancestor_of(e) and not e.dead)
 
 
 func enemies_awake() -> bool:
@@ -631,18 +852,18 @@ func _draw() -> void:
 	var wall_c := _col("wall", Color(0.42, 0.32, 0.21))
 	var wall_top := _col("wall_top", wall_c.lightened(0.2))
 	# Walls: top wall has a lit top face and a darker front face for depth.
-	draw_rect(Rect2(-WALL, -TOP_WALL, W + WALL * 2, H + TOP_WALL + WALL), wall_c.darkened(0.35))
-	draw_rect(Rect2(-WALL, -TOP_WALL, W + WALL * 2, TOP_WALL - 8), wall_top)
-	draw_rect(Rect2(0, -8, W, 8), wall_c)  # front face of the top wall
-	draw_rect(Rect2(-WALL, 0, WALL, H), wall_c.darkened(0.15))
-	draw_rect(Rect2(W, 0, WALL, H), wall_c.darkened(0.15))
-	draw_rect(Rect2(-WALL, H, W + WALL * 2, WALL), wall_c.darkened(0.05))
-	# Floor: checker + paper-comb hex hints (deterministic per room cell).
-	for y in ROWS:
-		for x in COLS:
+	draw_rect(Rect2(-WALL, -TOP_WALL, room_w + WALL * 2, room_h + TOP_WALL + WALL), wall_c.darkened(0.35))
+	draw_rect(Rect2(-WALL, -TOP_WALL, room_w + WALL * 2, TOP_WALL - 8), wall_top)
+	draw_rect(Rect2(0, -8, room_w, 8), wall_c)  # front face of the top wall
+	draw_rect(Rect2(-WALL, 0, WALL, room_h), wall_c.darkened(0.15))
+	draw_rect(Rect2(room_w, 0, WALL, room_h), wall_c.darkened(0.15))
+	draw_rect(Rect2(-WALL, room_h, room_w + WALL * 2, WALL), wall_c.darkened(0.05))
+	# Floor: checker + paper-comb hex hints (deterministic per room).
+	for y in rows:
+		for x in cols:
 			var r := Rect2(x * TILE, y * TILE, TILE, TILE)
 			draw_rect(r, floor_c if (x + y) % 2 == 0 else floor_alt)
-			var hsh := absi((cell.x * 73856093) ^ (cell.y * 19349663) ^ (x * 83492791) ^ (y * 2654435761)) % 9
+			var hsh := absi((anchor.x * 73856093) ^ (anchor.y * 19349663) ^ (x * 83492791) ^ (y * 2654435761)) % 9
 			if hsh == 0:
 				_hex(tile_center(Vector2i(x, y)), 5.0, floor_c.lightened(0.08))
 			match tile_at(Vector2i(x, y)):
@@ -653,9 +874,13 @@ func _draw() -> void:
 					for k in 3:
 						var sx := r.position.x + 3 + k * 5
 						draw_colored_polygon(PackedVector2Array([Vector2(sx, r.end.y - 3), Vector2(sx + 2, r.position.y + 5), Vector2(sx + 4, r.end.y - 3)]), Color(0.65, 0.6, 0.55))
-	# Doors
-	for dir in DIRS:
-		_draw_door(dir)
+	# Creep (sludge) puddles
+	for c in creeps:
+		var a: float = clampf(float(c["life"]) / 1.0, 0.0, 1.0)
+		draw_circle(c["pos"], float(c["r"]), Color(0.32, 0.36, 0.12, 0.55 * a))
+		draw_circle(c["pos"] + Vector2(-1.5, -1.5), float(c["r"]) * 0.4, Color(0.55, 0.6, 0.25, 0.4 * a))
+	for s in all_slots():
+		_draw_door(s)
 	# Boss shaft: light column from the surface.
 	if _shaft_open > 0.0:
 		var sw := 26.0 * _shaft_open
@@ -672,46 +897,76 @@ func _hex(c: Vector2, r: float, col: Color) -> void:
 	draw_polyline(pts, col, 1.0)
 
 
-func _draw_door(dir: String) -> void:
-	var st := door_state(dir)
+func _door_rect(slot: String) -> Rect2:
+	var p := door_pos(slot)
+	var d := slot_dir(slot)
+	match d:
+		"N": return Rect2(Vector2(p.x - DOOR_W / 2.0, -TOP_WALL + 4), Vector2(DOOR_W, TOP_WALL - 4))
+		"S": return Rect2(Vector2(p.x - DOOR_W / 2.0, room_h), Vector2(DOOR_W, WALL))
+		"W": return Rect2(Vector2(-WALL, p.y - DOOR_W / 2.0), Vector2(WALL, DOOR_W))
+		_: return Rect2(Vector2(room_w, p.y - DOOR_W / 2.0), Vector2(WALL, DOOR_W))
+
+
+func _draw_door(slot: String) -> void:
+	var st := door_state(slot)
 	if st == "none":
 		return
-	var p := door_pos(dir)
-	var horiz := dir == "N" or dir == "S"
-	var size := Vector2(DOOR_W, WALL) if horiz else Vector2(WALL, DOOR_W)
-	var r := Rect2(p - size / 2.0, size)
-	if dir == "N":
-		r = Rect2(Vector2(p.x - DOOR_W / 2.0, -TOP_WALL + 4), Vector2(DOOR_W, TOP_WALL - 4))
-	elif dir == "S":
-		r.position.y = H
-	elif dir == "W":
-		r.position.x = -WALL
-	else:
-		r.position.x = W
+	var r := _door_rect(slot)
+	var horiz := slot_dir(slot) in ["N", "S"]
 	if st == "cracked":
-		# Hairline fractures: subtle but readable.
-		var c := Color(0.12, 0.09, 0.07, 0.8)
+		# Hairline fractures: subtle but readable (stronger with Reading Glasses).
+		var see: bool = RunState.flags.get("see_secrets", false)
+		var c := Color(0.12, 0.09, 0.07, 1.0 if see else 0.8)
 		var m := r.get_center()
-		draw_line(m + Vector2(-5, -3), m + Vector2(-1, 1), c, 1.0)
+		draw_line(m + Vector2(-5, -3), m + Vector2(-1, 1), c, 1.5 if see else 1.0)
 		draw_line(m + Vector2(-1, 1), m + Vector2(3, -2), c, 1.0)
 		draw_line(m + Vector2(-1, 1), m + Vector2(0, 5), c, 1.0)
 		draw_line(m + Vector2(3, -2), m + Vector2(6, 2), c, 1.0)
 		return
-	var ntype: String = neighbor_types.get(dir, "normal")
+	var ntype: String = neighbor_types.get(slot, "normal")
+	var kind := door_kind(slot)
 	var frame := Color(0.55, 0.42, 0.25)
 	match ntype:
 		"boss": frame = Color(0.7, 0.12, 0.12)
 		"treasure": frame = Color(0.95, 0.78, 0.2)
+		"shop": frame = Color(0.35, 0.75, 0.85)
 		"secret", "super_secret": frame = Color(0.2, 0.15, 0.1)
 		"brood_cell": frame = Color(0.95, 0.9, 0.7)
-	if info["doors"][dir] == "secret" or info["type"] in ["secret", "super_secret"]:
+		"royal": frame = Color(1.0, 0.97, 0.85)
+		"den": frame = Color(0.35, 0.05, 0.08)
+		"curse": frame = Color(0.3, 0.1, 0.25)
+		"challenge": frame = Color(0.9, 0.45, 0.15)
+		"vault": frame = Color(1.0, 0.85, 0.3)
+		"library": frame = Color(0.5, 0.35, 0.6)
+		"arcade": frame = Color(0.9, 0.3, 0.6)
+		"miniboss": frame = Color(0.6, 0.2, 0.2)
+		"sacrifice": frame = Color(0.5, 0.45, 0.4)
+	if kind == "secret" or info["type"] in FloorGen.SECRET_TYPES:
 		frame = Color(0.2, 0.15, 0.1)
+	if info["type"] in ["royal", "den"]:
+		frame = Color(1.0, 0.97, 0.85) if info["type"] == "royal" else Color(0.35, 0.05, 0.08)
 	draw_rect(r.grow(2), frame)
 	draw_rect(r, Color(0.04, 0.03, 0.02))
-	if st == "closed":
+	if kind == "spiked":
+		for k in 4:
+			var t := (k + 0.5) / 4.0
+			var base := r.position + (Vector2(r.size.x * t, r.size.y) if horiz else Vector2(r.size.x, r.size.y * t))
+			draw_circle(r.position + (Vector2(r.size.x * t, 1) if horiz else Vector2(1, r.size.y * t)), 1.5, Color(0.75, 0.7, 0.7))
+			draw_circle(base - (Vector2(0, 1) if horiz else Vector2(1, 0)), 1.5, Color(0.75, 0.7, 0.7))
+	if st in ["closed", "locked", "barred"]:
 		var bar := frame.darkened(0.2)
 		for k in 3:
 			if horiz:
 				draw_rect(Rect2(r.position.x + 3 + k * 8, r.position.y, 3, r.size.y), bar)
 			else:
 				draw_rect(Rect2(r.position.x, r.position.y + 3 + k * 8, r.size.x, 3), bar)
+	if st == "locked":
+		var cost: int = int(info.get("lock_cost", {}).get(slot, 1))
+		var m := r.get_center()
+		for k in cost:
+			var off := Vector2((k - (cost - 1) / 2.0) * 6.0, 0)
+			draw_circle(m + off, 3.0, Color(0.98, 0.93, 0.6))
+			draw_circle(m + off, 1.2, Color(0.4, 0.3, 0.1))
+	elif st == "barred":
+		var m2 := r.get_center()
+		draw_circle(m2, 3.0, Color(0.86, 0.12, 0.18))

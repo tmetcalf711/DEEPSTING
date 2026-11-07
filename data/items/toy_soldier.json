@@ -6,8 +6,8 @@
   "quality": 2,
   "kind": "passive",
   "pools": [
-    "dig_site",
-    "boss"
+    "boss",
+    "dig_site"
   ],
   "locked_by_default": false,
   "tags": [

@@ -13,21 +13,76 @@
   "max_attempts": 200,
   "big_room_attempt_rate": 0.3,
   "special_weights": {
-    "vault": 1.0,
-    "arcade": 1.0,
     "sacrifice": 0.6,
     "curse": 0.8,
-    "library": 0.5,
     "challenge": 0.7,
     "miniboss": 1.0,
-    "brood_cell": 0.3
+    "vault": 1.0,
+    "arcade": 1.0,
+    "library": 0.5
   },
   "floor1_brood_cells": [
     2,
     4
   ],
   "required_specials": [
-    "treasure"
+    "treasure",
+    "shop"
   ],
-  "brood_cell_room_chance": 0.5
+  "brood_cell_room_chance": 0.5,
+  "big_room_rate": 0.22,
+  "big_room_weights": {
+    "2x1": 1.0,
+    "1x2": 1.0,
+    "2x2": 0.6
+  },
+  "labyrinth_mult": 1.8,
+  "labyrinth_cap": 30,
+  "special_rules": {
+    "vault": {
+      "min_depth": 3
+    },
+    "arcade": {
+      "min_depth": 3
+    },
+    "library": {
+      "unlock": "feature:library"
+    }
+  },
+  "random_special_count": 1,
+  "locks": {
+    "shop": {
+      "min_depth": 2,
+      "cost": 1
+    },
+    "treasure": {
+      "min_depth": 3,
+      "cost": 1
+    },
+    "vault": {
+      "min_depth": 1,
+      "cost": 2
+    },
+    "library": {
+      "min_depth": 1,
+      "cost": 1
+    }
+  },
+  "curse_chance": 0.15,
+  "curse_free_runs": 3,
+  "deal": {
+    "min_depth": 2,
+    "base": 0.3,
+    "no_boss_damage_bonus": 0.35,
+    "no_floor_damage_bonus": 0.1
+  },
+  "chapters": [
+    {
+      "id": "ch1",
+      "floors": [
+        "hive",
+        "topsoil"
+      ]
+    }
+  ]
 }

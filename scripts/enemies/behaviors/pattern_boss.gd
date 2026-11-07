@@ -16,6 +16,7 @@ var _t := 0.0
 var _charge_dir := Vector2.ZERO
 var _spiral_ang := 0.0
 var _fired := false
+var _spots: Array = []
 
 
 func init(e: Enemy, p: Dictionary) -> void:
@@ -47,6 +48,8 @@ func tick(e: Enemy, delta: float) -> void:
 		"spiral_burst": _spiral(e, delta)
 		"spawn_minions": _spawn(e)
 		"charge": _charge(e)
+		"burrow_strike": _burrow_strike(e, delta)
+		"rubble_rain": _rubble_rain(e)
 		_: _end()
 
 
@@ -103,7 +106,7 @@ func _spawn(e: Enemy) -> void:
 	e.velocity = Vector2.ZERO
 	if _t >= windup and not _fired:
 		_fired = true
-		var alive := e.get_tree().get_nodes_in_group("enemies").size() - 1
+		var alive: int = e.room.room_enemies().size() - 1
 		var data: Dictionary = Content.get_entry("enemies", minion)
 		for i in mini(2, max_minions - alive):
 			e.room.spawn_enemy(data, e.global_position + Vector2.from_angle(e.rng.randf() * TAU) * 14.0)
@@ -119,4 +122,55 @@ func _charge(e: Enemy) -> void:
 	if _t > windup + 0.9 or (e.get_slide_collision_count() > 0 and _t > windup + 0.1):
 		RunController.instance.shake(0.3)
 		e.stun(0.5)
+		_end()
+
+
+## Dig under, tunnel to the player, burst out with a ring.
+func _burrow_strike(e: Enemy, _delta: float) -> void:
+	if _t < windup:
+		e.velocity = Vector2.ZERO
+		return
+	if _t < windup + 1.2:
+		if not e.untargetable:
+			e.untargetable = true
+			RunController.instance.fx.burst(e.global_position, Color(0.4, 0.3, 0.2), 16, 60.0, 2.0)
+		e.velocity = e.to_player().normalized() * 85.0
+		return
+	if e.untargetable:
+		e.untargetable = false
+		e.velocity = Vector2.ZERO
+		e.telegraph(0.45)
+		return
+	if _t >= windup + 1.65 and not _fired:
+		_fired = true
+		RunController.instance.shake(0.35)
+		for i in 10:
+			e.fire(Vector2.from_angle(TAU * i / 10.0) * 72.0)
+		_end()
+
+
+## Rocks fall from the ceiling: shadows telegraph the spots, then each bursts into shards.
+func _rubble_rain(e: Enemy) -> void:
+	e.velocity = Vector2.ZERO
+	if _spots.is_empty():
+		var p: Node2D = e.player()
+		for i in 6:
+			var base: Vector2 = p.global_position if i < 2 and p else e.room.center()
+			var spot: Vector2 = base + Vector2(e.rng.randf_range(-70, 70), e.rng.randf_range(-40, 40))
+			spot.x = clampf(spot.x, 10.0, e.room.room_w - 10.0)
+			spot.y = clampf(spot.y, 10.0, e.room.room_h - 10.0)
+			_spots.append(spot)
+			RunController.instance.fx.warn(spot, 10.0, windup + 0.5)
+		return
+	if _t >= windup + 0.5 and not _fired:
+		_fired = true
+		var rc := RunController.instance
+		rc.shake(0.3)
+		for spot in _spots:
+			rc.fx.burst(spot, Color(0.45, 0.38, 0.3), 8, 60.0, 2.0)
+			for k in 4:
+				rc.projectiles.spawn_enemy_shot(spot, Vector2.from_angle(PI / 4.0 + k * PI / 2.0) * 60.0)
+			if rc.player and rc.player.global_position.distance_to(spot) < 10.0:
+				rc.player.hurt(1, "rubble")
+		_spots.clear()
 		_end()

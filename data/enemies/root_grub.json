@@ -1,0 +1,24 @@
+{
+  "id": "root_grub",
+  "name_key": "ENEMY_ROOT_GRUB_NAME",
+  "archetype": "chaser",
+  "family": "topsoil",
+  "strata": [
+    "topsoil"
+  ],
+  "hp": 16,
+  "radius": 7,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "chase",
+    "speed": 34,
+    "stutter_chance": 0.1
+  }
+}

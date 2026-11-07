@@ -1,0 +1,22 @@
+{
+  "id": "rad_heart",
+  "name_key": "ITEM_RAD_HEART_NAME",
+  "desc_key": "ITEM_RAD_HEART_DESC",
+  "note_key": "ITEM_RAD_HEART_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "cursed",
+    "mutation"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "mutation"
+  ],
+  "effects": [
+    {
+      "type": "health",
+      "toxic_chitin": 6
+    }
+  ]
+}

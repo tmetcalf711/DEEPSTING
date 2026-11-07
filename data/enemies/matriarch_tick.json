@@ -1,0 +1,30 @@
+{
+  "id": "matriarch_tick",
+  "name_key": "ENEMY_MATRIARCH_TICK_NAME",
+  "archetype": "turret",
+  "family": "hive",
+  "strata": [
+    "hive",
+    "topsoil"
+  ],
+  "hp": 70,
+  "radius": 11,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": "tick_swell"
+  },
+  "behavior": {
+    "type": "turret",
+    "interval": 1.8,
+    "bullet_speed": 80,
+    "pattern": "alternate_cross",
+    "count": 8
+  },
+  "tags": [
+    "miniboss"
+  ]
+}

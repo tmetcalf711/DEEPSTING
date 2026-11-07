@@ -1,0 +1,25 @@
+{
+  "id": "grubling",
+  "name_key": "ENEMY_GRUBLING_NAME",
+  "archetype": "chaser",
+  "family": "hive",
+  "strata": [
+    "hive",
+    "topsoil"
+  ],
+  "hp": 22,
+  "radius": 8,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "chase",
+    "speed": 46,
+    "stutter_chance": 0.05
+  }
+}

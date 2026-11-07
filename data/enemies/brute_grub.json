@@ -1,0 +1,28 @@
+{
+  "id": "brute_grub",
+  "name_key": "ENEMY_BRUTE_GRUB_NAME",
+  "archetype": "chaser",
+  "family": "hive",
+  "strata": [
+    "hive",
+    "topsoil"
+  ],
+  "hp": 80,
+  "radius": 11,
+  "contact_damage": 2,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "chase",
+    "speed": 40,
+    "stutter_chance": 0.0
+  },
+  "tags": [
+    "miniboss"
+  ]
+}

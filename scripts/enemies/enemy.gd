@@ -18,6 +18,11 @@ var flying := false
 var stunned := 0.0
 var knock := Vector2.ZERO
 var dead := false
+## Underground (burrowers): invisible, can't be hit, no contact damage.
+var untargetable := false
+var poison_t := 0.0
+var slow_t := 0.0
+var _poison_tick := 0.0
 
 var _spr: Sprite2D
 var _flash := 0.0
@@ -103,11 +108,16 @@ func _physics_process(delta: float) -> void:
 		_spawn_t -= delta
 		_animate()
 		return
+	_tick_status(delta)
+	if dead:
+		return
 	if stunned > 0.0:
 		stunned -= delta
 		velocity = knock
 	elif behavior:
 		behavior.tick(self, delta)
+		if slow_t > 0.0:
+			velocity *= 0.5
 		velocity += knock
 	knock = knock.move_toward(Vector2.ZERO, 400.0 * delta)
 	move_and_slide()
@@ -115,15 +125,43 @@ func _physics_process(delta: float) -> void:
 	_animate()
 
 
+## Elemental statuses from shots (DESIGN.md §6.5): poison ticks damage, slow halves movement.
+func apply_elements(elements: Array) -> void:
+	for el in elements:
+		match str(el):
+			"poison":
+				poison_t = 3.0 if not is_boss else 2.0
+			"slow":
+				slow_t = 2.0 if not is_boss else 1.0
+
+
+func _tick_status(delta: float) -> void:
+	slow_t = maxf(0.0, slow_t - delta)
+	if poison_t > 0.0:
+		poison_t -= delta
+		_poison_tick -= delta
+		if _poison_tick <= 0.0:
+			_poison_tick = 0.5
+			hp -= 1.25
+			_flash = 0.04
+			if is_boss:
+				Events.boss_health_changed.emit(maxf(0.0, hp / max_hp))
+			if hp <= 0.0:
+				die(true)
+
+
 func _contact() -> void:
+	if untargetable:
+		return
 	var p := player()
 	if p and p.global_position.distance_to(global_position) < hit_radius + 4.0:
 		p.hurt(int(data.get("contact_damage", 1)), data["id"])
 
 
-func take_hit(damage: float, dir: Vector2, _elements: Array) -> void:
-	if dead:
+func take_hit(damage: float, dir: Vector2, elements: Array) -> void:
+	if dead or untargetable:
 		return
+	apply_elements(elements)
 	hp -= damage
 	_flash = 0.06
 	if not is_boss:
@@ -151,6 +189,16 @@ func die(counted: bool = true) -> void:
 		Events.boss_health_changed.emit(0.0)
 		Events.boss_killed.emit(data["id"], not rc.took_damage_this_room)
 		rc.projectiles.clear_enemy_shots()
+	# Splitters (and bosses like the Grubking) break into smaller enemies. Spawned before the death
+	# is reported so the room doesn't count as cleared in between.
+	var split: Dictionary = data.get("split_into", {})
+	if counted and not split.is_empty():
+		var child: Dictionary = Content.get_entry("enemies", str(split.get("enemy", "")))
+		for i in int(split.get("count", 2)):
+			var off := Vector2.from_angle(TAU * i / float(split.get("count", 2)) + 0.5) * (hit_radius + 4.0)
+			room.call_deferred("spawn_enemy", child, room.nearest_free_point(global_position + off))
+		room.enemies_alive += int(split.get("count", 2))  # reserve; spawn_enemy adds again, so undo below
+		room.call_deferred("_release_reserved", int(split.get("count", 2)))
 	room.on_enemy_died(self)
 	queue_free()
 
@@ -168,6 +216,7 @@ func _animate() -> void:
 	if _spawn_t > 0.0:
 		_spr.scale *= 1.0 - clampf(_spawn_t / 0.45, 0.0, 1.0) * 0.6
 	_spr.position = Vector2(0, -hit_radius * 0.6 - lift)
+	_spr.visible = not untargetable
 	var tele_flash := _tele > 0.0 and fmod(_tele, 0.16) < 0.08
 	if _flash > 0.0:
 		_spr.modulate = Color(3, 3, 3)
@@ -175,6 +224,10 @@ func _animate() -> void:
 		_spr.modulate = Color(1.8, 1.4, 1.4)
 	elif stunned > 0.0:
 		_spr.modulate = Color(0.6, 0.6, 1.0)
+	elif poison_t > 0.0:
+		_spr.modulate = Color(0.6, 1.0, 0.5)
+	elif slow_t > 0.0:
+		_spr.modulate = Color(0.75, 0.85, 1.0)
 	else:
 		_spr.modulate = Color.WHITE
 	_spr.flip_h = to_player().x < 0
@@ -182,6 +235,11 @@ func _animate() -> void:
 
 
 func _draw() -> void:
+	if untargetable:
+		# Dirt mound moving underground.
+		draw_circle(Vector2(0, 0), hit_radius * 0.9, Color(0.3, 0.22, 0.14, 0.9))
+		draw_circle(Vector2(-1, -1), hit_radius * 0.5, Color(0.42, 0.32, 0.2, 0.9))
+		return
 	draw_set_transform(Vector2(0, 1), 0.0, Vector2(1.0, 0.5))
 	draw_circle(Vector2.ZERO, hit_radius * (0.8 if flying else 1.0), Color(0, 0, 0, 0.35))
 	draw_set_transform(Vector2.ZERO)
