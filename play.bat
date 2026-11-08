@@ -31,6 +31,7 @@ set "BRANCH_ARG="
 set "REF=HEAD"
 if defined BRANCH set "BRANCH_ARG=--branch %BRANCH%" & set "REF=%BRANCH%"
 set "GODOT_NAME=Godot_v%GODOT_VERSION%-stable_win64"
+set "LOG=%HERE%\deepsting_log.txt"
 
 echo.
 echo   DeepSting - getting the latest version...
@@ -93,6 +94,7 @@ if not exist "%GAME%\project.godot" (
 )
 echo   Playing the version you already have.
 echo.
+pause
 
 rem ---- 2. Find (or fetch) Godot ---------------------------------------------
 :godot
@@ -116,7 +118,20 @@ if not exist "%GODOT_EXE%" (
 rem ---- 3. Import new assets, then play ---------------------------------------
 :run
 echo   Preparing assets...
-start "" /wait "%GODOT_EXE%" --headless --path "%GAME%" --import
+rem The _console build prints Godot's messages, so problems end up in the log instead of vanishing.
+set "GODOT_CON=%GODOT_EXE:.exe=_console.exe%"
+if not exist "%GODOT_CON%" set "GODOT_CON=%GODOT_EXE%"
+"%GODOT_CON%" --headless --path "%GAME%" --import > "%LOG%" 2>&1
+findstr /c:"SCRIPT ERROR" /c:"Parse Error" "%LOG%" >nul 2>nul
+if not errorlevel 1 (
+    echo.
+    echo   The game reported errors while loading. Please send this to the developer:
+    echo   %LOG%
+    echo.
+    findstr /c:"SCRIPT ERROR" /c:"Parse Error" /c:"at: " "%LOG%"
+    echo.
+    pause
+)
 echo   Starting DeepSting!
 start "" "%GODOT_EXE%" --path "%GAME%"
 endlocal

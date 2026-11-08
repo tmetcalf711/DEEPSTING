@@ -5,6 +5,14 @@ set -uo pipefail
 cd "$(dirname "$0")/.."
 GODOT="${GODOT:-godot}"
 "$GODOT" --headless --import >/dev/null 2>&1
+# Every script must parse and the main menu must boot (the smoke run starts in-run, not at the menu).
+checks="$("$GODOT" --headless -s res://tools/check_scripts.gd 2>&1)"
+echo "$checks" | grep -E "check_scripts"
+if echo "$checks" | grep -qE "SCRIPT ERROR|Parse Error|check_scripts: [^O]" || ! echo "$checks" | grep -q "check_scripts: OK"; then
+  echo "$checks" | grep -E "SCRIPT ERROR|Parse Error|ERROR" -A2 | head -30
+  echo "run_tests: script check failed" >&2
+  exit 1
+fi
 out="$("$GODOT" --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests -ginclude_subdirs -gexit 2>&1)"
 status=$?
 echo "$out" | grep -vE '^\s*$'

@@ -107,6 +107,14 @@ fi
 
 # ---- 3. Import new assets, then play ------------------------------------------
 echo "  Preparing assets..."
-"$GODOT_EXE" --headless --path "$GAME" --import >/dev/null 2>&1
+LOG="$HERE/deepsting_log.txt"
+"$GODOT_EXE" --headless --path "$GAME" --import >"$LOG" 2>&1
+if grep -qE "SCRIPT ERROR|Parse Error" "$LOG"; then
+	echo
+	echo "  The game reported errors while loading. Please send this to the developer: $LOG"
+	grep -E "SCRIPT ERROR|Parse Error|at: " "$LOG" | head -20
+	echo
+	read -r -p "  Press Enter to start anyway... " _
+fi
 echo "  Starting DeepSting!"
 exec "$GODOT_EXE" --path "$GAME"
