@@ -93,6 +93,11 @@ func _on_toast(text: String) -> void:
 
 
 func _process(delta: float) -> void:
+	# The boss bar only shows while a live boss is in the current room.
+	if _boss_frac > 0.0:
+		var rc0 := RunController.instance
+		if rc0 == null or rc0.room == null or rc0.room.room_enemies().filter(func(e: Node) -> bool: return e.is_boss).is_empty():
+			_boss_frac = -1.0
 	_banner_t = maxf(0.0, _banner_t - delta)
 	var a := clampf(_banner_t / 0.5, 0.0, 1.0)
 	_banner.modulate.a = a

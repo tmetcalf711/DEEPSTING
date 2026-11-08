@@ -25,6 +25,17 @@ func _ready() -> void:
 	_quit.pressed.connect(GameState.quit)
 	_seed_edit.text_changed.connect(_on_seed_changed)
 	_on_seed_changed("")
+	# Dev builds: the room editor (DESIGN.md §10.4).
+	if OS.is_debug_build():
+		var ed := Button.new()
+		ed.text = tr("MENU_EDITOR")
+		ed.add_theme_font_size_override("font_size", 8)
+		ed.custom_minimum_size = Vector2(160, 0)
+		ed.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		ed.pressed.connect(func() -> void: GameState.goto_scene("room_editor"))
+		_quit.get_parent().add_child(ed)
+		_quit.get_parent().move_child(ed, _quit.get_index())
+	GameState.room_test_template = ""
 	_descend.grab_focus()
 
 
@@ -46,5 +57,16 @@ func _on_descend() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel") and _seed_edit.has_focus():
-		_descend.grab_focus()
+		# Dev builds: the room editor (DESIGN.md §10.4).
+	if OS.is_debug_build():
+		var ed := Button.new()
+		ed.text = tr("MENU_EDITOR")
+		ed.add_theme_font_size_override("font_size", 8)
+		ed.custom_minimum_size = Vector2(160, 0)
+		ed.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+		ed.pressed.connect(func() -> void: GameState.goto_scene("room_editor"))
+		_quit.get_parent().add_child(ed)
+		_quit.get_parent().move_child(ed, _quit.get_index())
+	GameState.room_test_template = ""
+	_descend.grab_focus()
 		get_viewport().set_input_as_handled()

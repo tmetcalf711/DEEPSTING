@@ -1,32 +1,41 @@
 extends SceneTree
 ## Renders gameplay screenshots for review (needs a display, e.g. xvfb-run).
-##   xvfb-run -a godot --rendering-driver opengl3 -s res://tools/capture_screens.gd -- <out_dir>
+##   xvfb-run -a godot --rendering-driver opengl3 --resolution 1280x720 -s res://tools/capture_screens.gd -- <out_dir>
 
 var frames := 0
 var rc: Node = null
 var out_dir := "user://shots"
-var shots := []
 var started := false
+var built := false
+var steps: Array = []
+var wait := 0
 
 
-func _press(action: String, on: bool) -> void:
-	if on:
-		Input.action_press(action)
-	else:
-		Input.action_release(action)
+func _shot(shot_name: String) -> void:
+	root.get_texture().get_image().save_png(out_dir.path_join(shot_name + ".png"))
+	print("capture: ", shot_name)
 
 
-func _shot(name: String) -> void:
-	var img := root.get_texture().get_image()
-	img.save_png(out_dir.path_join(name + ".png"))
-	print("capture: ", name)
+func _console(cmd: String) -> void:
+	root.get_node("DebugConsole").execute(cmd)
 
 
-func _first(type: String) -> Vector2i:
-	for c in rc.layout["order"]:
-		if rc.layout["rooms"][c]["type"] == type:
-			return c
+func _first(type: String, shape: String = "") -> Vector2i:
+	for a in rc.layout["order"]:
+		var info: Dictionary = rc.layout["rooms"][a]
+		if (type == "" or info["type"] == type) and (shape == "" or info["shape"] == shape):
+			return a
 	return Vector2i(-1, -1)
+
+
+func _special(tid: String) -> void:
+	rc._start_room_test(tid)
+
+
+func _kill_all() -> void:
+	for e in get_nodes_in_group("enemies"):
+		e.untargetable = false
+		e.take_hit(9999.0, Vector2.UP, [])
 
 
 func _process(_d: float) -> bool:
@@ -40,67 +49,76 @@ func _process(_d: float) -> bool:
 		root.get_node("RunState").start_new(0x5EED1234)
 		change_scene_to_file("res://scenes/run/run.tscn")
 		return false
-	if rc == null:
+	if not built:
+		built = true
 		rc = current_scene
+		_build()
 		return false
-	var console: Node = root.get_node("DebugConsole")
-	match frames:
-		40:
-			_shot("01_start_room")
-			console.execute("god")
-		45:
-			# First normal room with a brood cell, fighting.
-			for c in rc.layout["order"]:
-				if rc.layout["rooms"][c]["brood_cell"]:
-					rc.enter_room(c, "S")
-					break
-		110:
-			_press("shoot_up", true)
-			_press("move_left", true)
-		150:
-			_shot("02_combat")
-			_press("move_left", false)
-		200:
-			for e in get_nodes_in_group("enemies"):
-				e.take_hit(9999.0, Vector2.UP, [])
-		235:
-			_press("shoot_up", false)
-			_shot("03_cleared_workers_hauling")
-		260:
-			for b in get_nodes_in_group("brood_cells"):
-				b.take_hit(1.0, Vector2.UP, ["blast"])
-		285:
-			_shot("04_brood_rescued")
-		300:
-			for id in ["raw_geode", "bottle_cap", "obsidian_shard", "quartz_lens", "toy_soldier", "gnome_hat", "dead_phone"]:
-				console.execute("give " + id)
-			rc.enter_room(_first("boss"), "W")
-		420:
-			_press("shoot_right", true)
-		470:
-			_shot("05_boss_fight")
-		520:
-			_press("shoot_right", false)
-			for e in get_nodes_in_group("enemies"):
-				if e.is_boss:
-					e.take_hit(9999.0, Vector2.UP, [])
-		600:
-			_shot("06_boss_shaft_haul")
-		760:
-			_shot("07_banked_trapdoor")
-		770:
-			rc.enter_room(_first("treasure"), "S")
-		800:
-			_shot("08_treasure_room")
-		810:
-			rc.enter_room(_first("secret"), "S")
-		840:
-			_shot("09_secret_room")
-			var ev := InputEventAction.new()
-			ev.action = "pause"
-			ev.pressed = true
-			Input.parse_input_event(ev)
-		860:
-			_shot("10_pause")
-			quit(0)
+	if wait > 0:
+		wait -= 1
+		return false
+	if steps.is_empty():
+		quit(0)
+		return false
+	var s: Array = steps.pop_front()
+	wait = int(s[0])
+	s[1].call()
 	return false
+
+
+func _then(w: int, fn: Callable) -> void:
+	steps.append([w, fn])
+
+
+func _build() -> void:
+	_then(30, func() -> void:
+		_console("god")
+		for id in ["raw_geode", "acid_gland", "toy_soldier", "wax_wings", "dead_phone"]:
+			_console("give " + id))
+	# Topsoil floor: a big room in combat, the minimap with big rooms.
+	_then(40, func() -> void:
+		_console("goto 2")
+		var big := _first("normal", "2x1")
+		if big.x < 0:
+			big = _first("normal", "1x2")
+		if big.x < 0:
+			big = _first("normal", "2x2")
+		if big.x >= 0:
+			rc.enter_room(big, "")
+		Input.action_press("shoot_right"))
+	_then(50, func() -> void: _shot("01_topsoil_big_room"))
+	_then(10, func() -> void:
+		Input.action_release("shoot_right")
+		_console("reveal"))
+	_then(10, func() -> void: _shot("02_minimap_revealed"))
+	# Tunnel Mole boss (rubble rain / burrow strike).
+	_then(1, func() -> void:
+		rc.enter_room(rc.layout["boss"], "")
+		Input.action_press("shoot_up"))
+	_then(200, func() -> void: _shot("03_boss_fight"))
+	_then(1, func() -> void:
+		Input.action_release("shoot_up")
+		_kill_all())
+	_then(200, func() -> void: _console("deal royal"))
+	_then(30, func() -> void: _shot("04_boss_cleared_deal_door"))
+	# Locked shop door on floor 2.
+	_then(1, func() -> void:
+		var shop := _first("shop")
+		var info: Dictionary = rc.layout["rooms"][shop]
+		var link: Array = info["links"].values()[0]
+		rc.enter_room(link[0], link[1]))
+	_then(30, func() -> void: _shot("05_locked_shop_door"))
+	# Special rooms.
+	for tid in ["special_shop", "special_den", "special_royal", "special_sacrifice", "special_arcade", "special_challenge"]:
+		_then(1, func() -> void: _special(tid))
+		_then(45, func() -> void: _shot("06_" + tid))
+	# Curse of the Cave-in.
+	_then(1, func() -> void: _console("curse cave_in"))
+	_then(40, func() -> void: _shot("07_curse_cave_in"))
+	_then(1, func() -> void: _console("curse none"))
+	# Room editor.
+	_then(1, func() -> void: change_scene_to_file("res://tools/room_editor.tscn"))
+	_then(20, func() -> void:
+		var ed: Node = current_scene
+		ed._load("hive_x01"))
+	_then(10, func() -> void: _shot("08_room_editor"))

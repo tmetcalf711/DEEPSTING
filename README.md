@@ -19,7 +19,7 @@ godot                       # play
 ./tools/run_tests.sh        # tests + data validation + smoke run
 ```
 
-Status: **Milestone 1: playable vertical slice** (one Abandoned Hive floor).
+Status: **Milestone 2: chapter 1 playable.** The Abandoned Hive → Topsoil, with every special room (shop, Royal Chamber / Mutation Den, sacrifice altar, challenge, mini-boss, curse room, vault, arcade, library), big rooms, curses, and an in-engine room editor (main menu → Room Editor in dev builds).
 
 ## Controls (defaults)
 | | Keyboard | Gamepad |

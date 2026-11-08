@@ -1,6 +1,6 @@
 # DeepSting — Game Design Document (living)
 
-> Status: **Milestone 0 (design and scaffolding)**. This is the source of truth for design. When code and this document disagree, fix one of them in the same commit.
+> Status: **Milestone 2 complete** (chapter 1 playable: The Abandoned Hive → Topsoil). This is the source of truth for design. When code and this document disagree, fix one of them in the same commit.
 > Every ambiguity resolved during development goes in **§19 Decisions Log**. Questions that would be expensive to change later go in **§20 Open Questions**.
 
 ---
@@ -341,13 +341,13 @@ Each boss has 2–3 phases, a HUD health bar, a name card, and is fully pattern-
 | Curse | Effect | Isaac analogue |
 |---|---|---|
 | **Cave-in** | darkness: small light radius around the wasp | Darkness |
-| **Tremor** | the minimap scrambles until a room is entered; unvisited room icons shuffle | Lost/Maze hybrid |
+| **Tremor** | the minimap only shows rooms you have visited (D31) | Lost |
 | **Toxic Fog** | pedestal items show as "?" until picked up | Blind |
-| **Labyrinth** | double-size floor (XL), with 2 bosses | Labyrinth |
+| **Labyrinth** | XL floor (×1.8 rooms, cap 30) with 2 Dig Sites; no floor skip yet (D31) | Labyrinth |
 | **Silt** | room icons hidden on the map (special rooms are unknown) | Unknown-ish |
-| **Spore Bloom** | (late-game unlock) enemies are 15% more likely to be champions | — |
+| **Spore Bloom** | (late-game unlock, `curse:spore_bloom`) enemies are 15% more likely to be champions; lands with champions in M4 | — |
 
-Base curse chance 15% per floor after floor 1, adjusted by items and Contamination.
+Base curse chance 15% per floor (`curse_chance`), except floor 1 during the first 3 runs (`curse_free_runs`). It's adjusted by items and Contamination later. The curse is shown in the floor banner, under the HUD consumables and on the pause screen. Debug: `curse <id|none>` regenerates the floor.
 
 ### 8.2 Radiation and Mutations (second build axis)
 - The **Radiation meter** fills from killing mutants (1 per kill, 5 per champion, 20 per boss), from standing in glowing contamination (+5/s) and from some Fluids.
@@ -361,24 +361,25 @@ Base curse chance 15% per floor after floor 1, adjusted by items and Contaminati
 |---|---|---|
 | Start | center | tutorial art on floor 1 |
 | Boss | farthest dead end | boss + trapdoor + reward pedestal |
-| Dig Site (treasure) | dead end | 1 item from Dig Site / Strata pool; locked from ch2 |
-| Trader (shop) | dead end | 3–5 wares from Trader pool + consumables; NPC: **Mott**, a hoarding pack rat |
+| Dig Site (treasure) | dead end, always | 1 item from Dig Site (25% Strata pool when one exists); Royal Jelly lock from depth 3 |
+| Trader (shop) | dead end, always | 2 Trader pool items (10–25 Mana by quality) + 3 consumables (heart 3, Dig Charge 5, Royal Jelly 5, Chitin 5); NPC **Mott**, a hoarding pack rat; Royal Jelly lock from floor 2 |
 | Vault | dead end, ch2+ | 2 Royal Jelly to open; Vault pool item; option to donate Mana |
 | Arcade | dead end, ch2+ | gamble Mana: slot beetle, fortune worm, crane game |
-| Sacrifice Altar | dead end | spikes: take damage for escalating rewards |
+| Sacrifice Altar | dead end | step on the spikes: half a heart per use; each use on the floor rolls a better table (`config/sacrifice.json`) |
 | Curse room | dead end | spiked door; cursed pool item / pickups |
 | Library | dead end, rarer | fossils + Library pool items (requires Archivist unlock) |
-| Challenge | dead end | waves for an item; enterable only at full health |
-| Mini-boss | dead end | a stronger enemy + guaranteed pickup |
+| Challenge | dead end | door only opens at full hearts; 3 waves of the stratum's enemies, then the pedestal unlocks |
+| Mini-boss | dead end | Matriarch Tick or Brute Grub; 2 guaranteed pickups |
 | **Brood Cell** | dead end; rare outside floor 1 | sealed brood cells; may hold mutated brood |
 | Secret | empty cell bordering ≥3 rooms | Secret pool / consumables |
 | Super-secret | empty cell bordering exactly 1 room (not boss) | Royal/Mutation-lite item or big pickup cache |
 | Royal Chamber / Mutation Den | reachable from the boss room post-fight | angel/devil equivalent (§8.4) |
 
 ### 8.4 Royal Chamber / Mutation Den (angel/devil)
-- After the boss dies, a door may appear. Base chance 0% on floor 1, 30% on floor 2+, with +35% if no damage was taken in the boss fight, −20% if the player took a red-cell hit from any source this floor, etc. (Isaac-like modifiers in config).
-- **Mutation Den** offers Mutation pool items that cost heart containers (1–2). Taking any Den item locks out Royal Chambers for the run.
-- **Royal Chamber** offers 1 free Royal pool item. The chance of Royal vs Den is 50% by default, shifted by Den items taken (→Den) and by having never taken one (→Royal).
+- After the boss dies, a door may appear on a free wall of the boss room, leading to an off-map room. Chance (`config/floorgen.deal`): 0% on floor 1, otherwise 30% base, +35% if no damage was taken in the boss fight, +10% if none was taken on the whole floor.
+- **Mutation Den** offers 2 Mutation pool items that cost heart containers (1, or 2 for quality 3+). You can't pay with containers you don't have, or buy yourself to death. Taking any Den item makes every later deal a Den.
+- **Royal Chamber** offers a choice of 2 Royal pool items; taking one makes the other vanish. Otherwise Royal vs Den is 50/50.
+- Debug: `deal royal|den`.
 
 ---
 
@@ -411,8 +412,9 @@ max_attempts = 200 (then relax neighbor rule; logged)
 ```
 
 ### 10.2 Algorithm
+*(As implemented in M2: steps run at room level. A room's "neighbors" are its wall slots, `"ox,oy,D"`, and every door is an explicit link `slot → [room, slot]`, stored on both sides.)*
 1. Queue ← [start]. Mark start filled.
-2. Pop a cell. For each of 4 directions (order shuffled by `RNG.stream("map")`):
+2. Pop a room. For each of its wall slots (order shuffled by `RNG.stream("map")`):
    - skip if out of bounds, already filled, or `filled_count ≥ target`
    - skip if the candidate has more than 1 filled neighbor (prevents clumps and loops)
    - skip with 50% chance (keeps branches organic)
@@ -420,12 +422,12 @@ max_attempts = 200 (then relax neighbor rule; logged)
 3. When the queue empties: if `filled_count < target`, restart from scratch (new attempt, same stream, so it stays deterministic).
 4. Collect **dead ends** (cells with exactly 1 neighbor, excluding start). If fewer than required, restart.
 5. **Boss** = the dead end with the greatest BFS distance from start (ties → stream order).
-6. Assign the remaining dead ends (shuffled) to: Dig Site, Trader, then one random special from the eligible set for this floor (weights in config). Floor 1 replaces the random special with a Brood Cell room 50% of the time.
-7. **Big rooms (2×1, 1×2, 2×2, L):** after layout, attempt to merge eligible normal cells into multi-cell templates (Isaac Afterbirth+ approach: try to place large shapes where all covered cells are normal rooms, keeping connectivity; 30% attempt rate per cell).
+6. Assign the remaining dead ends (shuffled) to: Dig Site, Trader, then (floor 1, 50%) a Brood Cell room, then one random special from the eligible set for this floor (`special_weights`, filtered by `special_rules`: Vault/Arcade from depth 3, Library needs the Archivist unlock). Contents and door kinds are then rolled by `FloorContents` in fixed room order (D26).
+7. **Big rooms (2×1, 1×2, 2×2):** placed *during* growth (D25). When a new room is added, with `big_room_rate` (22%) it tries a big shape (weights `big_room_weights`) anchored so it covers the new cell. A room of any shape may only touch the existing map at exactly one cell edge, which keeps the room graph a tree. Specials, the boss and the start are always 1×1. L-shapes are deferred (D27).
 8. **Secret room:** among empty cells with ≥3 filled neighbors (none of them boss), pick by stream. If none exist, relax to ≥2. Must not be adjacent to boss.
 9. **Super-secret room:** empty cells with exactly 1 filled neighbor that is not boss/secret, and not adjacent to the secret room. Prefer the farthest from start.
 10. **Floor 1 brood cells:** choose 2–4 normal rooms (not start, not boss-adjacent) and flag them `has_brood_cell`. Template choice must then use a template with a `brood_cell` slot.
-11. **Template assignment:** per cell, choose a room template whose shape matches and whose doors ⊇ the cell's needed doors (templates declare possible door slots, and unused doors become walls), filtered by stratum tags and difficulty band (`depth`-scaled), weighted, via `RNG.stream("rooms")`.
+11. **Template assignment:** per room, choose a template whose shape matches, whose `room_types` include the room's type and whose stratum is the floor's (or `"*"` for shared specials), weighted, via `RNG.stream("rooms")`. Rooms with sealed brood cells need the `brood_cell` tag; if no shape matches, the cell is dropped rather than failing. Difficulty bands come in M4.
 
 ### 10.3 Invariants (unit-tested)
 - All rooms are reachable from start (BFS over doors).
@@ -625,9 +627,9 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 ## 17. Milestone plan with acceptance criteria
 | M | Scope | "Done" means |
 |---|---|---|
-| 0 | GDD, project, autoloads, folders, CLAUDE.md, GUT, console, data/i18n/art scaffolding | project boots to the main menu; tests green; GDD reviewed |
-| 1 | Vertical slice: Abandoned Hive floor (fixed or simple gen), movement/dash/shoot, health, doors, 4 enemies + 1 boss, deposits + worker haul, brood cells, Dig Charge + 1 secret wall, 10 items (stat, projectile mods, familiar, active), minimap, death + restart | playable start-to-boss loop in under 10 min |
-| 2 | Full floorgen + all special rooms, 40 ch1 templates, room editor, curses, Royal/Den, Trader | invariant tests green; seeds reproduce |
+| 0 ✅ | GDD, project, autoloads, folders, CLAUDE.md, GUT, console, data/i18n/art scaffolding | project boots to the main menu; tests green; GDD reviewed |
+| 1 ✅ | Vertical slice: Abandoned Hive floor (fixed or simple gen), movement/dash/shoot, health, doors, 4 enemies + 1 boss, deposits + worker haul, brood cells, Dig Charge + 1 secret wall, 10 items (stat, projectile mods, familiar, active), minimap, death + restart | playable start-to-boss loop in under 10 min |
+| 2 ✅ | Full floorgen + all special rooms, 40 ch1 templates, room editor, curses, Royal/Den, Trader | invariant tests green; seeds reproduce |
 | 3 | Generic modifier stack at scale, all pools, trinkets, fossils, fluids, radiation + mutations, 60 items, synergy test scene | stacking tests green; 500-bullet perf test passes |
 | 4 | Ch1–4 + alts, 3 bosses/chapter, champions, difficulty curve, first ending | full run to ending 1 |
 | 5 | Achievements → unlocks, pool locking, completion marks, 6 mutated brood, hive + Pulper, Trove, Hive Upgrades, 3 castes, save/resume | fresh save → unlocks flow across runs |
@@ -670,6 +672,16 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | D22 | Enemies get a 0.5 s wake-up on room entry, plus a 0.45 s spawn-in animation | Isaac-fair room entries |
 | D23 | Player shots stay amber-family; item tints blend at most 45% | bullet readability (§7.1) |
 | D24 | Dig Charge: 38 px radius, 60 damage, 1 heart to the player if caught | rescaled for 16 px tiles (Isaac ≈ 2.5 tiles) |
+| D25 | Big rooms are grown during generation, at room level, with the "touch the map at exactly one edge" rule | merging cells afterwards can't make 2×2 rooms (the cell tree never has a 2×2 block) and breaks dead-end math |
+| D26 | `FloorContents` rolls every room's contents and door kinds at generation time, in room order; deal rooms roll when they appear | exploration order can't change a seed's floor; same seed = identical layout + contents (tested) |
+| D27 | L-shaped rooms deferred; shapes are 1×1, 2×1, 1×2, 2×2 | rectangles cover most of Isaac's value; L needs non-rect walls and camera rules |
+| D28 | Locks: Trader from floor 2, Dig Site from depth 3, Vault 2 Royal Jelly, Library 1 | gives Royal Jelly a real use from chapter 1 (answers part of Q9) |
+| D29 | Chapter 1 = The Abandoned Hive → Topsoil (`config/floorgen.chapters`); clearing Topsoil ends the run as "Chapter 1 complete" until M4 adds chapters 2–4 | playable to a clear end every milestone |
+| D30 | Special rooms are plug-ins: `scripts/run/specials/<type>.gd`, created by the room by type, with hooks `setup`, `on_enemies_cleared`, `on_cleared` | adding a room type never touches Room |
+| D31 | Tremor = "only visited rooms on the map" (simpler than a shuffling map); Labyrinth = XL floor + 2 Dig Sites, no floor skip yet | readable now; the skip returns when chapters have more floors |
+| D32 | Statuses: poison (1.25 dmg / 0.5 s for 3 s) and slow (½ speed for 2 s); bosses get shorter durations | first element effects for item builds |
+| D33 | Projectiles, blasts and bursts only affect nodes inside the current room | a room being freed on the same frame could otherwise absorb hits (found by the smoke test) |
+| D34 | Brood Cell rooms use a shared template (any stratum); Mutation Den can't kill you or take containers you don't have | design says Brood Cells are "rare outside floor 1"; Isaac-fair deals |
 
 ---
 
@@ -689,5 +701,5 @@ All eight Milestone 0 questions were answered (2026-11-04):
 | Extra | Health stays **hearts**; **Chitin** = soul-heart shields; **Toxic Spined Chitin** = black hearts; **Royal Jelly** = keys for now | §3.4, §4 |
 
 ### New open questions (Milestone 1 review)
-1. **Q9: Mana and Royal Jelly have no sinks yet.** Shops (Mana) and locked rooms/caches (Royal Jelly) arrive in M2. Are a Trader shop plus locked Dig Sites from chapter 2 enough, or do you want Royal Jelly to have a second use (e.g. feeding rescued brood for a bonus)?
+1. **Q9: Royal Jelly's second use.** M2 added Mana sinks (the Trader, Arcade machines) and Royal Jelly locks (Trader from floor 2, Dig Site from depth 3, Vault, Library). Do you still want a second Royal Jelly use (e.g. feeding rescued brood for a bonus)?
 2. **Q10: Shaft haul pacing.** The shaft sequence takes ~3–6 s depending on stash size, and the trapdoor appears only afterwards. Too slow? It can be skipped by leaving the room.

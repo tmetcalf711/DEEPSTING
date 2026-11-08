@@ -6,6 +6,7 @@ enum Mode { BOOT, MENU, HIVE, RUN, PAUSED }
 const SCENES: Dictionary = {
 	"main_menu": "res://scenes/ui/main_menu.tscn",
 	"run": "res://scenes/run/run.tscn",
+	"room_editor": "res://tools/room_editor.tscn",
 	# M5: "hive": "res://scenes/hive/hive.tscn",
 }
 
