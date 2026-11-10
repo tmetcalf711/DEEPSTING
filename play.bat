@@ -12,6 +12,16 @@ rem    copy, set the GODOT environment variable to the path of the Godot .exe.
 rem  Your saves live in %%APPDATA%%\DeepSting and are
 rem  never touched by updates.
 rem ---------------------------------------------------------------------------
+
+rem Run from a temporary copy. Updating the game can rewrite this very file, and cmd reads a
+rem running batch file from disk as it goes, so the rest of the script would come out garbled.
+rem The whole "if" block is read before it runs, and the copy takes over without returning.
+if /i not "%~1"=="--from-copy" (
+    copy /y "%~f0" "%TEMP%\deepsting_play.bat" >nul
+    "%TEMP%\deepsting_play.bat" --from-copy "%~dp0."
+    exit /b
+)
+
 setlocal
 title DeepSting
 set "REPO=https://github.com/tmetcalf711/DEEPSTING"
@@ -19,8 +29,8 @@ rem Leave BRANCH empty to follow the repository's default branch, or name one (e
 set "BRANCH="
 set "GODOT_VERSION=4.7.2"
 
-set "HERE=%~dp0"
-set "HERE=%HERE:~0,-1%"
+rem The folder this launcher was started from (passed by the original copy, see above).
+set "HERE=%~f2"
 if exist "%HERE%\project.godot" (
     set "GAME=%HERE%"
 ) else (
