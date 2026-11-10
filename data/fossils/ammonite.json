@@ -1,0 +1,16 @@
+{
+  "id": "ammonite",
+  "name_key": "FOSSIL_AMMONITE_NAME",
+  "desc_key": "FOSSIL_AMMONITE_DESC",
+  "effects": [
+    {
+      "type": "ability",
+      "ability": "volley",
+      "params": {
+        "count": 16,
+        "spiral": true,
+        "damage_mult": 1.2
+      }
+    }
+  ]
+}

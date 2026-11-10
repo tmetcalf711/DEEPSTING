@@ -4,6 +4,14 @@
   "fallback": "",
   "entries": [
     {
+      "id": "amber_gnat",
+      "weight": 1.0
+    },
+    {
+      "id": "ant_farm",
+      "weight": 1.0
+    },
+    {
       "id": "bag_of_fuses",
       "weight": 1.0
     },
@@ -12,7 +20,35 @@
       "weight": 1.0
     },
     {
+      "id": "bone_whistle",
+      "weight": 1.0
+    },
+    {
       "id": "bottle_cap",
+      "weight": 1.0
+    },
+    {
+      "id": "bronze_arrowhead",
+      "weight": 1.0
+    },
+    {
+      "id": "bubble_wrap",
+      "weight": 1.0
+    },
+    {
+      "id": "clay_idol",
+      "weight": 1.0
+    },
+    {
+      "id": "coin_purse",
+      "weight": 1.0
+    },
+    {
+      "id": "darning_needle",
+      "weight": 1.0
+    },
+    {
+      "id": "dead_lighter",
       "weight": 1.0
     },
     {
@@ -20,7 +56,19 @@
       "weight": 1.0
     },
     {
+      "id": "fishing_sinker",
+      "weight": 1.0
+    },
+    {
       "id": "frayed_shoelace",
+      "weight": 1.0
+    },
+    {
+      "id": "fridge_magnet",
+      "weight": 1.0
+    },
+    {
+      "id": "glass_eye",
       "weight": 1.0
     },
     {
@@ -28,7 +76,27 @@
       "weight": 1.0
     },
     {
+      "id": "jawbreaker",
+      "weight": 1.0
+    },
+    {
+      "id": "kaleidoscope_shard",
+      "weight": 1.0
+    },
+    {
+      "id": "marble",
+      "weight": 1.0
+    },
+    {
       "id": "obsidian_shard",
+      "weight": 1.0
+    },
+    {
+      "id": "opal_fragment",
+      "weight": 1.0
+    },
+    {
+      "id": "pocket_watch",
       "weight": 1.0
     },
     {
@@ -44,7 +112,19 @@
       "weight": 1.0
     },
     {
+      "id": "rubber_band",
+      "weight": 1.0
+    },
+    {
+      "id": "rusty_spoon",
+      "weight": 1.0
+    },
+    {
       "id": "salt_lick",
+      "weight": 1.0
+    },
+    {
+      "id": "snail_shell",
       "weight": 1.0
     },
     {
@@ -52,11 +132,31 @@
       "weight": 1.0
     },
     {
+      "id": "static_wire",
+      "weight": 1.0
+    },
+    {
       "id": "sun_disk",
       "weight": 1.0
     },
     {
+      "id": "swollen_battery",
+      "weight": 1.0
+    },
+    {
+      "id": "temple_bell",
+      "weight": 1.0
+    },
+    {
+      "id": "tin_can_phone",
+      "weight": 1.0
+    },
+    {
       "id": "toy_soldier",
+      "weight": 1.0
+    },
+    {
+      "id": "wedding_ring",
       "weight": 1.0
     }
   ]

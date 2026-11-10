@@ -1,0 +1,11 @@
+{
+  "id": "full_heal",
+  "name_key": "FLUID_FULL_HEAL_NAME",
+  "effects": [
+    {
+      "type": "health",
+      "heal": -1
+    }
+  ],
+  "good": true
+}

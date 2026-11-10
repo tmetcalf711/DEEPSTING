@@ -10,7 +10,7 @@ class P:
 	var max_life := 1.0
 	var size := 1.0
 	var color := Color.WHITE
-	var kind := 0  # 0 dot, 1 ring, 2 warning circle
+	var kind := 0  # 0 dot, 1 ring, 2 warning circle, 3 zap segment (vel = offset), 4 number (size = value)
 	var grav := 0.0
 
 var parts: Array[P] = []
@@ -59,6 +59,22 @@ func ring(pos: Vector2, radius: float, color: Color, life: float = 0.3) -> void:
 	_add(1, pos, Vector2.ZERO, life, radius, color)
 
 
+## Chain-lightning arc between two points (a few jagged segments).
+func zap(a: Vector2, b: Vector2) -> void:
+	var r := _rng()
+	var prev := a
+	for i in range(1, 5):
+		var t := i / 4.0
+		var pt := a.lerp(b, t) + (Vector2(r.randf_range(-4, 4), r.randf_range(-4, 4)) if i < 4 else Vector2.ZERO)
+		_add(3, prev, pt - prev, 0.15, 1.5, Color(1, 1, 0.5))
+		prev = pt
+
+
+## Floating damage number (synergy lab dummies).
+func number(pos: Vector2, value: float) -> void:
+	_add(4, pos + Vector2(_rng().randf_range(-4, 4), -10), Vector2(0, -18), 0.7, value, Color(1, 1, 1))
+
+
 ## Telegraph circle on the ground (falling rubble etc.) that fills up until it lands.
 func warn(pos: Vector2, radius: float, duration: float) -> void:
 	_add(2, pos, Vector2.ZERO, duration, radius, Color(0.9, 0.2, 0.2, 0.8))
@@ -86,9 +102,10 @@ func _process(delta: float) -> void:
 			parts[i] = parts[parts.size() - 1]
 			parts.pop_back()
 			continue
-		p.vel.y += p.grav * delta
-		p.vel *= 0.92
-		p.pos += p.vel * delta
+		if p.kind != 3:
+			p.vel.y += p.grav * delta
+			p.vel *= 0.92
+			p.pos += p.vel * delta
 		i += 1
 	queue_redraw()
 
@@ -104,6 +121,10 @@ func _draw() -> void:
 				draw_rect(Rect2(p.pos - Vector2.ONE * p.size * 0.5, Vector2.ONE * p.size), c)
 			1:
 				draw_arc(p.pos, p.size * (1.0 - t * 0.6), 0, TAU, 24, c, 2.0)
+			3:
+				draw_line(p.pos, p.pos + p.vel, c, p.size)
+			4:
+				draw_string(ThemeDB.fallback_font, p.pos, str(snappedf(p.size, 0.1)), HORIZONTAL_ALIGNMENT_CENTER, -1, 7, c)
 			2:
 				var k := 1.0 - t
 				draw_circle(p.pos, p.size, Color(0, 0, 0, 0.25 + 0.25 * k))

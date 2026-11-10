@@ -1,0 +1,34 @@
+{
+  "id": "wedding_ring",
+  "name_key": "ITEM_WEDDING_RING_NAME",
+  "desc_key": "ITEM_WEDDING_RING_DESC",
+  "note_key": "ITEM_WEDDING_RING_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "royal"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "luck",
+      "add": 1
+    },
+    {
+      "type": "trigger",
+      "event": "floor_start",
+      "chance": 1.0,
+      "per_luck": 0.0,
+      "action": {
+        "kind": "shield",
+        "shield": "chitin",
+        "amount": 2
+      }
+    }
+  ]
+}

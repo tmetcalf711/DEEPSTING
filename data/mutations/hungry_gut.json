@@ -1,0 +1,18 @@
+{
+  "id": "hungry_gut",
+  "name_key": "MUT_HUNGRY_GUT_NAME",
+  "desc_key": "MUT_HUNGRY_GUT_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "room_clear",
+      "chance": 0.2,
+      "per_luck": 0.0,
+      "action": {
+        "kind": "heal",
+        "amount": 1
+      }
+    }
+  ]
+}

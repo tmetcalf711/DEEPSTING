@@ -15,6 +15,8 @@ var mode: Mode = Mode.BOOT
 var god_mode: bool = false
 ## Set by the room editor's Test button: the next run builds just this template (empty = normal run).
 var room_test_template: String = ""
+## Synergy Lab (dev): the room test also gets the lab panel.
+var lab_mode: bool = false
 
 
 func _ready() -> void:

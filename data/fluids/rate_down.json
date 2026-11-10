@@ -1,0 +1,12 @@
+{
+  "id": "rate_down",
+  "name_key": "FLUID_RATE_DOWN_NAME",
+  "effects": [
+    {
+      "type": "perma_stat",
+      "stat": "fire_rate",
+      "add": -0.25
+    }
+  ],
+  "good": false
+}

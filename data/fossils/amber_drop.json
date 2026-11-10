@@ -1,0 +1,11 @@
+{
+  "id": "amber_drop",
+  "name_key": "FOSSIL_AMBER_DROP_NAME",
+  "desc_key": "FOSSIL_AMBER_DROP_DESC",
+  "effects": [
+    {
+      "type": "health",
+      "heal": -1
+    }
+  ]
+}

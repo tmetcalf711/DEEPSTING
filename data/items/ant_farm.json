@@ -1,0 +1,28 @@
+{
+  "id": "ant_farm",
+  "name_key": "ITEM_ANT_FARM_NAME",
+  "desc_key": "ITEM_ANT_FARM_DESC",
+  "note_key": "ITEM_ANT_FARM_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "familiar",
+      "behavior": "biter",
+      "sprite": "ant_farm",
+      "count": 2,
+      "params": {
+        "speed": 65,
+        "damage": 3
+      }
+    }
+  ]
+}

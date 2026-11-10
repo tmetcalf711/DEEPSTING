@@ -1,0 +1,13 @@
+{
+  "id": "glow_glands",
+  "name_key": "MUT_GLOW_GLANDS_NAME",
+  "desc_key": "MUT_GLOW_GLANDS_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "aura",
+      "radius": 26,
+      "dps": 4
+    }
+  ]
+}

@@ -75,6 +75,10 @@ func _set_open(on: bool) -> void:
 			names.append(tr(Content.get_entry("items", id).get("name_key", id)))
 		if RunState.active_item != "":
 			names.append(tr(Content.get_entry("items", RunState.active_item).get("name_key", "")) + " *")
+		if RunState.trinket != "":
+			names.append(tr(Content.get_entry("trinkets", RunState.trinket).get("name_key", "")) + " (" + tr("PAUSE_KNICKKNACK") + ")")
+		for m in RunState.mutations:
+			names.append(tr(Content.get_entry("mutations", m).get("name_key", "")) + " (" + tr("PAUSE_MUTATION") + ")")
 		var rc := RunController.instance
 		var where := tr(rc.stratum.get("name_key", "")) + "  ·  " + (tr("BANNER_FLOOR") % (RunState.floor_index + 1))
 		if rc.curse_id != "":

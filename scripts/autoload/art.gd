@@ -22,6 +22,9 @@ const PLACEHOLDER_STYLE: Dictionary = {
 	"workers": ["wasp", 8, Color(0.95, 0.75, 0.2)],
 	"fx": ["circle", 8, Color(1, 1, 1)],
 	"npcs": ["blob", 18, Color(0.55, 0.42, 0.3)],
+	"trinkets": ["triangle", 12, Color(0.85, 0.7, 0.45)],
+	"fossils": ["rock", 12, Color(0.72, 0.66, 0.55)],
+	"mutations": ["blob", 14, Color(0.5, 0.95, 0.35)],
 }
 
 ## Per-id overrides ("category/id" -> [shape, size_px, color]) so placeholder silhouettes read
@@ -60,6 +63,8 @@ const ID_STYLE: Dictionary = {
 	"player/overlay_gnome_hat": ["triangle", 8, Color(0.85, 0.12, 0.12)],
 	"player/overlay_wax_wings": ["hex", 12, Color(0.98, 0.95, 0.8)],
 	"items/unknown": ["hex", 14, Color(0.45, 0.45, 0.5)],
+	"ui/fluid": ["square", 9, Color(0.7, 0.9, 0.95)],
+	"ui/radiation": ["circle", 9, Color(0.5, 1.0, 0.3)],
 	"npcs/mott": ["blob", 18, Color(0.55, 0.42, 0.3)],
 	"props/altar": ["square", 16, Color(0.45, 0.42, 0.4)],
 	"props/slot_beetle": ["square", 16, Color(0.85, 0.3, 0.55)],

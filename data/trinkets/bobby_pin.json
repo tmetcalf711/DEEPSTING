@@ -1,0 +1,13 @@
+{
+  "id": "bobby_pin",
+  "name_key": "TRINKET_BOBBY_PIN_NAME",
+  "desc_key": "TRINKET_BOBBY_PIN_DESC",
+  "effects": [
+    {
+      "type": "flag",
+      "name": "lockpick"
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

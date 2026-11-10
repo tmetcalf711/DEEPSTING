@@ -1,0 +1,27 @@
+{
+  "id": "rusty_spoon",
+  "name_key": "ITEM_RUSTY_SPOON_NAME",
+  "desc_key": "ITEM_RUSTY_SPOON_DESC",
+  "note_key": "ITEM_RUSTY_SPOON_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "proc",
+      "kind": "element",
+      "chance": 0.25,
+      "per_luck": 0.02,
+      "params": {
+        "element": "poison"
+      }
+    }
+  ]
+}

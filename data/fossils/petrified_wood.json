@@ -1,0 +1,11 @@
+{
+  "id": "petrified_wood",
+  "name_key": "FOSSIL_PETRIFIED_WOOD_NAME",
+  "desc_key": "FOSSIL_PETRIFIED_WOOD_DESC",
+  "effects": [
+    {
+      "type": "consumables",
+      "dig_charges": 3
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "id": "chewing_gum",
+  "name_key": "TRINKET_CHEWING_GUM_NAME",
+  "desc_key": "TRINKET_CHEWING_GUM_DESC",
+  "effects": [
+    {
+      "type": "proc",
+      "kind": "element",
+      "chance": 0.1,
+      "per_luck": 0.01,
+      "params": {
+        "element": "slow"
+      }
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

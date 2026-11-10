@@ -29,6 +29,16 @@
       "id": "chitin",
       "price": 5,
       "weight": 1.5
+    },
+    {
+      "id": "fossil",
+      "price": 4,
+      "weight": 1.5
+    },
+    {
+      "id": "fluid",
+      "price": 3,
+      "weight": 1.5
     }
   ]
 }

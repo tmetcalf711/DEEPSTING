@@ -1,0 +1,22 @@
+{
+  "id": "rusty_compass",
+  "name_key": "ITEM_RUSTY_COMPASS_NAME",
+  "desc_key": "ITEM_RUSTY_COMPASS_DESC",
+  "note_key": "ITEM_RUSTY_COMPASS_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "trader",
+    "library"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "flag",
+      "name": "compass"
+    }
+  ]
+}

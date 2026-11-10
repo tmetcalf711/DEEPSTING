@@ -1,0 +1,23 @@
+{
+  "id": "tin_can_phone",
+  "name_key": "ITEM_TIN_CAN_PHONE_NAME",
+  "desc_key": "ITEM_TIN_CAN_PHONE_DESC",
+  "note_key": "ITEM_TIN_CAN_PHONE_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "boomerang",
+      "params": {}
+    }
+  ]
+}

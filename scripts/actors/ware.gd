@@ -43,7 +43,12 @@ func _refresh() -> void:
 		var blind: bool = RunController.instance.curse_effect() == "blind_items"
 		_spr.texture = Art.texture("items", "unknown" if blind else str(entry["id"]))
 	else:
-		_spr.texture = Art.texture("pickups", str(entry["id"]))
+		var pk: String = str(Content.get_entry("pickups", str(entry["id"])).get("kind", ""))
+		match pk:
+			"trinket": _spr.texture = Art.texture("trinkets", str(entry.get("payload", "")))
+			"fossil": _spr.texture = Art.texture("fossils", str(entry.get("payload", "")))
+			"fluid": _spr.texture = Art.texture("ui", "fluid")
+			_: _spr.texture = Art.texture("pickups", str(entry["id"]))
 	if entry.has("heart_cost"):
 		_label.text = "♥".repeat(int(entry["heart_cost"]))
 		_label.add_theme_color_override("font_color", Color(0.95, 0.25, 0.3))
@@ -81,7 +86,7 @@ func _try_buy(p: Node2D) -> void:
 			Audio.play_sfx("cant_afford")
 			return
 		if entry["kind"] == "pickup":
-			if not PickupScript.apply_pickup(Content.get_entry("pickups", str(entry["id"]))):
+			if not PickupScript.apply_pickup(Content.get_entry("pickups", str(entry["id"])), str(entry.get("payload", "")), global_position + Vector2(0, 20)):
 				return
 		RunState.add_mana(-price)
 		MetaSave.add_counter("shop_purchases")

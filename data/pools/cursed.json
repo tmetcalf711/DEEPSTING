@@ -4,7 +4,15 @@
   "fallback": "dig_site",
   "entries": [
     {
+      "id": "cracked_crown",
+      "weight": 1.0
+    },
+    {
       "id": "cursed_locket",
+      "weight": 1.0
+    },
+    {
+      "id": "dead_lighter",
       "weight": 1.0
     },
     {

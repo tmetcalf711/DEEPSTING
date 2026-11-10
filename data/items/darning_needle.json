@@ -1,0 +1,26 @@
+{
+  "id": "darning_needle",
+  "name_key": "ITEM_DARNING_NEEDLE_NAME",
+  "desc_key": "ITEM_DARNING_NEEDLE_DESC",
+  "note_key": "ITEM_DARNING_NEEDLE_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "multishot",
+      "params": {
+        "count": 2,
+        "spread": 0.12
+      }
+    }
+  ]
+}

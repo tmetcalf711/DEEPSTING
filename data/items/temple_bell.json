@@ -1,0 +1,26 @@
+{
+  "id": "temple_bell",
+  "name_key": "ITEM_TEMPLE_BELL_NAME",
+  "desc_key": "ITEM_TEMPLE_BELL_DESC",
+  "note_key": "ITEM_TEMPLE_BELL_NOTE",
+  "quality": 2,
+  "kind": "active",
+  "pools": [
+    "dig_site",
+    "library"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "active",
+      "ability": "stun_flash",
+      "charge": 3,
+      "params": {
+        "duration": 2.0
+      }
+    }
+  ]
+}

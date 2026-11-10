@@ -1,6 +1,7 @@
 {
   "id": "extra_eye",
   "name_key": "MUT_EXTRA_EYE_NAME",
+  "desc_key": "MUT_EXTRA_EYE_DESC",
   "weight": 1.0,
   "effects": [
     {

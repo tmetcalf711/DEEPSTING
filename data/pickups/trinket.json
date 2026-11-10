@@ -1,0 +1,6 @@
+{
+  "id": "trinket",
+  "kind": "trinket",
+  "value": 1,
+  "name_key": "PICKUP_TRINKET_NAME"
+}

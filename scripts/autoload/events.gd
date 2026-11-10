@@ -21,6 +21,8 @@ signal player_died()
 signal stats_changed()
 signal item_picked_up(item_id: String)
 signal consumables_changed()
+signal radiation_changed(value: float, threshold: int)
+signal synergy(item_id: String)
 
 # --- Economy / colony ---
 signal haul_started(room_index: int, value: int)

@@ -162,7 +162,7 @@ func tile_at(t: Vector2i) -> String:
 
 
 func is_walkable_tile(t: Vector2i) -> bool:
-	return tile_at(t) in [".", "S", "D", "P"]
+	return tile_at(t) in [".", "S", "D", "P", "G"]
 
 
 func is_bullet_blocked(p: Vector2, spectral: bool) -> bool:
@@ -181,7 +181,7 @@ func free_tiles() -> Array[Vector2i]:
 	var out: Array[Vector2i] = []
 	for y in rows:
 		for x in cols:
-			if tile_at(Vector2i(x, y)) == ".":
+			if tile_at(Vector2i(x, y)) in [".", "G"]:
 				out.append(Vector2i(x, y))
 	return out
 
@@ -213,6 +213,9 @@ func _build_obstacles() -> void:
 					rock.setup(self, t, tile_at(t))
 					entities.add_child(rock)
 					_obstacles[t] = rock
+				"G":
+					# Glowing contamination: harmless, but soaks the wasp in radiation.
+					add_creep(tile_center(t), "glow", INF, 8.0)
 				"X":
 					var cs := CollisionShape2D.new()
 					var rs := RectangleShape2D.new()
@@ -399,6 +402,8 @@ func _try_unlock_doors() -> void:
 		if p.global_position.distance_to(door_pos(s)) > 18.0:
 			continue
 		var cost: int = int(info.get("lock_cost", {}).get(s, 1))
+		if RunState.flag("lockpick"):
+			cost = maxi(0, cost - 1)
 		if RunState.royal_jelly < cost:
 			continue
 		RunState.add_royal_jelly(-cost)
@@ -552,19 +557,27 @@ func on_brood_cell_broken(t: Vector2i, larvae: int) -> void:
 
 func _restore_pickups() -> void:
 	for p in info.get("pickups", []):
-		spawn_pickup(str(p["id"]), Vector2(float(p["x"]), float(p["y"])), Vector2.ZERO)
+		spawn_pickup(str(p["id"]), Vector2(float(p["x"]), float(p["y"])), Vector2.ZERO, str(p.get("payload", "")))
 	info["pickups"] = []
 
 
-func spawn_pickup(id: String, pos: Vector2, vel: Vector2 = Vector2.ZERO) -> void:
+func spawn_pickup(id: String, pos: Vector2, vel: Vector2 = Vector2.ZERO, payload: String = "") -> Node2D:
 	var data: Dictionary = Content.get_entry("pickups", id)
 	if data.is_empty():
-		return
+		return null
 	var p: Node2D = PickupScript.new()
-	p.setup(self, data)
+	p.setup(self, data, payload)
 	p.position = pos
 	p.velocity = vel
 	entities.add_child(p)
+	return p
+
+
+## Drops a trinket / fossil / fluid the wasp just swapped out, with a short re-pickup delay.
+func drop_swapped(kind: String, payload: String, at: Vector2) -> void:
+	var p := spawn_pickup(kind, nearest_free_point(at), Vector2.from_angle(rng_drops.randf() * TAU) * 40.0, payload)
+	if p:
+		p.pickup_delay = 0.8
 
 
 func _drops(table: String) -> Dictionary:
@@ -588,7 +601,10 @@ func drop_from_table(table: String, pos: Vector2, force: bool = false, r: Random
 
 func add_creep(pos: Vector2, kind: String, life: float, radius: float = 7.0) -> void:
 	if creeps.size() > 80:
-		creeps.pop_front()
+		for i in creeps.size():
+			if creeps[i]["kind"] != "glow":
+				creeps.remove_at(i)
+				break
 	creeps.append({"pos": pos, "r": radius, "life": life, "max": life, "kind": kind})
 
 
@@ -773,7 +789,7 @@ func on_exit() -> void:
 	var left: Array = []
 	for n in get_tree().get_nodes_in_group("pickups"):
 		if n.get_parent() == entities and not n.collected:
-			left.append({"id": n.data["id"], "x": n.position.x, "y": n.position.y})
+			left.append({"id": n.data["id"], "x": n.position.x, "y": n.position.y, "payload": n.payload})
 	info["pickups"] = left
 
 
@@ -874,9 +890,14 @@ func _draw() -> void:
 					for k in 3:
 						var sx := r.position.x + 3 + k * 5
 						draw_colored_polygon(PackedVector2Array([Vector2(sx, r.end.y - 3), Vector2(sx + 2, r.position.y + 5), Vector2(sx + 4, r.end.y - 3)]), Color(0.65, 0.6, 0.55))
-	# Creep (sludge) puddles
+	# Creep puddles: sludge (slows) and glowing contamination (radiation)
 	for c in creeps:
 		var a: float = clampf(float(c["life"]) / 1.0, 0.0, 1.0)
+		if c["kind"] == "glow":
+			var pulse := 0.5 + 0.2 * sin(Time.get_ticks_msec() / 300.0 + float(c["pos"].x))
+			draw_circle(c["pos"], float(c["r"]), Color(0.35, 0.9, 0.2, 0.35 * pulse + 0.15))
+			draw_circle(c["pos"], float(c["r"]) * 0.5, Color(0.7, 1.0, 0.4, 0.4 * pulse))
+			continue
 		draw_circle(c["pos"], float(c["r"]), Color(0.32, 0.36, 0.12, 0.55 * a))
 		draw_circle(c["pos"] + Vector2(-1.5, -1.5), float(c["r"]) * 0.4, Color(0.55, 0.6, 0.25, 0.4 * a))
 	for s in all_slots():

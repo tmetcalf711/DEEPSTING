@@ -1,0 +1,13 @@
+{
+  "id": "quick_molt",
+  "name_key": "MUT_QUICK_MOLT_NAME",
+  "desc_key": "MUT_QUICK_MOLT_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "move_speed",
+      "add": 0.15
+    }
+  ]
+}

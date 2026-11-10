@@ -1,0 +1,17 @@
+{
+  "id": "belemnite",
+  "name_key": "FOSSIL_BELEMNITE_NAME",
+  "desc_key": "FOSSIL_BELEMNITE_DESC",
+  "effects": [
+    {
+      "type": "ability",
+      "ability": "volley",
+      "params": {
+        "count": 8,
+        "pierce": true,
+        "damage_mult": 2.0,
+        "color": "#cfe8ff"
+      }
+    }
+  ]
+}

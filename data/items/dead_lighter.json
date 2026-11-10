@@ -1,0 +1,30 @@
+{
+  "id": "dead_lighter",
+  "name_key": "ITEM_DEAD_LIGHTER_NAME",
+  "desc_key": "ITEM_DEAD_LIGHTER_DESC",
+  "note_key": "ITEM_DEAD_LIGHTER_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "cursed"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "proc",
+      "kind": "element",
+      "chance": 0.12,
+      "per_luck": 0.02,
+      "params": {
+        "element": "burn"
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#ff9a3c"
+  }
+}

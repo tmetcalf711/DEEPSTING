@@ -1,0 +1,20 @@
+{
+  "id": "hardened_stinger",
+  "name_key": "MUT_HARDENED_STINGER_NAME",
+  "desc_key": "MUT_HARDENED_STINGER_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "pierce",
+      "params": {
+        "count": 1
+      }
+    },
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.2
+    }
+  ]
+}

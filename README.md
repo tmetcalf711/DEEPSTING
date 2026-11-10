@@ -19,7 +19,7 @@ godot                       # play
 ./tools/run_tests.sh        # tests + data validation + smoke run
 ```
 
-Status: **Milestone 2: chapter 1 playable.** The Abandoned Hive → Topsoil, with every special room (shop, Royal Chamber / Mutation Den, sacrifice altar, challenge, mini-boss, curse room, vault, arcade, library), big rooms, curses, and an in-engine room editor (main menu → Room Editor in dev builds).
+Status: **Milestone 3: item & synergy system.** 61 items, knick-knacks, fossils, Strange Fluids, radiation mutations, and a dev Synergy Lab. Previously: **Milestone 2: chapter 1 playable.** The Abandoned Hive → Topsoil, with every special room (shop, Royal Chamber / Mutation Den, sacrifice altar, challenge, mini-boss, curse room, vault, arcade, library), big rooms, curses, and an in-engine room editor (main menu → Room Editor in dev builds).
 
 ## Controls (defaults)
 | | Keyboard | Gamepad |
@@ -29,5 +29,6 @@ Status: **Milestone 2: chapter 1 playable.** The Abandoned Hive → Topsoil, wit
 | Dash | Shift / RMB | RB |
 | Active item | Space | RT |
 | Dig Charge | E | LB |
+| Use fossil / fluid | Q | LT |
 | Pause | Esc | Start |
 | Debug console (dev builds) | ` | |

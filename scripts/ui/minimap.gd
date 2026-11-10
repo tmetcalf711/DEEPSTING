@@ -28,6 +28,8 @@ static func is_known(rooms: Dictionary, a: Vector2i, effect: String) -> bool:
 		return true
 	if not secret and RunState.flags.get("map_reveal", false):
 		return true
+	if RunState.flag("compass") and not secret and not info["type"] in ["normal", "start"]:
+		return true
 	for s in info["links"]:
 		var b: Vector2i = info["links"][s][0]
 		if rooms.has(b) and rooms[b].get("visited", false):

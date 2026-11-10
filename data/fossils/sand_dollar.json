@@ -1,0 +1,11 @@
+{
+  "id": "sand_dollar",
+  "name_key": "FOSSIL_SAND_DOLLAR_NAME",
+  "desc_key": "FOSSIL_SAND_DOLLAR_DESC",
+  "effects": [
+    {
+      "type": "consumables",
+      "mana": 10
+    }
+  ]
+}

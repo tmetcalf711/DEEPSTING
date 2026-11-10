@@ -1,0 +1,12 @@
+{
+  "id": "coprolite",
+  "name_key": "FOSSIL_COPROLITE_NAME",
+  "desc_key": "FOSSIL_COPROLITE_DESC",
+  "effects": [
+    {
+      "type": "ability",
+      "ability": "shatter_rocks",
+      "params": {}
+    }
+  ]
+}

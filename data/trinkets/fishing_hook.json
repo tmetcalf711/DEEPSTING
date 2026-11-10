@@ -1,0 +1,16 @@
+{
+  "id": "fishing_hook",
+  "name_key": "TRINKET_FISHING_HOOK_NAME",
+  "desc_key": "TRINKET_FISHING_HOOK_DESC",
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "homing",
+      "params": {
+        "strength": 0.6
+      }
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

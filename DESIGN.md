@@ -1,6 +1,6 @@
 # DeepSting — Game Design Document (living)
 
-> Status: **Milestone 2 complete** (chapter 1 playable: The Abandoned Hive → Topsoil). This is the source of truth for design. When code and this document disagree, fix one of them in the same commit.
+> Status: **Milestone 3 complete** (item & synergy system at scale; chapter 1 playable). This is the source of truth for design. When code and this document disagree, fix one of them in the same commit.
 > Every ambiguity resolved during development goes in **§19 Decisions Log**. Questions that would be expensive to change later go in **§20 Open Questions**.
 
 ---
@@ -216,6 +216,12 @@ A shot is a `ShotSpec` assembled every time stats change:
   - Mutually exclusive delivery types (beam, lobbed, orbit) resolve by the highest `priority` delivery, and the others convert into compatible modifiers (e.g. *orbit* + *beam* = rotating beam is **not** hand-coded: beam is just "a shot with infinite speed rendered as a line", so modifiers apply along it).
 - **Visuals compose from the spec**: size scales the sprite, each element adds a tint and particle, pierce stretches the stinger, bounce adds a ricochet spark, split shows facets, homing adds a seeker glint. Any item can also add a `player_overlay` sprite (hat, glow, extra wings).
 - The Trove and pickup banner say **"Synergy!"** when a new item's modifier changes an existing modifier's behavior (detected generically: two or more modifiers with `synergy_tag` overlap).
+
+### 6.5b As built in Milestone 3
+- **61 items, 15 knick-knacks, 10 fossils, 12 Strange Fluids, 12 mutations** (all data in `/data`).
+- Effect types: `stat_mod`, `projectile_mod`, `proc`, `trigger`, `aura`, `familiar` (shooter / orbital / biter), `flag`, `health`, `consumables`, `active`, `ability`, `perma_stat`, `room_stat`, `radiation`.
+- Projectile modifiers: size, multishot, element (poison / slow / burn / shock), spectral, pierce, homing, wave, bounce, split, boomerang, knockback. Each element adds a colored ring to the stinger, and boomerangs spin.
+- The **Synergy Lab** (main menu → Synergy Lab in dev builds) is a firing range of training dummies that show damage numbers, with a toggle for every item / knick-knack / mutation and a live readout of the composed shot.
 
 ### 6.6 Starter item list (expanded seed list; target 120+ at launch)
 *(Names are original. "fn" = archaeologist's field note.)*
@@ -630,7 +636,7 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | 0 ✅ | GDD, project, autoloads, folders, CLAUDE.md, GUT, console, data/i18n/art scaffolding | project boots to the main menu; tests green; GDD reviewed |
 | 1 ✅ | Vertical slice: Abandoned Hive floor (fixed or simple gen), movement/dash/shoot, health, doors, 4 enemies + 1 boss, deposits + worker haul, brood cells, Dig Charge + 1 secret wall, 10 items (stat, projectile mods, familiar, active), minimap, death + restart | playable start-to-boss loop in under 10 min |
 | 2 ✅ | Full floorgen + all special rooms, 40 ch1 templates, room editor, curses, Royal/Den, Trader | invariant tests green; seeds reproduce |
-| 3 | Generic modifier stack at scale, all pools, trinkets, fossils, fluids, radiation + mutations, 60 items, synergy test scene | stacking tests green; 500-bullet perf test passes |
+| 3 ✅ | Generic modifier stack at scale, all pools, trinkets, fossils, fluids, radiation + mutations, 60 items, synergy test scene | stacking tests green; 500-bullet perf test passes |
 | 4 | Ch1–4 + alts, 3 bosses/chapter, champions, difficulty curve, first ending | full run to ending 1 |
 | 5 | Achievements → unlocks, pool locking, completion marks, 6 mutated brood, hive + Pulper, Trove, Hive Upgrades, 3 castes, save/resume | fresh save → unlocks flow across runs |
 | 6 | Ch5–6, alt path, secret bosses, mutated castes, Contamination, challenges, Daily, 120+ items | content complete |
@@ -682,6 +688,15 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | D32 | Statuses: poison (1.25 dmg / 0.5 s for 3 s) and slow (½ speed for 2 s); bosses get shorter durations | first element effects for item builds |
 | D33 | Projectiles, blasts and bursts only affect nodes inside the current room | a room being freed on the same frame could otherwise absorb hits (found by the smoke test) |
 | D34 | Brood Cell rooms use a shared template (any stratum); Mutation Den can't kill you or take containers you don't have | design says Brood Cells are "rare outside floor 1"; Isaac-fair deals |
+| D35 | Everything owned is an effect source: items, the active, the knick-knack and mutations all go through one `EffectHost.rebuild()` | one code path for stats, shots, hooks and familiars |
+| D36 | Event hooks are data: `trigger` effects `{event, chance, per_luck, action}` with events kill / room_clear / floor_start / damage_taken and a shared action library | on-kill / on-clear / on-hurt items need no code |
+| D37 | On-hit procs are data: `proc` effects (crit, chain, stun, element, knockback) rolled per hit on the `misc` stream, luck-scaled | generic, testable, stack with every modifier |
+| D38 | New projectile modifiers: multishot (adds shots, cap 7, widest spread wins), boomerang, wave, knockback; split children never boomerang or multishot | keeps combinations bounded and readable |
+| D39 | One fossil/fluid slot (a second slot comes with an item later); picking one up while holding one drops the old one, which stays inert until you step away | Isaac's card/pill swap without the swap-loop bug |
+| D40 | Strange Fluids: 10 vial colors mapped to 12 effects per run from a run-level seeded stream; identified for the run when drunk; stat fluids are permanent `perma_stat` changes | seeded, readable, Isaac pill model |
+| D41 | Radiation: kills add the enemy's `radiation` (bosses 20), glowing contamination tiles (`G`) add 5/s; thresholds 60, 90, 120...; the pick appears at the next room clear (or right away if the room is already clear) | never interrupts a fight |
+| D42 | Synergy callout is generic: an item synergizes when its build tags (modifiers / proc kinds) pair with an owned tag in `config/synergies.json` | no item pairs are hand-listed |
+| D43 | Knick-knacks share ItemPool rules (no repeats in a run) via a single "trinkets" pool | reuse, determinism |
 
 ---
 

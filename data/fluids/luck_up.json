@@ -1,0 +1,12 @@
+{
+  "id": "luck_up",
+  "name_key": "FLUID_LUCK_UP_NAME",
+  "effects": [
+    {
+      "type": "perma_stat",
+      "stat": "luck",
+      "add": 1
+    }
+  ],
+  "good": true
+}

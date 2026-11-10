@@ -3,6 +3,7 @@ extends CanvasLayer
 ## pickup banner, toasts. Drawn at the 640x360 logical resolution.
 
 const MinimapScript := preload("res://scripts/ui/minimap.gd")
+const PickupScript := preload("res://scripts/actors/pickup.gd")
 
 var _root: Control
 var _labels: Dictionary = {}
@@ -21,7 +22,7 @@ func _ready() -> void:
 	_root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_root.draw.connect(_draw_hud)
 	add_child(_root)
-	for k in ["mana", "dig_charge", "royal_jelly", "stash", "curse"]:
+	for k in ["mana", "dig_charge", "royal_jelly", "stash", "curse", "consumable"]:
 		var l := _label(8)
 		_root.add_child(l)
 		_labels[k] = l
@@ -115,6 +116,12 @@ func _process(delta: float) -> void:
 	var rc := RunController.instance
 	_labels["curse"].text = tr(Content.get_entry("curses", rc.curse_id).get("name_key", "")) if rc and rc.curse_id != "" else ""
 	_labels["curse"].position = Vector2(8, 64)
+	var c: Dictionary = RunState.consumable
+	var cname := ""
+	if not c.is_empty():
+		cname = EffectHost.fluid_display_name(str(c["id"])) if c["kind"] == "fluid" else tr(Content.get_entry("fossils", str(c["id"])).get("name_key", ""))
+	_labels["consumable"].text = cname
+	_labels["consumable"].position = Vector2(vp.x - 100, vp.y - 30)
 	_labels["curse"].add_theme_color_override("font_color", Color(0.75, 0.55, 0.95))
 	_root.queue_redraw()
 
@@ -151,6 +158,23 @@ func _draw_hud() -> void:
 		_root.draw_rect(Rect2(ax + 18, 8 + 16 * (1.0 - frac), 4, 16 * frac), Color(1.0, 0.85, 0.2) if frac >= 1.0 else Color(0.6, 0.6, 0.65))
 		for k in range(1, RunState.active_max):
 			_root.draw_line(Vector2(ax + 18, 8 + 16.0 * k / RunState.active_max), Vector2(ax + 22, 8 + 16.0 * k / RunState.active_max), Color(0, 0, 0))
+	# Radiation meter (fills toward a mutation)
+	var vp0 := _root.get_viewport_rect().size
+	var rfrac := clampf(RunState.radiation / float(maxi(1, RunState.radiation_threshold)), 0.0, 1.0)
+	var rr := Rect2(8, vp0.y - 14, 70, 4)
+	_icon("radiation", Vector2(8, vp0.y - 26))
+	_root.draw_rect(rr.grow(1), Color(0, 0, 0, 0.8))
+	_root.draw_rect(Rect2(rr.position, Vector2(rr.size.x * rfrac, rr.size.y)), Color(0.5, 1.0, 0.3) if rfrac < 1.0 else Color(0.9, 1.0, 0.5))
+	# Knick-knack and the fossil / fluid slot (bottom right)
+	if RunState.trinket != "":
+		_root.draw_texture(Art.texture("trinkets", RunState.trinket), Vector2(vp0.x - 120, vp0.y - 34))
+	var cs: Dictionary = RunState.consumable
+	if not cs.is_empty():
+		if cs["kind"] == "fluid":
+			var col := PickupScript.fluid_color(str(cs["id"]))
+			_root.draw_rect(Rect2(vp0.x - 112, vp0.y - 20, 6, 9), col)
+		else:
+			_root.draw_texture(Art.texture("fossils", str(cs["id"])), Vector2(vp0.x - 116, vp0.y - 22))
 	# Boss bar
 	if _boss_frac > 0.0:
 		var vp := _root.get_viewport_rect().size

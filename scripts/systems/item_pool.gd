@@ -30,6 +30,19 @@ static func from_content() -> ItemPool:
 		return not item.get("locked_by_default", false) or MetaSave.is_unlocked("items", id))
 
 
+## Knick-knacks use the same rules (seen ones don't come back this run) from one "trinkets" pool.
+static func trinkets_from_content() -> ItemPool:
+	var it := {}
+	var entries: Array = []
+	for e in Content.all("trinkets"):
+		it[e["id"]] = e
+		entries.append({"id": e["id"], "weight": float(e.get("weight", 1.0))})
+	entries.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a["id"]) < str(b["id"]))
+	var pool := ItemPool.new({"trinkets": {"id": "trinkets", "fallback": "", "entries": entries}}, it, func(id: String) -> bool:
+		return not it.get(id, {}).get("locked_by_default", false) or MetaSave.is_unlocked("trinkets", id))
+	return pool
+
+
 func candidates(pool_id: String) -> Array:
 	var out: Array = []
 	for e in pools.get(pool_id, {}).get("entries", []):
@@ -51,7 +64,7 @@ func roll(pool_id: String, r: RandomNumberGenerator) -> String:
 			seen[id] = true
 			return id
 		pid = str(pools.get(pid, {}).get("fallback", "dig_site" if pid != "dig_site" else ""))
-	return FALLBACK_ITEM
+	return FALLBACK_ITEM if items.has(FALLBACK_ITEM) else ""
 
 
 func mark_seen(id: String) -> void:

@@ -1,0 +1,14 @@
+{
+  "id": "antifreeze",
+  "name_key": "FLUID_ANTIFREEZE_NAME",
+  "effects": [
+    {
+      "type": "ability",
+      "ability": "stun_flash",
+      "params": {
+        "duration": 3.0
+      }
+    }
+  ],
+  "good": true
+}

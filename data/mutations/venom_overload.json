@@ -1,0 +1,13 @@
+{
+  "id": "venom_overload",
+  "name_key": "MUT_VENOM_OVERLOAD_NAME",
+  "desc_key": "MUT_VENOM_OVERLOAD_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.6
+    }
+  ]
+}

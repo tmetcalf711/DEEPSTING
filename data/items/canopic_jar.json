@@ -1,0 +1,28 @@
+{
+  "id": "canopic_jar",
+  "name_key": "ITEM_CANOPIC_JAR_NAME",
+  "desc_key": "ITEM_CANOPIC_JAR_DESC",
+  "note_key": "ITEM_CANOPIC_JAR_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "boss",
+    "vault"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "kill",
+      "chance": 0.05,
+      "per_luck": 0.005,
+      "action": {
+        "kind": "pickup",
+        "id": "chitin"
+      }
+    }
+  ]
+}

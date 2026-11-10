@@ -12,6 +12,10 @@
       "weight": 1.0
     },
     {
+      "id": "pocket_watch",
+      "weight": 1.0
+    },
+    {
       "id": "pressed_flower",
       "weight": 1.0
     },
@@ -21,6 +25,14 @@
     },
     {
       "id": "reading_glasses",
+      "weight": 1.0
+    },
+    {
+      "id": "rusty_compass",
+      "weight": 1.0
+    },
+    {
+      "id": "temple_bell",
       "weight": 1.0
     }
   ]

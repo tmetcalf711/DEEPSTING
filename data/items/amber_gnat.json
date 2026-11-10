@@ -1,0 +1,27 @@
+{
+  "id": "amber_gnat",
+  "name_key": "ITEM_AMBER_GNAT_NAME",
+  "desc_key": "ITEM_AMBER_GNAT_DESC",
+  "note_key": "ITEM_AMBER_GNAT_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "gem"
+  ],
+  "effects": [
+    {
+      "type": "familiar",
+      "behavior": "biter",
+      "sprite": "amber_gnat",
+      "params": {
+        "speed": 75,
+        "damage": 4
+      }
+    }
+  ]
+}

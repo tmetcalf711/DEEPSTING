@@ -18,6 +18,10 @@
     {
       "id": "third_mandible",
       "weight": 1.0
+    },
+    {
+      "id": "venom_vial",
+      "weight": 1.0
     }
   ]
 }

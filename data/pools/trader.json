@@ -12,6 +12,14 @@
       "weight": 1.0
     },
     {
+      "id": "bubble_wrap",
+      "weight": 1.0
+    },
+    {
+      "id": "coin_purse",
+      "weight": 1.0
+    },
+    {
       "id": "dead_phone",
       "weight": 1.0
     },
@@ -20,7 +28,19 @@
       "weight": 1.0
     },
     {
+      "id": "fishing_sinker",
+      "weight": 1.0
+    },
+    {
       "id": "frayed_shoelace",
+      "weight": 1.0
+    },
+    {
+      "id": "honey_jar",
+      "weight": 1.0
+    },
+    {
+      "id": "jawbreaker",
       "weight": 1.0
     },
     {
@@ -40,11 +60,35 @@
       "weight": 1.0
     },
     {
+      "id": "rubber_band",
+      "weight": 1.0
+    },
+    {
+      "id": "rusty_compass",
+      "weight": 1.0
+    },
+    {
+      "id": "rusty_spoon",
+      "weight": 1.0
+    },
+    {
       "id": "salt_lick",
       "weight": 1.0
     },
     {
       "id": "squeeze_bottle",
+      "weight": 1.0
+    },
+    {
+      "id": "static_wire",
+      "weight": 1.0
+    },
+    {
+      "id": "swollen_battery",
+      "weight": 1.0
+    },
+    {
+      "id": "tin_can_phone",
       "weight": 1.0
     }
   ]

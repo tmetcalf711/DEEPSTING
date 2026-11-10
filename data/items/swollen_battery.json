@@ -1,0 +1,28 @@
+{
+  "id": "swollen_battery",
+  "name_key": "ITEM_SWOLLEN_BATTERY_NAME",
+  "desc_key": "ITEM_SWOLLEN_BATTERY_DESC",
+  "note_key": "ITEM_SWOLLEN_BATTERY_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "trader",
+    "dig_site"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "room_clear",
+      "chance": 1.0,
+      "per_luck": 0.0,
+      "action": {
+        "kind": "charge_active",
+        "amount": 1
+      }
+    }
+  ]
+}

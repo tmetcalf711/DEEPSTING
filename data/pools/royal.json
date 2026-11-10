@@ -4,6 +4,10 @@
   "fallback": "boss",
   "entries": [
     {
+      "id": "clay_idol",
+      "weight": 1.0
+    },
+    {
       "id": "jelly_crown",
       "weight": 1.0
     },
@@ -17,6 +21,10 @@
     },
     {
       "id": "wax_wings",
+      "weight": 1.0
+    },
+    {
+      "id": "wedding_ring",
       "weight": 1.0
     }
   ]

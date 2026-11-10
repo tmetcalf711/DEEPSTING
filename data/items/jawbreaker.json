@@ -1,0 +1,32 @@
+{
+  "id": "jawbreaker",
+  "name_key": "ITEM_JAWBREAKER_NAME",
+  "desc_key": "ITEM_JAWBREAKER_DESC",
+  "note_key": "ITEM_JAWBREAKER_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "proc",
+      "kind": "stun",
+      "chance": 0.1,
+      "per_luck": 0.01,
+      "params": {
+        "duration": 1.0
+      }
+    },
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.4
+    }
+  ]
+}

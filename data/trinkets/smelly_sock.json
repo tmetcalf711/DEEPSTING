@@ -1,0 +1,19 @@
+{
+  "id": "smelly_sock",
+  "name_key": "TRINKET_SMELLY_SOCK_NAME",
+  "desc_key": "TRINKET_SMELLY_SOCK_DESC",
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "damage_taken",
+      "chance": 0.5,
+      "per_luck": 0.0,
+      "action": {
+        "kind": "stun_room",
+        "duration": 1.0
+      }
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

@@ -66,3 +66,33 @@ func test_every_item_projectile_mod_combo_builds() -> void:
 			assert_true(float(s["damage"]) > 0.0)
 	var all := ShotSpec.build(STATS, mods)
 	assert_true(all["pierce"] == -1 and all["bounce"] > 0 and all["split_count"] > 0 and all["homing"] > 0.0)
+
+
+func test_multishot_stacks_and_caps() -> void:
+	var s := ShotSpec.build(STATS, [_m("multishot", {"count": 2, "spread": 0.1}, "a"), _m("multishot", {"count": 3, "spread": 0.5}, "b")])
+	assert_eq(s["multishot"], 4, "2 + 3 - 1 extra shots")
+	assert_almost_eq(float(s["spread"]), 0.5, 0.001, "widest spread wins")
+	var many: Array = []
+	for i in 6:
+		many.append(_m("multishot", {"count": 3}, "x%d" % i))
+	assert_eq(ShotSpec.build(STATS, many)["multishot"], ShotSpec.MAX_MULTISHOT)
+
+
+func test_boomerang_wave_knockback() -> void:
+	var s := ShotSpec.build(STATS, [_m("boomerang", {}, "a"), _m("wave", {"amp": 7, "freq": 2.5}, "b"), _m("knockback", {"mult": 2.0}, "c"), _m("knockback", {"mult": 1.5}, "d")])
+	assert_true(s["boomerang"])
+	assert_eq(s["wave_amp"], 7.0)
+	assert_almost_eq(float(s["knockback"]), 3.0, 0.001, "knockback multiplies")
+	var c := ShotSpec.child_of(ShotSpec.build(STATS, [_m("boomerang", {}, "a"), _m("split", {"count": 2}, "b"), _m("multishot", {"count": 2}, "c")]))
+	assert_false(c["boomerang"], "split children don't boomerang")
+	assert_eq(c["multishot"], 1)
+
+
+func test_procs_sorted_and_carried() -> void:
+	var procs := [{"kind": "stun", "chance": 0.1, "source": "z"}, {"kind": "crit", "chance": 0.1, "source": "a"}]
+	var s := ShotSpec.build(STATS, [], [], procs)
+	assert_eq(s["procs"].size(), 2)
+	assert_eq(s["procs"][0]["kind"], "crit", "procs ordered deterministically")
+	var rev := procs.duplicate()
+	rev.reverse()
+	assert_eq(ShotSpec.build(STATS, [], [], rev)["procs"], s["procs"])

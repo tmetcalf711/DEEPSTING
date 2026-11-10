@@ -52,8 +52,8 @@ func _ready() -> void:
 
 
 func _on_stats_changed() -> void:
-	spec = ShotSpec.build(RunState.all_stats(), RunState.shot_mods, RunState.tints)
-	collision_mask = 1 if RunState.flags.get("flight", false) else (1 | 2 | 4)
+	spec = ShotSpec.build(RunState.all_stats(), RunState.shot_mods, RunState.tints, RunState.procs)
+	collision_mask = 1 if RunState.flag("flight") else (1 | 2 | 4)
 	var ov := ""
 	for id in RunState.items:
 		var v: Dictionary = Content.get_entry("items", id).get("visual", {})
@@ -86,8 +86,12 @@ func _physics_process(delta: float) -> void:
 	var move := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	var speed := RunState.stat("move_speed") * SPEED_UNIT
 	var rc := RunController.instance
-	if rc.room and rc.room.hazard_at(global_position) == "sludge" and not RunState.flags.get("flight", false):
+	var hazard: String = rc.room.hazard_at(global_position) if rc.room else ""
+	if hazard == "sludge" and not RunState.flag("flight"):
 		speed *= 0.55  # sludge sticks to wings
+	elif hazard == "glow":
+		RunState.add_radiation(float(Content.get_entry("config", "radiation").get("glow_per_second", 5.0)) * delta)
+	_tick_auras(delta)
 	if _dash_t > 0.0:
 		_dash_t -= delta
 	else:
@@ -98,7 +102,7 @@ func _physics_process(delta: float) -> void:
 			var d := move if move != Vector2.ZERO else facing
 			velocity = d.normalized() * speed * DASH_MULT
 			_dash_t = DASH_TIME
-			_dash_cd = DASH_COOLDOWN
+			_dash_cd = RunState.stat("dash_cooldown")
 			_iframes = maxf(_iframes, DASH_TIME + 0.04)
 			rc.fx.burst(global_position, Color(1, 0.9, 0.5, 0.6), 6, 30.0, 1.0)
 			Audio.play_sfx("dash")
@@ -117,6 +121,8 @@ func _physics_process(delta: float) -> void:
 		RunController.instance.room.entities.add_child(b)
 	if Input.is_action_just_pressed("use_active"):
 		effects.use_active()
+	if Input.is_action_just_pressed("use_consumable"):
+		effects.use_consumable()
 	_animate()
 
 
@@ -135,7 +141,7 @@ func _handle_shooting() -> void:
 	_fire_cd = 1.0 / RunState.stat("fire_rate")
 	_eye = -_eye
 	var perp := aim_dir.orthogonal() * 2.0 * _eye
-	RunController.instance.projectiles.spawn_player_shot(global_position + perp, aim_dir, spec, velocity * 0.15)
+	RunController.instance.projectiles.spawn_player_volley(global_position + perp, aim_dir, spec, velocity * 0.15)
 	_body.scale = Vector2(1.12, 0.9)
 	Audio.play_sfx("sting")
 
@@ -166,7 +172,27 @@ func _animate() -> void:
 	queue_redraw()
 
 
+var _aura_t := 0.0
+
+
+## Damage auras (Glow Glands...): tick every 0.5 s on enemies in range.
+func _tick_auras(delta: float) -> void:
+	if RunState.auras.is_empty():
+		return
+	_aura_t -= delta
+	if _aura_t > 0.0:
+		return
+	_aura_t = 0.5
+	var rc := RunController.instance
+	for a in RunState.auras:
+		for e in rc.room.room_enemies():
+			if e.global_position.distance_to(global_position) <= float(a["radius"]) + float(e.hit_radius):
+				e.take_hit(float(a["dps"]) * 0.5, Vector2.ZERO, [])
+
+
 func _draw() -> void:
+	for a in RunState.auras:
+		draw_arc(Vector2.ZERO, float(a["radius"]), 0, TAU, 32, Color(0.6, 1.0, 0.4, 0.18 + 0.06 * sin(_t * 4.0)), 2.0)
 	# Drop shadow under the hovering wasp (2.5D).
 	draw_set_transform(Vector2(0, 1), 0.0, Vector2(1.0, 0.5))
 	draw_circle(Vector2.ZERO, 5.0, Color(0, 0, 0, 0.35))
@@ -177,6 +203,8 @@ func _draw() -> void:
 func hurt(halves: int, source: String) -> bool:
 	if dead or _iframes > 0.0 or GameState.god_mode:
 		return false
+	if RunState.flag("double_damage"):
+		halves *= 2
 	var toxic := RunState.take_damage(halves)
 	_iframes = HURT_IFRAMES
 	_flash = 0.08
@@ -188,6 +216,7 @@ func hurt(halves: int, source: String) -> bool:
 	Events.player_damaged.emit(halves, source)
 	for i in toxic:
 		rc.toxic_burst(global_position)
+	effects.fire_event("damage_taken", global_position)
 	if RunState.is_dead():
 		if RunState.flags.get("revive_once", false):
 			RunState.flags.erase("revive_once")
@@ -210,8 +239,14 @@ func pickup_item(id: String) -> String:
 	var left := ""
 	if item.get("kind", "") == "active" and RunState.active_item != "":
 		left = RunState.active_item
+	var synergy := EffectHost.is_synergy(id)
 	effects.add_item(id)
-	Events.banner.emit(tr(item["name_key"]), tr(item.get("desc_key", "")))
+	var sub := tr(item.get("desc_key", ""))
+	if synergy:
+		sub += "  ·  " + tr("BANNER_SYNERGY")
+		Events.synergy.emit(id)
+		MetaSave.add_counter("synergies")
+	Events.banner.emit(tr(item["name_key"]), sub)
 	RunController.instance.fx.burst(global_position + Vector2(0, -10), Color(1, 0.85, 0.3), 14, 50.0, 1.5)
 	Audio.play_sfx("item_get")
 	return left

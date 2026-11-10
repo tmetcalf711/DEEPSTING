@@ -7,6 +7,7 @@ extends RefCounted
 ## ctx: {floor_index, stratum: Dictionary, pool: ItemPool, items_rng, rooms_rng, cfg (floorgen)}
 
 const RNGScript := preload("res://scripts/autoload/rng.gd")
+const PickupScript := preload("res://scripts/actors/pickup.gd")
 
 
 static func fill(layout: Dictionary, ctx: Dictionary) -> void:
@@ -76,7 +77,11 @@ static func roll_shop(pool: ItemPool, ri: RandomNumberGenerator, shop_cfg: Dicti
 	var weights: Array = table.map(func(e: Dictionary) -> float: return float(e.get("weight", 1.0)))
 	for i in int(shop_cfg.get("consumable_slots", 3)):
 		var e: Dictionary = table[RNGScript.weighted_index(ri, weights)]
-		wares.append({"kind": "pickup", "id": e["id"], "price": int(e["price"]), "sold": false})
+		var w := {"kind": "pickup", "id": e["id"], "price": int(e["price"]), "sold": false}
+		var pk: String = str(Content.get_entry("pickups", str(e["id"])).get("kind", ""))
+		if pk in ["trinket", "fossil", "fluid"]:
+			w["payload"] = PickupScript.roll_payload(pk, ri)
+		wares.append(w)
 	return wares
 
 

@@ -7,7 +7,8 @@ Top-down 2.5D roguelite twin-stick shooter (Binding of Isaac structure), Godot 4
 - **Milestone 0 complete:** GDD, project, autoloads, data/i18n/art scaffolding, GUT, debug console, main menu.
 - **Milestone 1 complete:** playable Abandoned Hive floor (procedural layout, combat, 4 enemies + boss, workers/stash/boss shaft, brood rescue, Dig Charges + secret rooms, 12 items, HUD/minimap/pause/death).
 - **Milestone 2 complete:** chapter 1 = Abandoned Hive → Topsoil; shaped rooms (1x1/2x1/1x2/2x2), every special room, Royal/Den deals, Royal Jelly locks, curses, 51 templates, in-engine room editor.
-- **Next:** Milestone 3 (item & synergy system at scale: trinkets, fossils, fluids, radiation + mutations, 60 items). Waiting for the user's go-ahead.
+- **Milestone 3 complete:** 61 items, 15 knick-knacks, 10 fossils, 12 Strange Fluids, 12 mutations; event triggers, on-hit procs, auras, orbital/biter familiars, multishot/boomerang/wave; radiation meter + mutation picker; Synergy Lab.
+- **Next:** Milestone 4 (full descent: chapters 1–4 + alternates, 3 bosses per chapter, champions, difficulty curve, first ending). Waiting for the user's go-ahead.
 - User decisions from the M0 review are in DESIGN.md §20 (hearts + Chitin, Mana chits, Pulp, floor stash, title).
 - Work in milestones (DESIGN.md §17). After each one, summarize, list known issues, and stop for review.
 
@@ -43,12 +44,12 @@ scripts/run/specials/  one script per special room type (shop, den, royal, sacri
 scripts/player/        player.gd, effect_host.gd (item effects dispatcher)
 scripts/enemies/       enemy.gd (class Enemy: statuses, burrowing, splitting) + behaviors/<type>.gd (chase, turret, flyer, swarm, burrow, charger, creep, pattern_boss)
 scripts/actors/        rock, pickup, pedestal, ware, arcade_machine, deposit, worker, larva, brood_cell, dig_charge, trapdoor, loot_pile, familiar
-scripts/tools/         room_editor.gd (scene: tools/room_editor.tscn; main menu button in dev builds)
-scripts/effects/       one file per item effect `type` (stat_mod, projectile_mod, health, flag, familiar, active, consumables)
-scripts/effects/abilities/  active item abilities (stun_flash, sunburst, reveal_map)
+scripts/tools/         room_editor.gd (scene: tools/room_editor.tscn), synergy_lab.gd (lab panel; main menu buttons in dev builds)
+scripts/effects/       one file per effect `type` (stat_mod, projectile_mod, proc, trigger, aura, familiar, flag, health, consumables, active, ability, perma_stat, room_stat, radiation)
+scripts/effects/abilities/  abilities used by actives/fossils/fluids (stun_flash, sunburst, reveal_map, volley, shatter_rocks, teleport)
 scripts/ui/            main_menu, hud, minimap, pause_menu, end_screen, darkness (Cave-in curse)
 tests/unit/test_*.gd   GUT tests
-tools/                 validate_data.gd, run_tests.sh, smoke_run.gd, capture_screens.gd, room editor (M2)
+tools/                 validate_data.gd, check_scripts.gd (every script parses + menu boots), run_tests.sh, smoke_run.gd, capture_screens.gd, room editor
 translations/strings.csv   every player-facing string (keys,en,...)
 ```
 
@@ -59,6 +60,8 @@ translations/strings.csv   every player-facing string (keys,en,...)
 - **Determinism:** never call global `randf()/randi()/randomize()` or `Array.shuffle()/pick_random()` in gameplay. Use `RNG.stream("<name>")`, `RNG.room_stream(...)`, `RNG.shuffle(r, arr)`, `RNG.weighted_index(r, weights)`. Visual-only randomness uses the `fx` stream.
 - **Coordinates:** 16 px tiles; a room interior is 13×7 tiles (208×112) at room-local (0,0). The camera zooms 2× on a 640×360 canvas.
 - **Health/consumables:** all health is in half-hearts (`RunState.hearts`, `shields` = ["chitin"|"toxic"]). Mana = coins, Dig Charges = bombs, Royal Jelly = keys.
+- **Effects:** everything owned (items, active, knick-knack, mutations) is a source in `EffectHost.rebuild()`. Hooks are `trigger` effects (events: kill, room_clear, floor_start, damage_taken → `EffectHost.do_action`); on-hit is `proc` effects (resolved in `ProjectileSystem._hit_target`). Fluids map colors→effects per run (`EffectHost.ensure_fluid_map`). Radiation: `RunState.add_radiation`; the mutation pick appears at room clear.
+- **Tools (headless `-s` scripts):** don't reference project `class_name`s that use autoloads (e.g. `EffectHost`) by name; `load()` them by path. The script compiles before autoloads exist.
 - **Economy:** hauls go to `RunState.floor_stash` (lost on death) and are banked as Pulp via `RunState.bank_stash()` when the boss-shaft haul finishes. Brood rescues bank immediately (`MetaSave.rescue_lost_brood`).
 - **Content is data:** add items, enemies, rooms etc. as JSON in `/data`. Never branch on specific ids in gameplay code (`if item == "x"` is forbidden). New behavior = a new effect `type` script in `scripts/effects/` (with `const PERSISTENT` + `static func apply`), a new enemy `behavior.type` script, a new ability script, or a new special-room script in `scripts/run/specials/<type>.gd`.
 - **Debug console (backtick):** `give`, `spawn`, `goto <floor|room type>`, `room <template>`, `curse <id|none>`, `deal royal|den`, `mana <n>`, `jelly <n>`, `heal`, `reveal`, `god`, `seed`, `bank`, `unlock_all`.

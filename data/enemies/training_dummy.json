@@ -1,0 +1,24 @@
+{
+  "id": "training_dummy",
+  "name_key": "ENEMY_TRAINING_DUMMY_NAME",
+  "archetype": "dummy",
+  "family": "lab",
+  "strata": [],
+  "hp": 100000,
+  "radius": 8,
+  "contact_damage": 0,
+  "radiation": 0,
+  "champion_ok": false,
+  "flying": false,
+  "show_damage": true,
+  "tags": [
+    "lab"
+  ],
+  "telegraph": {
+    "windup": 0.0,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "dummy"
+  }
+}

@@ -4,6 +4,14 @@
   "fallback": "boss",
   "entries": [
     {
+      "id": "canopic_jar",
+      "weight": 1.0
+    },
+    {
+      "id": "cracked_crown",
+      "weight": 1.0
+    },
+    {
       "id": "golden_thimble",
       "weight": 1.0
     },

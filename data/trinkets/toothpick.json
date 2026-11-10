@@ -1,0 +1,14 @@
+{
+  "id": "toothpick",
+  "name_key": "TRINKET_TOOTHPICK_NAME",
+  "desc_key": "TRINKET_TOOTHPICK_DESC",
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "fire_rate",
+      "add": 0.25
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

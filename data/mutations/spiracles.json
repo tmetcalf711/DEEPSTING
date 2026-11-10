@@ -1,0 +1,13 @@
+{
+  "id": "spiracles",
+  "name_key": "MUT_SPIRACLES_NAME",
+  "desc_key": "MUT_SPIRACLES_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "dash_cooldown",
+      "mult": 0.65
+    }
+  ]
+}

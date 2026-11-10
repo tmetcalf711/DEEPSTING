@@ -1,0 +1,29 @@
+{
+  "id": "clay_idol",
+  "name_key": "ITEM_CLAY_IDOL_NAME",
+  "desc_key": "ITEM_CLAY_IDOL_DESC",
+  "note_key": "ITEM_CLAY_IDOL_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "royal"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "familiar",
+      "behavior": "orbital",
+      "sprite": "clay_idol",
+      "params": {
+        "radius": 18,
+        "speed": 2.5,
+        "damage": 6,
+        "block_radius": 5
+      }
+    }
+  ]
+}

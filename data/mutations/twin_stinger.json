@@ -1,0 +1,17 @@
+{
+  "id": "twin_stinger",
+  "name_key": "MUT_TWIN_STINGER_NAME",
+  "desc_key": "MUT_TWIN_STINGER_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "multishot",
+      "params": {
+        "count": 2,
+        "spread": 0.28,
+        "damage_mult": 0.85
+      }
+    }
+  ]
+}

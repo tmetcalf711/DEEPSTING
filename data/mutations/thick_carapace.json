@@ -1,0 +1,17 @@
+{
+  "id": "thick_carapace",
+  "name_key": "MUT_THICK_CARAPACE_NAME",
+  "desc_key": "MUT_THICK_CARAPACE_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "health",
+      "chitin": 4
+    },
+    {
+      "type": "stat_mod",
+      "stat": "move_speed",
+      "add": -0.05
+    }
+  ]
+}

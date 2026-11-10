@@ -1,0 +1,12 @@
+{
+  "id": "speed_down",
+  "name_key": "FLUID_SPEED_DOWN_NAME",
+  "effects": [
+    {
+      "type": "perma_stat",
+      "stat": "move_speed",
+      "add": -0.1
+    }
+  ],
+  "good": false
+}

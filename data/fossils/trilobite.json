@@ -1,0 +1,12 @@
+{
+  "id": "trilobite",
+  "name_key": "FOSSIL_TRILOBITE_NAME",
+  "desc_key": "FOSSIL_TRILOBITE_DESC",
+  "effects": [
+    {
+      "type": "ability",
+      "ability": "reveal_map",
+      "params": {}
+    }
+  ]
+}

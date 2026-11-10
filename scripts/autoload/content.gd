@@ -34,9 +34,9 @@ const SCHEMA: Dictionary = {
 }
 
 const ITEM_KINDS: PackedStringArray = ["passive", "active"]
-const PICKUP_KINDS: PackedStringArray = ["mana", "heart", "chitin", "toxic_chitin", "dig_charge", "royal_jelly"]
+const PICKUP_KINDS: PackedStringArray = ["mana", "heart", "chitin", "toxic_chitin", "dig_charge", "royal_jelly", "trinket", "fossil", "fluid"]
 const ROOM_TYPES: PackedStringArray = ["normal", "start", "boss", "treasure", "secret", "super_secret", "brood_cell",
-	"shop", "miniboss", "sacrifice", "curse", "challenge", "vault", "arcade", "library", "royal", "den"]
+	"shop", "miniboss", "sacrifice", "curse", "challenge", "vault", "arcade", "library", "royal", "den", "lab"]
 ## L-shaped rooms are deferred (DESIGN.md D27); rectangles only for now.
 const ROOM_SHAPES: PackedStringArray = ["1x1", "2x1", "1x2", "2x2"]
 const SHAPE_CELLS: Dictionary = {"1x1": Vector2i(1, 1), "2x1": Vector2i(2, 1), "1x2": Vector2i(1, 2), "2x2": Vector2i(2, 2)}
@@ -80,6 +80,20 @@ func cross_check() -> PackedStringArray:
 			for e in t["table"]:
 				if not has_entry("pickups", e["id"]):
 					out.append("drop table '%s' references unknown pickup '%s'" % [table_name, e["id"]])
+	# Every effect type and ability named in data must have a script.
+	for cat in ["items", "trinkets", "fossils", "fluids", "mutations"]:
+		for entry in all(cat):
+			for e in entry.get("effects", []):
+				var t := str(e.get("type", ""))
+				if not ResourceLoader.exists("res://scripts/effects/%s.gd" % t):
+					out.append("%s '%s': no effect script for type '%s'" % [cat, entry["id"], t])
+				var ab := str(e.get("ability", ""))
+				if ab != "" and not ResourceLoader.exists("res://scripts/effects/abilities/%s.gd" % ab):
+					out.append("%s '%s': no ability script '%s'" % [cat, entry["id"], ab])
+	for entry in all("enemies") + all("bosses"):
+		var bt := str(entry.get("behavior", {}).get("type", "chase"))
+		if not ResourceLoader.exists("res://scripts/enemies/behaviors/%s.gd" % bt):
+			out.append("enemy '%s': no behavior script '%s'" % [entry["id"], bt])
 	for ach in all("achievements"):
 		for u in ach["unlocks"]:
 			if _db.has(u.get("kind", "")) and not has_entry(u["kind"], u.get("id", "")):
@@ -184,7 +198,7 @@ static func validate(category: String, entry: Dictionary) -> PackedStringArray:
 			# Door entry lanes must stay walkable on every wall slot (the player spawns there).
 			for lane in door_lanes(entry["shape"]):
 				var ch := str(grid[lane.y])[lane.x]
-				if not ch in [".", "S", "D"]:
+				if not ch in [".", "S", "D", "G"]:
 					out.append("door entry tile %s must be walkable (found '%s')" % [lane, ch])
 			for sp in entry.get("spawns", []):
 				var at: Array = sp.get("at", [0, 0])
@@ -192,7 +206,7 @@ static func validate(category: String, entry: Dictionary) -> PackedStringArray:
 					out.append("spawn %s at %s is outside the grid" % [sp.get("enemy", "?"), at])
 					continue
 				var ch2 := str(grid[int(at[1])])[int(at[0])]
-				if not ch2 in [".", "D"]:
+				if not ch2 in [".", "D", "G"]:
 					out.append("spawn %s at %s is on '%s'" % [sp.get("enemy", "?"), at, ch2])
 			for t in entry.get("room_types", ["normal"]):
 				if not ROOM_TYPES.has(str(t)):

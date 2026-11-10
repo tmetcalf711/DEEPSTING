@@ -1,0 +1,32 @@
+{
+  "id": "bronze_arrowhead",
+  "name_key": "ITEM_BRONZE_ARROWHEAD_NAME",
+  "desc_key": "ITEM_BRONZE_ARROWHEAD_DESC",
+  "note_key": "ITEM_BRONZE_ARROWHEAD_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": 0.2
+    },
+    {
+      "type": "proc",
+      "kind": "crit",
+      "chance": 0.1,
+      "per_luck": 0.01,
+      "params": {
+        "mult": 2.0
+      }
+    }
+  ]
+}

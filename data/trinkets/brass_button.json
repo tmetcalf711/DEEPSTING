@@ -1,0 +1,19 @@
+{
+  "id": "brass_button",
+  "name_key": "TRINKET_BRASS_BUTTON_NAME",
+  "desc_key": "TRINKET_BRASS_BUTTON_DESC",
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "kill",
+      "chance": 0.04,
+      "per_luck": 0.004,
+      "action": {
+        "kind": "pickup",
+        "id": "mana_chip"
+      }
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

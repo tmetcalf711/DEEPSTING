@@ -1,0 +1,34 @@
+{
+  "id": "opal_fragment",
+  "name_key": "ITEM_OPAL_FRAGMENT_NAME",
+  "desc_key": "ITEM_OPAL_FRAGMENT_DESC",
+  "note_key": "ITEM_OPAL_FRAGMENT_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "secret"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "gem"
+  ],
+  "effects": [
+    {
+      "type": "proc",
+      "kind": "element",
+      "chance": 0.2,
+      "per_luck": 0.02,
+      "params": {
+        "elements": [
+          "poison",
+          "slow",
+          "burn"
+        ]
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#f0d8ff"
+  }
+}

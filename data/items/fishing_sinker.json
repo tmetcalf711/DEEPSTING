@@ -1,0 +1,35 @@
+{
+  "id": "fishing_sinker",
+  "name_key": "ITEM_FISHING_SINKER_NAME",
+  "desc_key": "ITEM_FISHING_SINKER_DESC",
+  "note_key": "ITEM_FISHING_SINKER_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.8
+    },
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": -0.2
+    },
+    {
+      "type": "projectile_mod",
+      "modifier": "size",
+      "params": {
+        "mult": 1.25
+      }
+    }
+  ]
+}

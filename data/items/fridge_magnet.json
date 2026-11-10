@@ -1,0 +1,30 @@
+{
+  "id": "fridge_magnet",
+  "name_key": "ITEM_FRIDGE_MAGNET_NAME",
+  "desc_key": "ITEM_FRIDGE_MAGNET_DESC",
+  "note_key": "ITEM_FRIDGE_MAGNET_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "boss"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "homing",
+      "params": {
+        "strength": 2.0
+      }
+    },
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": -0.1
+    }
+  ]
+}

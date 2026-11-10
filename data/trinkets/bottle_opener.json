@@ -1,0 +1,14 @@
+{
+  "id": "bottle_opener",
+  "name_key": "TRINKET_BOTTLE_OPENER_NAME",
+  "desc_key": "TRINKET_BOTTLE_OPENER_DESC",
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": 0.15
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

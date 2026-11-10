@@ -1,0 +1,15 @@
+{
+  "id": "compound_eyes",
+  "name_key": "MUT_COMPOUND_EYES_NAME",
+  "desc_key": "MUT_COMPOUND_EYES_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "homing",
+      "params": {
+        "strength": 0.7
+      }
+    }
+  ]
+}

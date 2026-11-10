@@ -1,0 +1,29 @@
+{
+  "id": "bone_whistle",
+  "name_key": "ITEM_BONE_WHISTLE_NAME",
+  "desc_key": "ITEM_BONE_WHISTLE_DESC",
+  "note_key": "ITEM_BONE_WHISTLE_NOTE",
+  "quality": 3,
+  "kind": "active",
+  "pools": [
+    "dig_site",
+    "secret"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "active",
+      "ability": "volley",
+      "charge": 3,
+      "params": {
+        "count": 10,
+        "homing": 2.5,
+        "damage_mult": 1.5,
+        "color": "#fff4d0"
+      }
+    }
+  ]
+}

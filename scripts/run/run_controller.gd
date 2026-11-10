@@ -13,11 +13,13 @@ const HudScript := preload("res://scripts/ui/hud.gd")
 const PauseScript := preload("res://scripts/ui/pause_menu.gd")
 const EndScript := preload("res://scripts/ui/end_screen.gd")
 const DarknessScript := preload("res://scripts/ui/darkness.gd")
+const MutationPickerScript := preload("res://scripts/ui/mutation_picker.gd")
 
 var layout: Dictionary = {}
 var stratum: Dictionary = {}
 var curse_id := ""
 var item_pool: ItemPool
+var trinket_pool: ItemPool
 var room: Room
 var player: CharacterBody2D
 var projectiles: ProjectileSystem
@@ -69,6 +71,9 @@ func _ready() -> void:
 	_register_commands()
 	if GameState.room_test_template != "":
 		_start_room_test(GameState.room_test_template)
+		if GameState.lab_mode:
+			add_child(load("res://scripts/tools/synergy_lab.gd").new())
+			GameState.god_mode = true
 	else:
 		start_floor(RunState.floor_index)
 
@@ -118,8 +123,7 @@ func start_floor(floor_index: int) -> void:
 	}
 	layout = FloorGen.generate(depth, RNG.stream("map"), cfg, opts)
 	FloorGen.assign_templates(layout, _templates(), RNG.stream("rooms"))
-	if item_pool == null:
-		item_pool = ItemPool.from_content()
+	_ensure_pools()
 	FloorContents.fill(layout, {"floor_index": floor_index, "stratum": stratum, "pool": item_pool,
 		"items_rng": RNG.stream("items"), "rooms_rng": RNG.stream("rooms"), "cfg": cfg})
 	if player == null:
@@ -133,6 +137,15 @@ func start_floor(floor_index: int) -> void:
 	Events.banner.emit(tr(stratum["name_key"]), sub)
 	Audio.play_music(str(stratum.get("music", "")))
 	enter_room(layout["start"], "")
+	player.effects.fire_event("floor_start", player.global_position)
+
+
+func _ensure_pools() -> void:
+	if item_pool == null:
+		item_pool = ItemPool.from_content()
+	if trinket_pool == null:
+		trinket_pool = ItemPool.trinkets_from_content()
+	EffectHost.ensure_fluid_map()
 
 
 func _templates() -> Array:
@@ -193,6 +206,7 @@ func enter_room(anchor: Vector2i, entry_slot: String) -> void:
 	if player.get_parent():
 		player.get_parent().remove_child(player)
 	projectiles.clear()
+	RunState.clear_room_effects()
 	current_anchor = anchor
 	var info: Dictionary = layout["rooms"][anchor]
 	var neighbors := {}
@@ -259,6 +273,8 @@ func mirror_door_flag(info: Dictionary, slot: String, key: String) -> void:
 
 func on_room_cleared(r: Room) -> void:
 	player.effects.on_room_cleared()
+	if RunState.mutation_ready():
+		call_deferred("_offer_mutation")
 	Events.room_cleared.emit(int(r.info["index"]))
 	if r.info.has("pedestal_on_clear") and not r.info.has("pedestal"):
 		r.info["pedestal"] = r.info["pedestal_on_clear"]
@@ -296,6 +312,40 @@ func _maybe_open_deal(r: Room, force_type: String = "") -> void:
 	r.neighbor_types[layout["deal_slot"]] = type
 	r.refresh_doors()
 	Events.toast.emit(tr("TOAST_DEAL_" + type.to_upper()))
+
+
+## Radiation meter full: choose 1 of 3 mutations (offered at room clear, never mid-fight).
+func _offer_mutation() -> void:
+	if not RunState.mutation_ready() or _ended or get_node_or_null("MutationPicker"):
+		return
+	var options := roll_mutations(3, RNG.stream("items"))
+	if options.is_empty():
+		return
+	RunState.consume_mutation()
+	var picker: CanvasLayer = MutationPickerScript.new()
+	picker.name = "MutationPicker"
+	picker.setup(options)
+	picker.chosen.connect(func(id: String) -> void:
+		player.effects.add_mutation(id)
+		Events.banner.emit(tr(Content.get_entry("mutations", id).get("name_key", "")), tr("BANNER_MUTATED"))
+		call_deferred("_offer_mutation"))
+	add_child(picker)
+
+
+## Up to n distinct mutations, weighted, unlock-gated (DESIGN.md §8.2).
+static func roll_mutations(n: int, r: RandomNumberGenerator) -> Array:
+	var pool := Content.all("mutations").filter(func(m: Dictionary) -> bool:
+		if not m.has("unlock"):
+			return true
+		var u := str(m["unlock"]).split(":")
+		return MetaSave.is_unlocked(u[0], u[1]))
+	pool.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a["id"]) < str(b["id"]))
+	var out: Array = []
+	while out.size() < n and not pool.is_empty():
+		var i := RNG.weighted_index(r, pool.map(func(m: Dictionary) -> float: return float(m.get("weight", 1.0))))
+		out.append(pool[i]["id"])
+		pool.remove_at(i)
+	return out
 
 
 func on_player_hurt() -> void:
@@ -351,8 +401,7 @@ func _start_room_test(template_id: String) -> void:
 		owner[c] = a
 	layout = {"depth": 1, "start": a, "boss": a if info["type"] == "boss" else FloorGen.NONE, "secret": FloorGen.NONE,
 		"super_secret": FloorGen.NONE, "deal": FloorGen.NONE, "deal_slot": "", "order": [a], "owner": owner, "rooms": {a: info}}
-	if item_pool == null:
-		item_pool = ItemPool.from_content()
+	_ensure_pools()
 	FloorContents.fill(layout, {"floor_index": 0, "stratum": stratum, "pool": item_pool,
 		"items_rng": RNG.stream("items"), "rooms_rng": RNG.stream("rooms"), "cfg": Content.get_entry("config", "floorgen")})
 	if info["type"] in ["royal", "den"]:

@@ -1,0 +1,28 @@
+{
+  "id": "rubber_band",
+  "name_key": "ITEM_RUBBER_BAND_NAME",
+  "desc_key": "ITEM_RUBBER_BAND_DESC",
+  "note_key": "ITEM_RUBBER_BAND_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "fire_rate",
+      "add": 0.5
+    },
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": -20
+    }
+  ]
+}

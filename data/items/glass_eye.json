@@ -1,0 +1,37 @@
+{
+  "id": "glass_eye",
+  "name_key": "ITEM_GLASS_EYE_NAME",
+  "desc_key": "ITEM_GLASS_EYE_DESC",
+  "note_key": "ITEM_GLASS_EYE_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "secret"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 60
+    },
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": 0.2
+    },
+    {
+      "type": "proc",
+      "kind": "crit",
+      "chance": 0.05,
+      "per_luck": 0.01,
+      "params": {
+        "mult": 2.0
+      }
+    }
+  ]
+}

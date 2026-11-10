@@ -1,0 +1,12 @@
+{
+  "id": "range_down",
+  "name_key": "FLUID_RANGE_DOWN_NAME",
+  "effects": [
+    {
+      "type": "perma_stat",
+      "stat": "range",
+      "add": -25
+    }
+  ],
+  "good": false
+}

@@ -1,0 +1,14 @@
+{
+  "id": "ichnite",
+  "name_key": "FOSSIL_ICHNITE_NAME",
+  "desc_key": "FOSSIL_ICHNITE_DESC",
+  "effects": [
+    {
+      "type": "ability",
+      "ability": "teleport",
+      "params": {
+        "room_type": "boss"
+      }
+    }
+  ]
+}

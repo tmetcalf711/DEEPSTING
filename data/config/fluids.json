@@ -1,0 +1,55 @@
+{
+  "id": "fluids",
+  "colors": [
+    {
+      "id": "amber",
+      "color": "#e8a33a",
+      "name_key": "FLUIDCOL_AMBER"
+    },
+    {
+      "id": "murky",
+      "color": "#6b6b3a",
+      "name_key": "FLUIDCOL_MURKY"
+    },
+    {
+      "id": "rust",
+      "color": "#b5562d",
+      "name_key": "FLUIDCOL_RUST"
+    },
+    {
+      "id": "teal",
+      "color": "#2fb7a3",
+      "name_key": "FLUIDCOL_TEAL"
+    },
+    {
+      "id": "violet",
+      "color": "#8a52d6",
+      "name_key": "FLUIDCOL_VIOLET"
+    },
+    {
+      "id": "milky",
+      "color": "#e6e2d3",
+      "name_key": "FLUIDCOL_MILKY"
+    },
+    {
+      "id": "glowing",
+      "color": "#8cff3a",
+      "name_key": "FLUIDCOL_GLOWING"
+    },
+    {
+      "id": "inky",
+      "color": "#2c2f45",
+      "name_key": "FLUIDCOL_INKY"
+    },
+    {
+      "id": "pink",
+      "color": "#ff7fb5",
+      "name_key": "FLUIDCOL_PINK"
+    },
+    {
+      "id": "oily",
+      "color": "#4f4a2c",
+      "name_key": "FLUIDCOL_OILY"
+    }
+  ]
+}

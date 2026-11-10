@@ -1,0 +1,6 @@
+{
+  "id": "radiation",
+  "first_threshold": 60,
+  "threshold_step": 30,
+  "glow_per_second": 5.0
+}

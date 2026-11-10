@@ -16,6 +16,7 @@ var wait := 0
 var walk_action := ""
 var start_anchor := Vector2i.ZERO
 var failures: PackedStringArray = []
+var prev_trinket := ""
 
 
 func _press(action: String, on: bool) -> void:
@@ -94,7 +95,9 @@ func _build_steps() -> void:
 	_then(1, func() -> void:
 		for t in SPECIALS:
 			_queue_special(t))
-	# 4. Curses regenerate the floor.
+	# 4. Milestone 3 systems in real play.
+	_then(1, func() -> void: _queue_m3())
+	# 5. Curses regenerate the floor.
 	for c in ["cave_in", "tremor", "toxic_fog", "labyrinth", "silt"]:
 		_then(20, func() -> void:
 			_console("curse " + c)
@@ -165,6 +168,65 @@ func _queue_special(type: String) -> void:
 		print("smoke: special %s (%s)" % [type, tid])])
 	for phase in 4:
 		front.append([60, func() -> void: _special_phase(type, phase)])
+	steps = front + steps
+
+
+func _queue_m3() -> void:
+	var front: Array = []
+	front.append([1, func() -> void:
+		rc._start_room_test("hive_n02")
+		for id in ["static_wire", "tin_can_phone", "darning_needle", "clay_idol", "amber_gnat", "dead_lighter", "jawbreaker", "glass_eye"]:
+			_console("give " + id)
+		rc.player.effects.add_mutation("glow_glands")
+		print("smoke: m3 build: multishot=%d boomerang=%s procs=%d familiars=%d auras=%d" % [
+			rc.player.spec["multishot"], rc.player.spec["boomerang"], rc.player.spec["procs"].size(), rc.player.effects.familiars.size(), _rs().auras.size()])
+		_check(rc.player.spec["multishot"] == 2 and rc.player.spec["boomerang"], "m3 build composed")
+		_press("shoot_right", true)])
+	front.append([150, func() -> void:
+		print("smoke: m3 fight: %d enemies left, kills %d, radiation %.1f" % [rc.room.enemies_alive, int(_rs().stats["kills"]), _rs().radiation])])
+	front.append([1, func() -> void:
+		# Knick-knack: walk onto one, then swap it for another.
+		rc.room.spawn_pickup("trinket", rc.player.position)])
+	front.append([20, func() -> void:
+		_check(_rs().trinket != "", "picked up a knick-knack")
+		print("smoke: knick-knack %s" % _rs().trinket)
+		prev_trinket = _rs().trinket
+		rc.room.spawn_pickup("trinket", rc.player.position)])
+	front.append([20, func() -> void:
+		var dropped: Array = get_nodes_in_group("pickups").filter(func(n: Node) -> bool:
+			return n.data["kind"] == "trinket" and not n.collected and n.payload == prev_trinket)
+		_check(dropped.size() == 1 and _rs().trinket != prev_trinket, "swapped knick-knack was dropped (and not re-picked)")
+		rc.room.spawn_pickup("fossil", rc.player.position)])
+	front.append([20, func() -> void:
+		_check(_rs().consumable.get("kind", "") == "fossil", "holding a fossil")
+		print("smoke: fossil %s" % _rs().consumable.get("id", ""))
+		_press("use_consumable", true)])
+	front.append([2, func() -> void:
+		_press("use_consumable", false)
+		_check(_rs().consumable.is_empty(), "fossil used")
+		rc.room.spawn_pickup("fluid", rc.player.position)])
+	front.append([20, func() -> void:
+		var color: String = _rs().consumable.get("id", "")
+		_press("use_consumable", true)
+		print("smoke: drank %s fluid = %s" % [color, load("res://scripts/player/effect_host.gd").fluid_for_color(color)])])
+	front.append([2, func() -> void:
+		_press("use_consumable", false)
+		_check(_rs().fluids_identified.size() >= 1, "fluid identified")
+		_rs().add_radiation(200.0)
+		_kill_all()])
+	front.append([30, func() -> void:
+		var picker: Node = rc.get_node_or_null("MutationPicker")
+		_check(picker != null, "mutation offered at room clear")
+		if picker:
+			print("smoke: mutation options %s" % [picker.options])
+			picker._pick(picker.options[0])])
+	front.append([10, func() -> void:
+		_press("shoot_right", false)
+		print("smoke: mutations %s, next threshold %d" % [_rs().mutations, _rs().radiation_threshold])
+		_check(_rs().mutations.size() >= 2, "mutation added")
+		var picker: Node = rc.get_node_or_null("MutationPicker")
+		if picker:
+			picker._pick(picker.options[0])])
 	steps = front + steps
 
 

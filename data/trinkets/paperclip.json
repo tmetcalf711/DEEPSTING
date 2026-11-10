@@ -1,0 +1,14 @@
+{
+  "id": "paperclip",
+  "name_key": "TRINKET_PAPERCLIP_NAME",
+  "desc_key": "TRINKET_PAPERCLIP_DESC",
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "luck",
+      "add": 1
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

@@ -1,0 +1,47 @@
+{
+  "id": "cracked_crown",
+  "name_key": "ITEM_CRACKED_CROWN_NAME",
+  "desc_key": "ITEM_CRACKED_CROWN_DESC",
+  "note_key": "ITEM_CRACKED_CROWN_NOTE",
+  "quality": 4,
+  "kind": "passive",
+  "pools": [
+    "vault",
+    "cursed"
+  ],
+  "locked_by_default": true,
+  "tags": [
+    "relic"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 1.5
+    },
+    {
+      "type": "stat_mod",
+      "stat": "fire_rate",
+      "add": 0.5
+    },
+    {
+      "type": "stat_mod",
+      "stat": "move_speed",
+      "add": 0.15
+    },
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 40
+    },
+    {
+      "type": "stat_mod",
+      "stat": "luck",
+      "add": 1
+    },
+    {
+      "type": "flag",
+      "name": "double_damage"
+    }
+  ]
+}

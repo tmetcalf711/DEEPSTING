@@ -1,0 +1,19 @@
+{
+  "id": "watch_battery",
+  "name_key": "TRINKET_WATCH_BATTERY_NAME",
+  "desc_key": "TRINKET_WATCH_BATTERY_DESC",
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "room_clear",
+      "chance": 0.25,
+      "per_luck": 0.0,
+      "action": {
+        "kind": "charge_active",
+        "amount": 1
+      }
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

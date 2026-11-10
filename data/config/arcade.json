@@ -33,6 +33,11 @@
           "weight": 3,
           "result": "enemy",
           "id": "paper_moth"
+        },
+        {
+          "weight": 4,
+          "result": "pickup",
+          "id": "fluid"
         }
       ]
     },
@@ -58,6 +63,11 @@
           "result": "pickup",
           "id": "mana_chip",
           "count": 3
+        },
+        {
+          "weight": 6,
+          "result": "pickup",
+          "id": "trinket"
         }
       ]
     },

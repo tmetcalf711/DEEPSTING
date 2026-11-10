@@ -1,0 +1,22 @@
+{
+  "id": "pocket_watch",
+  "name_key": "ITEM_POCKET_WATCH_NAME",
+  "desc_key": "ITEM_POCKET_WATCH_DESC",
+  "note_key": "ITEM_POCKET_WATCH_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "library"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "flag",
+      "name": "slow_enemy_shots"
+    }
+  ]
+}

@@ -38,6 +38,18 @@
       {
         "id": "royal_jelly",
         "weight": 12
+      },
+      {
+        "id": "trinket",
+        "weight": 2
+      },
+      {
+        "id": "fossil",
+        "weight": 5
+      },
+      {
+        "id": "fluid",
+        "weight": 5
       }
     ]
   },
@@ -72,6 +84,14 @@
       {
         "id": "mana_fragment",
         "weight": 2
+      },
+      {
+        "id": "fossil",
+        "weight": 2
+      },
+      {
+        "id": "trinket",
+        "weight": 1
       }
     ]
   },
@@ -110,6 +130,14 @@
       {
         "id": "royal_jelly",
         "weight": 2
+      },
+      {
+        "id": "trinket",
+        "weight": 1
+      },
+      {
+        "id": "fossil",
+        "weight": 1
       }
     ]
   },
@@ -170,6 +198,10 @@
       },
       {
         "id": "mana_chunk",
+        "weight": 1
+      },
+      {
+        "id": "trinket",
         "weight": 1
       }
     ]

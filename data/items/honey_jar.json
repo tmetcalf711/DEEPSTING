@@ -1,0 +1,23 @@
+{
+  "id": "honey_jar",
+  "name_key": "ITEM_HONEY_JAR_NAME",
+  "desc_key": "ITEM_HONEY_JAR_DESC",
+  "note_key": "ITEM_HONEY_JAR_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "boss",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "hive"
+  ],
+  "effects": [
+    {
+      "type": "health",
+      "heart_containers": 1,
+      "heal": -1
+    }
+  ]
+}

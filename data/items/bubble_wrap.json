@@ -1,0 +1,22 @@
+{
+  "id": "bubble_wrap",
+  "name_key": "ITEM_BUBBLE_WRAP_NAME",
+  "desc_key": "ITEM_BUBBLE_WRAP_DESC",
+  "note_key": "ITEM_BUBBLE_WRAP_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "trader",
+    "dig_site"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "health",
+      "chitin": 4
+    }
+  ]
+}

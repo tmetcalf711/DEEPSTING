@@ -1,0 +1,28 @@
+{
+  "id": "coin_purse",
+  "name_key": "ITEM_COIN_PURSE_NAME",
+  "desc_key": "ITEM_COIN_PURSE_DESC",
+  "note_key": "ITEM_COIN_PURSE_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "trader",
+    "dig_site"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "room_clear",
+      "chance": 0.3,
+      "per_luck": 0.03,
+      "action": {
+        "kind": "pickup",
+        "id": "mana_chip"
+      }
+    }
+  ]
+}

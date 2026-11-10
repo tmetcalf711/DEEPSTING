@@ -1,0 +1,14 @@
+{
+  "id": "cats_eye_marble",
+  "name_key": "TRINKET_CATS_EYE_MARBLE_NAME",
+  "desc_key": "TRINKET_CATS_EYE_MARBLE_DESC",
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 30
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

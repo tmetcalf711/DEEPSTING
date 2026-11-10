@@ -116,9 +116,41 @@ func _build() -> void:
 	_then(1, func() -> void: _console("curse cave_in"))
 	_then(40, func() -> void: _shot("07_curse_cave_in"))
 	_then(1, func() -> void: _console("curse none"))
+	# Consumables, knick-knack, radiation, mutation picker.
+	_then(1, func() -> void:
+		var rs: Node = root.get_node("RunState")
+		rc.player.effects.set_trinket("fishing_hook")
+		rs.consumable = {"kind": "fluid", "id": "teal"}
+		rs.add_radiation(70.0)
+		rc._start_room_test("topsoil_t08")
+		Input.action_press("shoot_left"))
+	_then(40, func() -> void: _shot("09_hud_consumables_radiation"))
+	_then(1, func() -> void:
+		Input.action_release("shoot_left")
+		rc._offer_mutation())
+	_then(10, func() -> void: _shot("10_mutation_picker"))
+	_then(1, func() -> void:
+		var picker: Node = rc.get_node_or_null("MutationPicker")
+		if picker:
+			picker._pick(picker.options[0]))
 	# Room editor.
 	_then(1, func() -> void: change_scene_to_file("res://tools/room_editor.tscn"))
 	_then(20, func() -> void:
 		var ed: Node = current_scene
 		ed._load("hive_x01"))
 	_then(10, func() -> void: _shot("08_room_editor"))
+	# Synergy Lab with a stacked build.
+	_then(1, func() -> void:
+		var gs: Node = root.get_node("GameState")
+		gs.room_test_template = "lab_range"
+		gs.lab_mode = true
+		root.get_node("RunState").start_new(7)
+		change_scene_to_file("res://scenes/run/run.tscn"))
+	_then(20, func() -> void:
+		rc = current_scene
+		for e in [["items", "raw_geode"], ["items", "darning_needle"], ["items", "static_wire"], ["items", "acid_gland"], ["items", "snail_shell"], ["mutations", "glow_glands"]]:
+			load("res://scripts/tools/synergy_lab.gd").toggle(e[0], e[1])
+		rc.player.position = Vector2(60, 56)
+		Input.action_press("shoot_right"))
+	_then(70, func() -> void: _shot("11_synergy_lab"))
+	_then(1, func() -> void: Input.action_release("shoot_right"))

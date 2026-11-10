@@ -1,0 +1,30 @@
+{
+  "id": "snail_shell",
+  "name_key": "ITEM_SNAIL_SHELL_NAME",
+  "desc_key": "ITEM_SNAIL_SHELL_DESC",
+  "note_key": "ITEM_SNAIL_SHELL_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "wave",
+      "params": {
+        "amp": 7,
+        "freq": 2.5
+      }
+    },
+    {
+      "type": "stat_mod",
+      "stat": "damage",
+      "add": 0.3
+    }
+  ]
+}

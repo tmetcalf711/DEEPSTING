@@ -1,0 +1,34 @@
+{
+  "id": "kaleidoscope_shard",
+  "name_key": "ITEM_KALEIDOSCOPE_SHARD_NAME",
+  "desc_key": "ITEM_KALEIDOSCOPE_SHARD_DESC",
+  "note_key": "ITEM_KALEIDOSCOPE_SHARD_NOTE",
+  "quality": 3,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "secret"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "gem"
+  ],
+  "effects": [
+    {
+      "type": "projectile_mod",
+      "modifier": "multishot",
+      "params": {
+        "count": 3,
+        "spread": 0.5
+      }
+    },
+    {
+      "type": "stat_mod",
+      "stat": "fire_rate",
+      "mult": 0.7
+    }
+  ],
+  "visual": {
+    "tint": "#9fe8ff"
+  }
+}

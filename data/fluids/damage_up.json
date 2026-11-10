@@ -1,0 +1,12 @@
+{
+  "id": "damage_up",
+  "name_key": "FLUID_DAMAGE_UP_NAME",
+  "effects": [
+    {
+      "type": "perma_stat",
+      "stat": "damage",
+      "add": 0.4
+    }
+  ],
+  "good": true
+}

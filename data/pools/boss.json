@@ -8,7 +8,27 @@
       "weight": 1.0
     },
     {
+      "id": "amber_gnat",
+      "weight": 1.0
+    },
+    {
+      "id": "ant_farm",
+      "weight": 1.0
+    },
+    {
       "id": "bent_fork",
+      "weight": 1.0
+    },
+    {
+      "id": "bronze_arrowhead",
+      "weight": 1.0
+    },
+    {
+      "id": "canopic_jar",
+      "weight": 1.0
+    },
+    {
+      "id": "darning_needle",
       "weight": 1.0
     },
     {
@@ -17,6 +37,14 @@
     },
     {
       "id": "frayed_shoelace",
+      "weight": 1.0
+    },
+    {
+      "id": "fridge_magnet",
+      "weight": 1.0
+    },
+    {
+      "id": "honey_jar",
       "weight": 1.0
     },
     {
@@ -33,6 +61,10 @@
     },
     {
       "id": "toy_soldier",
+      "weight": 1.0
+    },
+    {
+      "id": "venom_vial",
       "weight": 1.0
     }
   ]

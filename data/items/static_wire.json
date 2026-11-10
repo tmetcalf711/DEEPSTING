@@ -1,0 +1,32 @@
+{
+  "id": "static_wire",
+  "name_key": "ITEM_STATIC_WIRE_NAME",
+  "desc_key": "ITEM_STATIC_WIRE_DESC",
+  "note_key": "ITEM_STATIC_WIRE_NOTE",
+  "quality": 2,
+  "kind": "passive",
+  "pools": [
+    "dig_site",
+    "trader"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "proc",
+      "kind": "chain",
+      "chance": 0.15,
+      "per_luck": 0.02,
+      "params": {
+        "mult": 0.6,
+        "range": 70,
+        "jumps": 2
+      }
+    }
+  ],
+  "visual": {
+    "tint": "#fff27a"
+  }
+}

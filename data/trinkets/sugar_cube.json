@@ -1,0 +1,14 @@
+{
+  "id": "sugar_cube",
+  "name_key": "TRINKET_SUGAR_CUBE_NAME",
+  "desc_key": "TRINKET_SUGAR_CUBE_DESC",
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "move_speed",
+      "add": 0.1
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

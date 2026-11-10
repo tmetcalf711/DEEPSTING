@@ -1,0 +1,12 @@
+{
+  "id": "shark_tooth",
+  "name_key": "FOSSIL_SHARK_TOOTH_NAME",
+  "desc_key": "FOSSIL_SHARK_TOOTH_DESC",
+  "effects": [
+    {
+      "type": "room_stat",
+      "stat": "damage",
+      "add": 2.5
+    }
+  ]
+}

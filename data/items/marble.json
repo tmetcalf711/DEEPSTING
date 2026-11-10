@@ -1,0 +1,27 @@
+{
+  "id": "marble",
+  "name_key": "ITEM_MARBLE_NAME",
+  "desc_key": "ITEM_MARBLE_DESC",
+  "note_key": "ITEM_MARBLE_NOTE",
+  "quality": 1,
+  "kind": "passive",
+  "pools": [
+    "dig_site"
+  ],
+  "locked_by_default": false,
+  "tags": [
+    "junk"
+  ],
+  "effects": [
+    {
+      "type": "stat_mod",
+      "stat": "range",
+      "add": 80
+    },
+    {
+      "type": "stat_mod",
+      "stat": "shot_speed",
+      "add": -0.15
+    }
+  ]
+}

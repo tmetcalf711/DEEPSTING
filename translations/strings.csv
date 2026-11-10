@@ -221,3 +221,203 @@ EDITOR_TEST,Test
 EDITOR_SAVED,Saved %s
 EDITOR_ERRORS,Not saved: %s
 MENU_EDITOR,Room Editor (dev)
+ITEM_BRONZE_ARROWHEAD_NAME,Bronze Arrowhead
+ITEM_BRONZE_ARROWHEAD_DESC,"Shot speed up, critical hits"
+ITEM_BRONZE_ARROWHEAD_NOTE,"Field note: older than the hive, and still sharp."
+ITEM_TIN_CAN_PHONE_NAME,Tin Can Phone
+ITEM_TIN_CAN_PHONE_DESC,Shots come back
+ITEM_TIN_CAN_PHONE_NOTE,"Field note: whatever you shout into it, comes back."
+ITEM_CRACKED_CROWN_NAME,Cracked Crown
+ITEM_CRACKED_CROWN_DESC,"All stats up, you take double damage"
+ITEM_CRACKED_CROWN_NOTE,Field note: heavy is the head. Heavier when it's cracked.
+ITEM_CLAY_IDOL_NAME,Clay Idol
+ITEM_CLAY_IDOL_DESC,An orbiting idol blocks shots
+ITEM_CLAY_IDOL_NOTE,Field note: it spins when no one is looking. Now it spins when we are.
+ITEM_CANOPIC_JAR_NAME,Canopic Jar
+ITEM_CANOPIC_JAR_DESC,Kills sometimes leave Chitin
+ITEM_CANOPIC_JAR_NOTE,Field note: something rattles inside. Better not to check.
+ITEM_TEMPLE_BELL_NAME,Temple Bell
+ITEM_TEMPLE_BELL_DESC,Ring it: the room freezes
+ITEM_TEMPLE_BELL_NOTE,Field note: its ring makes everything stop and listen.
+ITEM_WEDDING_RING_NAME,Lost Wedding Ring
+ITEM_WEDDING_RING_DESC,"Luck up, Chitin each floor"
+ITEM_WEDDING_RING_NOTE,Field note: somebody looked for this for a long time.
+ITEM_RUSTY_SPOON_NAME,Rusty Spoon
+ITEM_RUSTY_SPOON_DESC,Shots may poison
+ITEM_RUSTY_SPOON_NOTE,Field note: it has stirred things that should not be stirred.
+ITEM_MARBLE_NAME,Marble
+ITEM_MARBLE_DESC,"Range up, shots roll slower"
+ITEM_MARBLE_NOTE,Field note: a perfect cat's eye. It never stops rolling.
+ITEM_COIN_PURSE_NAME,Old Coin Purse
+ITEM_COIN_PURSE_DESC,Cleared rooms drop more Mana
+ITEM_COIN_PURSE_NOTE,"Field note: empty, but it remembers being full."
+ITEM_SWOLLEN_BATTERY_NAME,Swollen Battery
+ITEM_SWOLLEN_BATTERY_DESC,Actives charge twice as fast
+ITEM_SWOLLEN_BATTERY_NOTE,Field note: it's warm. Batteries shouldn't be warm.
+ITEM_BUBBLE_WRAP_NAME,Bubble Wrap
+ITEM_BUBBLE_WRAP_DESC,+2 Chitin
+ITEM_BUBBLE_WRAP_NOTE,Field note: all the bubbles are still intact. Unbelievable restraint.
+ITEM_DEAD_LIGHTER_NAME,Dead Lighter
+ITEM_DEAD_LIGHTER_DESC,Shots may set things alight
+ITEM_DEAD_LIGHTER_NOTE,Field note: one spark left in it. Then another. Then another.
+ITEM_AMBER_GNAT_NAME,Amber with a Gnat Inside
+ITEM_AMBER_GNAT_DESC,A gnat that bites enemies
+ITEM_AMBER_GNAT_NOTE,Field note: we cracked the amber. The gnat was not dead.
+ITEM_OPAL_FRAGMENT_NAME,Opal Fragment
+ITEM_OPAL_FRAGMENT_DESC,"Shots may poison, slow or burn"
+ITEM_OPAL_FRAGMENT_NOTE,"Field note: every color at once, depending on the mood."
+ITEM_DARNING_NEEDLE_NAME,Darning Needle
+ITEM_DARNING_NEEDLE_DESC,Double shot
+ITEM_DARNING_NEEDLE_NOTE,Field note: it has a second eye. So now do you.
+ITEM_KALEIDOSCOPE_SHARD_NAME,Kaleidoscope Shard
+ITEM_KALEIDOSCOPE_SHARD_DESC,"Triple shot, fire rate down"
+ITEM_KALEIDOSCOPE_SHARD_NOTE,Field note: everything is three things now.
+ITEM_STATIC_WIRE_NAME,Static Wire
+ITEM_STATIC_WIRE_DESC,Shots may arc to nearby enemies
+ITEM_STATIC_WIRE_NOTE,Field note: still live. Somehow. Down here.
+ITEM_FRIDGE_MAGNET_NAME,Fridge Magnet
+ITEM_FRIDGE_MAGNET_DESC,Strongly seeking shots
+ITEM_FRIDGE_MAGNET_NOTE,Field note: it holds up nothing now. It pulls everything.
+ITEM_SNAIL_SHELL_NAME,Snail Shell
+ITEM_SNAIL_SHELL_DESC,Shots wiggle
+ITEM_SNAIL_SHELL_NOTE,Field note: the spiral goes in forever if you look long enough.
+ITEM_FISHING_SINKER_NAME,Fishing Sinker
+ITEM_FISHING_SINKER_DESC,"Heavy shots: damage up, shot speed down"
+ITEM_FISHING_SINKER_NOTE,Field note: made to go down. Like us.
+ITEM_BONE_WHISTLE_NAME,Bone Whistle
+ITEM_BONE_WHISTLE_DESC,Call a swarm of seeking stingers
+ITEM_BONE_WHISTLE_NOTE,Field note: you can't hear it. Every wasp for a mile can.
+ITEM_RUBBER_BAND_NAME,Rubber Band
+ITEM_RUBBER_BAND_DESC,"Fire rate up, range down"
+ITEM_RUBBER_BAND_NOTE,Field note: snaps back faster than it should.
+ITEM_VENOM_VIAL_NAME,Venom Vial
+ITEM_VENOM_VIAL_DESC,Damage multiplied
+ITEM_VENOM_VIAL_NOTE,Field note: a stronger vintage than ours.
+ITEM_RUSTY_COMPASS_NAME,Rusty Compass
+ITEM_RUSTY_COMPASS_DESC,Special rooms show on the map
+ITEM_RUSTY_COMPASS_NOTE,Field note: it only ever points at treasure. Or danger. Hard to say.
+ITEM_POCKET_WATCH_NAME,Stopped Pocket Watch
+ITEM_POCKET_WATCH_DESC,Enemy shots move slower
+ITEM_POCKET_WATCH_NOTE,Field note: stopped at 3:47. Time down here agrees.
+ITEM_HONEY_JAR_NAME,Crystallized Honey
+ITEM_HONEY_JAR_DESC,"+1 Heart, full heal"
+ITEM_HONEY_JAR_NOTE,Field note: the old hive's last reserve. It tastes like home.
+ITEM_GLASS_EYE_NAME,Glass Eye
+ITEM_GLASS_EYE_DESC,"Range and shot speed up, crits"
+ITEM_GLASS_EYE_NOTE,Field note: it sees better than ours do.
+ITEM_ANT_FARM_NAME,Ant Farm
+ITEM_ANT_FARM_DESC,Two ants fight for you
+ITEM_ANT_FARM_NOTE,Field note: the ants have been waiting for someone to fight.
+ITEM_JAWBREAKER_NAME,Jawbreaker
+ITEM_JAWBREAKER_DESC,Shots may stun
+ITEM_JAWBREAKER_NOTE,Field note: seven layers. We licked to the fourth.
+TRINKET_BOTTLE_OPENER_NAME,Bottle Opener
+TRINKET_BOTTLE_OPENER_DESC,Shot speed up
+TRINKET_PAPERCLIP_NAME,Paperclip
+TRINKET_PAPERCLIP_DESC,Luck up
+TRINKET_THUMBTACK_NAME,Thumbtack
+TRINKET_THUMBTACK_DESC,Occasional critical hits
+TRINKET_FISHING_HOOK_NAME,Fishing Hook
+TRINKET_FISHING_HOOK_DESC,Slightly seeking shots
+TRINKET_SUGAR_CUBE_NAME,Sugar Cube
+TRINKET_SUGAR_CUBE_DESC,Speed up
+TRINKET_BRASS_BUTTON_NAME,Brass Button
+TRINKET_BRASS_BUTTON_DESC,Kills sometimes drop Mana
+TRINKET_TOOTHPICK_NAME,Toothpick
+TRINKET_TOOTHPICK_DESC,Fire rate up
+TRINKET_RUBBER_DUCK_NAME,Rubber Duck
+TRINKET_RUBBER_DUCK_DESC,Getting hurt sometimes grants Chitin
+TRINKET_CHEWING_GUM_NAME,Old Chewing Gum
+TRINKET_CHEWING_GUM_DESC,Shots may stick and slow
+TRINKET_WATCH_BATTERY_NAME,Watch Battery
+TRINKET_WATCH_BATTERY_DESC,Actives sometimes charge faster
+TRINKET_DOMINO_NAME,Domino Tile
+TRINKET_DOMINO_DESC,Small luck and damage up
+TRINKET_CATS_EYE_MARBLE_NAME,Cat's Eye Marble
+TRINKET_CATS_EYE_MARBLE_DESC,Range up
+TRINKET_BOBBY_PIN_NAME,Bobby Pin
+TRINKET_BOBBY_PIN_DESC,Locks need one less Royal Jelly
+TRINKET_SMELLY_SOCK_NAME,Smelly Sock
+TRINKET_SMELLY_SOCK_DESC,Getting hurt may stun the room
+TRINKET_LUCKY_PEBBLE_NAME,Lucky Pebble
+TRINKET_LUCKY_PEBBLE_DESC,Cleared rooms sometimes drop hearts
+FOSSIL_TRILOBITE_NAME,Trilobite
+FOSSIL_TRILOBITE_DESC,Reveals the floor
+FOSSIL_AMMONITE_NAME,Ammonite
+FOSSIL_AMMONITE_DESC,A spiral of stingers
+FOSSIL_SHARK_TOOTH_NAME,Shark Tooth
+FOSSIL_SHARK_TOOTH_DESC,Big damage up for this room
+FOSSIL_COPROLITE_NAME,Coprolite
+FOSSIL_COPROLITE_DESC,Every rock in the room crumbles
+FOSSIL_BELEMNITE_NAME,Belemnite
+FOSSIL_BELEMNITE_DESC,Eight piercing stingers
+FOSSIL_ICHNITE_NAME,Ichnite
+FOSSIL_ICHNITE_DESC,Footprints lead to the boss
+FOSSIL_PETRIFIED_WOOD_NAME,Petrified Wood
+FOSSIL_PETRIFIED_WOOD_DESC,+3 Dig Charges
+FOSSIL_AMBER_DROP_NAME,Amber Drop
+FOSSIL_AMBER_DROP_DESC,Full heal
+FOSSIL_SAND_DOLLAR_NAME,Sand Dollar
+FOSSIL_SAND_DOLLAR_DESC,+10 Mana
+FOSSIL_FEATHER_IMPRINT_NAME,Feather Imprint
+FOSSIL_FEATHER_IMPRINT_DESC,Flight and speed for this room
+FLUID_DAMAGE_UP_NAME,Damage Up
+FLUID_DAMAGE_DOWN_NAME,Damage Down
+FLUID_RATE_UP_NAME,Fire Rate Up
+FLUID_RATE_DOWN_NAME,Fire Rate Down
+FLUID_SPEED_UP_NAME,Speed Up
+FLUID_SPEED_DOWN_NAME,Speed Down
+FLUID_RANGE_UP_NAME,Range Up
+FLUID_RANGE_DOWN_NAME,Range Down
+FLUID_LUCK_UP_NAME,Luck Up
+FLUID_FULL_HEAL_NAME,Tap Water?
+FLUID_GLOWING_SLURRY_NAME,Glowing Slurry
+FLUID_ANTIFREEZE_NAME,Antifreeze
+FLUIDCOL_AMBER,Amber Fluid
+FLUIDCOL_MURKY,Murky Fluid
+FLUIDCOL_RUST,Rust Fluid
+FLUIDCOL_TEAL,Teal Fluid
+FLUIDCOL_VIOLET,Violet Fluid
+FLUIDCOL_MILKY,Milky Fluid
+FLUIDCOL_GLOWING,Glowing Fluid
+FLUIDCOL_INKY,Inky Fluid
+FLUIDCOL_PINK,Pink Fluid
+FLUIDCOL_OILY,Oily Fluid
+MUT_EXTRA_EYE_DESC,Range up
+MUT_THICK_CARAPACE_NAME,Thick Carapace
+MUT_THICK_CARAPACE_DESC,"+2 Chitin, slightly slower"
+MUT_GLOW_GLANDS_NAME,Glow Glands
+MUT_GLOW_GLANDS_DESC,Enemies near you take damage
+MUT_SPIRACLES_NAME,Spiracles
+MUT_SPIRACLES_DESC,Dash recharges faster
+MUT_TWIN_STINGER_NAME,Twin Stinger
+MUT_TWIN_STINGER_DESC,"An extra stinger, slightly weaker shots"
+MUT_HUNGRY_GUT_NAME,Hungry Gut
+MUT_HUNGRY_GUT_DESC,Clearing rooms sometimes heals
+MUT_STATIC_FUZZ_NAME,Static Fuzz
+MUT_STATIC_FUZZ_DESC,Shots may arc to a nearby enemy
+MUT_COMPOUND_EYES_NAME,Compound Eyes
+MUT_COMPOUND_EYES_DESC,Shots seek a little
+MUT_HARDENED_STINGER_NAME,Hardened Stinger
+MUT_HARDENED_STINGER_DESC,Shots pierce one enemy
+MUT_TOXIC_BLOOD_NAME,Toxic Blood
+MUT_TOXIC_BLOOD_DESC,Getting hurt sprays stingers
+MUT_QUICK_MOLT_NAME,Quick Molt
+MUT_QUICK_MOLT_DESC,Speed up
+MUT_VENOM_OVERLOAD_NAME,Venom Overload
+MUT_VENOM_OVERLOAD_DESC,Damage up
+PICKUP_TRINKET_NAME,Knick-knack
+PICKUP_FOSSIL_NAME,Fossil
+PICKUP_FLUID_NAME,Strange Fluid
+ENEMY_TRAINING_DUMMY_NAME,Training Dummy
+BANNER_FLUID_IDENTIFIED,identified!
+BANNER_SYNERGY,Synergy!
+BANNER_MUTATED,mutation
+MUTATION_TITLE,The radiation changes you...
+PAUSE_KNICKKNACK,knick-knack
+PAUSE_MUTATION,mutation
+MENU_LAB,Synergy Lab (dev)
+LAB_TITLE,Synergy Lab
+LAB_CLEAR,Clear build
+LAB_BACK,Back
+BANNER_LAB,Synergy Lab

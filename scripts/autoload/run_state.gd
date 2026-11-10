@@ -9,11 +9,12 @@ extends Node
 const BASE_STATS: Dictionary = {
 	# World units: 16 px tiles; a 1x1 room interior is 208 x 112 px (DESIGN.md §3.3).
 	"damage": 3.5, "fire_rate": 2.7, "shot_speed": 1.0, "range": 150.0,
-	"move_speed": 1.0, "luck": 0.0,
+	"move_speed": 1.0, "luck": 0.0, "dash_cooldown": 0.9,
 }
 const STAT_LIMITS: Dictionary = {  # stat -> [floor, cap]
 	"damage": [0.5, 1.0e9], "fire_rate": [0.5, 30.0], "shot_speed": [0.6, 2.5],
 	"range": [40.0, 600.0], "move_speed": [0.4, 2.0], "luck": [-5.0, 10.0],
+	"dash_cooldown": [0.25, 2.0],
 }
 const MAX_TOTAL_HEARTS := 12  # containers + shields, in whole hearts
 const MAX_CONSUMABLE := 99
@@ -43,6 +44,24 @@ var flags: Dictionary = {}
 var stat_mods: Array[Dictionary] = []  # [{stat, add, mult, source}]  rebuilt from items
 var shot_mods: Array[Dictionary] = []  # [{modifier, params, source}] rebuilt from items
 var tints: Array[Color] = []           # shot tints contributed by items (visual only)
+var triggers: Array[Dictionary] = []   # [{event, chance, per_luck, action}] rebuilt from owned things
+var procs: Array[Dictionary] = []      # [{kind, chance, per_luck, params}] on-hit, rebuilt
+var auras: Array[Dictionary] = []      # [{radius, dps}] rebuilt
+var perma_mods: Array[Dictionary] = [] # permanent stat changes from Strange Fluids (serialized)
+var room_mods: Array[Dictionary] = []  # stat buffs that end when you leave the room (fossils)
+var room_flags: Dictionary = {}        # flags that end when you leave the room
+
+# Knick-knack (trinket), the fossil/fluid slot, and the Strange Fluid color mapping for the run
+var trinket: String = ""
+var consumable: Dictionary = {}        # {} | {"kind": "fossil"|"fluid", "id": fossil id | fluid color id}
+var fluid_map: Dictionary = {}         # color id -> fluid id (seeded per run)
+var fluids_identified: Dictionary = {} # fluid id -> true
+
+# Radiation (Nuclear Throne model, DESIGN.md §8.2)
+var radiation: float = 0.0
+var radiation_threshold: int = 60
+var mutations_offered: int = 0
+var mutations: Array[String] = []
 
 # Floor stash: hauled materials waiting to be carried up the boss shaft. Lost on death.
 var floor_stash: Dictionary = {}  # resource_type -> amount
@@ -86,6 +105,20 @@ func reset() -> void:
 	stat_mods = []
 	shot_mods = []
 	tints = []
+	triggers = []
+	procs = []
+	auras = []
+	perma_mods = []
+	room_mods = []
+	room_flags = {}
+	trinket = ""
+	consumable = {}
+	fluid_map = {}
+	fluids_identified = {}
+	radiation = 0.0
+	radiation_threshold = int(Content.get_entry("config", "radiation").get("first_threshold", 60))
+	mutations_offered = 0
+	mutations = []
 	floor_stash = {}
 	stats = {"kills": 0, "rooms_cleared": 0, "brood_rescued": 0, "damage_taken": 0,
 		"secrets_found": 0, "pulp_banked": 0, "stash_lost": 0, "items": 0}
@@ -95,7 +128,45 @@ func reset() -> void:
 
 ## final = clamp((base + sum(add)) * prod(mult), floor, cap)  (DESIGN.md §3.3)
 func stat(stat_name: String) -> float:
-	return compute_stat(stat_name, stat_mods)
+	if perma_mods.is_empty() and room_mods.is_empty():
+		return compute_stat(stat_name, stat_mods)
+	var all_mods: Array = []
+	all_mods.append_array(stat_mods)
+	all_mods.append_array(perma_mods)
+	all_mods.append_array(room_mods)
+	return compute_stat(stat_name, all_mods)
+
+
+func flag(name: String) -> bool:
+	return bool(flags.get(name, false)) or bool(room_flags.get(name, false))
+
+
+## Leaving a room ends room-only buffs (fossils like Shark Tooth / Feather Imprint).
+func clear_room_effects() -> void:
+	if room_mods.is_empty() and room_flags.is_empty():
+		return
+	room_mods.clear()
+	room_flags.clear()
+	Events.stats_changed.emit()
+
+
+# ---------------------------------------------------------------- radiation
+
+func add_radiation(amount: float) -> void:
+	radiation = maxf(0.0, radiation + amount)
+	Events.radiation_changed.emit(radiation, radiation_threshold)
+
+
+func mutation_ready() -> bool:
+	return radiation >= radiation_threshold
+
+
+## Spends a full meter and raises the next threshold (60, 90, 120...).
+func consume_mutation() -> void:
+	radiation -= radiation_threshold
+	radiation_threshold += int(Content.get_entry("config", "radiation").get("threshold_step", 30))
+	mutations_offered += 1
+	Events.radiation_changed.emit(radiation, radiation_threshold)
 
 
 static func compute_stat(stat_name: String, mods: Array) -> float:
@@ -255,6 +326,9 @@ func to_dict() -> Dictionary:
 		"consumables": {"mana": mana, "dig_charges": dig_charges, "royal_jelly": royal_jelly},
 		"items": items.duplicate(), "active_item": active_item, "active_charge": active_charge,
 		"flags": flags.duplicate(true), "floor_stash": floor_stash.duplicate(), "stats": stats.duplicate(),
+		"trinket": trinket, "consumable": consumable.duplicate(), "fluid_map": fluid_map.duplicate(),
+		"fluids_identified": fluids_identified.duplicate(), "perma_mods": perma_mods.duplicate(true),
+		"radiation": radiation, "radiation_threshold": radiation_threshold, "mutations": mutations.duplicate(),
 	}
 
 
@@ -281,6 +355,14 @@ func from_dict(d: Dictionary) -> void:
 	flags = d.get("flags", {}).duplicate(true)
 	floor_stash = d.get("floor_stash", {}).duplicate()
 	stats.merge(d.get("stats", {}), true)
+	trinket = str(d.get("trinket", ""))
+	consumable = d.get("consumable", {}).duplicate()
+	fluid_map = d.get("fluid_map", {}).duplicate()
+	fluids_identified = d.get("fluids_identified", {}).duplicate()
+	perma_mods.assign(d.get("perma_mods", []))
+	radiation = float(d.get("radiation", 0.0))
+	radiation_threshold = int(d.get("radiation_threshold", radiation_threshold))
+	mutations.assign(d.get("mutations", []))
 	# Run snapshots are taken at floor start; streams derive from (seed, floor), so re-seeding
 	# reproduces the floor exactly.
 	RNG.set_run_seed(seed_value)

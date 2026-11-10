@@ -35,7 +35,17 @@ func _ready() -> void:
 		ed.pressed.connect(func() -> void: GameState.goto_scene("room_editor"))
 		_quit.get_parent().add_child(ed)
 		_quit.get_parent().move_child(ed, _quit.get_index())
+		var lab := ed.duplicate(0) as Button  # properties only (no signals)
+		lab.text = tr("MENU_LAB")
+		lab.pressed.connect(func() -> void:
+			GameState.room_test_template = "lab_range"
+			GameState.lab_mode = true
+			RunState.start_new(RNG.random_seed())
+			GameState.goto_scene("run"))
+		_quit.get_parent().add_child(lab)
+		_quit.get_parent().move_child(lab, _quit.get_index())
 	GameState.room_test_template = ""
+	GameState.lab_mode = false
 	_descend.grab_focus()
 
 

@@ -1,0 +1,19 @@
+{
+  "id": "toxic_blood",
+  "name_key": "MUT_TOXIC_BLOOD_NAME",
+  "desc_key": "MUT_TOXIC_BLOOD_DESC",
+  "weight": 1.0,
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "damage_taken",
+      "chance": 1.0,
+      "per_luck": 0.0,
+      "action": {
+        "kind": "burst",
+        "count": 8,
+        "damage_mult": 1.0
+      }
+    }
+  ]
+}

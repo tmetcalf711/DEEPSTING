@@ -1,0 +1,11 @@
+{
+  "id": "glowing_slurry",
+  "name_key": "FLUID_GLOWING_SLURRY_NAME",
+  "effects": [
+    {
+      "type": "radiation",
+      "amount": 35
+    }
+  ],
+  "good": true
+}

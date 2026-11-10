@@ -1,0 +1,19 @@
+{
+  "id": "lucky_pebble",
+  "name_key": "TRINKET_LUCKY_PEBBLE_NAME",
+  "desc_key": "TRINKET_LUCKY_PEBBLE_DESC",
+  "effects": [
+    {
+      "type": "trigger",
+      "event": "room_clear",
+      "chance": 0.1,
+      "per_luck": 0.01,
+      "action": {
+        "kind": "pickup",
+        "id": "heart_half"
+      }
+    }
+  ],
+  "weight": 1.0,
+  "locked_by_default": false
+}

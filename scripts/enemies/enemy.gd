@@ -21,6 +21,7 @@ var dead := false
 ## Underground (burrowers): invisible, can't be hit, no contact damage.
 var untargetable := false
 var poison_t := 0.0
+var burn_t := 0.0
 var slow_t := 0.0
 var _poison_tick := 0.0
 
@@ -133,16 +134,22 @@ func apply_elements(elements: Array) -> void:
 				poison_t = 3.0 if not is_boss else 2.0
 			"slow":
 				slow_t = 2.0 if not is_boss else 1.0
+			"burn":
+				burn_t = 1.5 if not is_boss else 1.0
 
 
 func _tick_status(delta: float) -> void:
 	slow_t = maxf(0.0, slow_t - delta)
-	if poison_t > 0.0:
-		poison_t -= delta
+	burn_t = maxf(0.0, burn_t - delta)
+	if poison_t > 0.0 or burn_t > 0.0:
+		poison_t = maxf(0.0, poison_t - delta)
 		_poison_tick -= delta
 		if _poison_tick <= 0.0:
 			_poison_tick = 0.5
-			hp -= 1.25
+			var tick := (1.25 if poison_t > 0.0 else 0.0) + (3.0 if burn_t > 0.0 else 0.0)
+			hp -= tick
+			if data.get("show_damage", false):
+				RunController.instance.fx.number(global_position, tick)
 			_flash = 0.04
 			if is_boss:
 				Events.boss_health_changed.emit(maxf(0.0, hp / max_hp))
@@ -163,6 +170,10 @@ func take_hit(damage: float, dir: Vector2, elements: Array) -> void:
 		return
 	apply_elements(elements)
 	hp -= damage
+	if data.get("show_damage", false):
+		RunController.instance.fx.number(global_position, damage)
+		if hp < max_hp * 0.5:
+			hp = max_hp  # lab dummies never die
 	_flash = 0.06
 	if not is_boss:
 		knock += dir * 70.0
@@ -180,6 +191,9 @@ func die(counted: bool = true) -> void:
 	var rc := RunController.instance
 	rc.fx.burst(global_position, _spr.modulate * Color(0.6, 0.9, 0.3), 14 if not is_boss else 60, 70.0 if not is_boss else 140.0, 2.0)
 	if counted:
+		RunState.add_radiation(float(data.get("radiation", 1)))
+		if rc.player and rc.player.effects:
+			rc.player.effects.fire_event("kill", global_position)
 		RunState.bump("kills")
 		MetaSave.add_counter("kills." + str(data["id"]))
 		Events.enemy_killed.emit(data["id"], false)
@@ -224,6 +238,8 @@ func _animate() -> void:
 		_spr.modulate = Color(1.8, 1.4, 1.4)
 	elif stunned > 0.0:
 		_spr.modulate = Color(0.6, 0.6, 1.0)
+	elif burn_t > 0.0:
+		_spr.modulate = Color(1.0, 0.65, 0.4)
 	elif poison_t > 0.0:
 		_spr.modulate = Color(0.6, 1.0, 0.5)
 	elif slow_t > 0.0:

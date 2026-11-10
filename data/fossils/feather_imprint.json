@@ -1,0 +1,16 @@
+{
+  "id": "feather_imprint",
+  "name_key": "FOSSIL_FEATHER_IMPRINT_NAME",
+  "desc_key": "FOSSIL_FEATHER_IMPRINT_DESC",
+  "effects": [
+    {
+      "type": "room_stat",
+      "flag": "flight"
+    },
+    {
+      "type": "room_stat",
+      "stat": "move_speed",
+      "add": 0.3
+    }
+  ]
+}
