@@ -205,5 +205,42 @@
         "weight": 1
       }
     ]
+  },
+  "champion": {
+    "chance": 1.0,
+    "table": [
+      {
+        "id": "mana_chip",
+        "weight": 5
+      },
+      {
+        "id": "mana_fragment",
+        "weight": 2
+      },
+      {
+        "id": "heart_half",
+        "weight": 3
+      },
+      {
+        "id": "chitin",
+        "weight": 2
+      },
+      {
+        "id": "dig_charge",
+        "weight": 2
+      },
+      {
+        "id": "royal_jelly",
+        "weight": 2
+      },
+      {
+        "id": "fossil",
+        "weight": 1
+      },
+      {
+        "id": "fluid",
+        "weight": 1
+      }
+    ]
   }
 }

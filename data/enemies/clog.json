@@ -1,0 +1,25 @@
+{
+  "id": "clog",
+  "name_key": "ENEMY_CLOG_NAME",
+  "archetype": "spawner",
+  "family": "sewer_pipes",
+  "strata": [
+    "sewer_pipes"
+  ],
+  "hp": 30,
+  "radius": 9,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.7,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "spawner",
+    "interval": 3.6,
+    "minion": "grease_fly",
+    "cap": 2
+  }
+}

@@ -19,7 +19,7 @@ godot                       # play
 ./tools/run_tests.sh        # tests + data validation + smoke run
 ```
 
-Status: **Milestone 3: item & synergy system.** 61 items, knick-knacks, fossils, Strange Fluids, radiation mutations, and a dev Synergy Lab. Previously: **Milestone 2: chapter 1 playable.** The Abandoned Hive → Topsoil, with every special room (shop, Royal Chamber / Mutation Den, sacrifice altar, challenge, mini-boss, curse room, vault, arcade, library), big rooms, curses, and an in-engine room editor (main menu → Room Editor in dev builds).
+Status: **Milestone 4: the full descent.** 8 floors across 4 chapters (each with an alternate floor type), 42 enemies with champion variants, 13 bosses, a difficulty curve, and the first ending (The Gilded Idol). Earlier: **Milestone 3: item & synergy system.** 61 items, knick-knacks, fossils, Strange Fluids, radiation mutations, and a dev Synergy Lab. Previously: **Milestone 2: chapter 1 playable.** The Abandoned Hive → Topsoil, with every special room (shop, Royal Chamber / Mutation Den, sacrifice altar, challenge, mini-boss, curse room, vault, arcade, library), big rooms, curses, and an in-engine room editor (main menu → Room Editor in dev builds).
 
 ## Controls (defaults)
 | | Keyboard | Gamepad |

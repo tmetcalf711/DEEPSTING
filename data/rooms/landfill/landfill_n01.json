@@ -1,0 +1,38 @@
+{
+  "id": "landfill_n01",
+  "stratum": [
+    "landfill"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".R.........R.",
+    ".............",
+    ".............",
+    ".............",
+    ".R.........R.",
+    ".......D....."
+  ],
+  "spawns": [
+    {
+      "enemy": "wrapper_moth",
+      "at": [
+        2,
+        1
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        4,
+        3
+      ]
+    }
+  ]
+}

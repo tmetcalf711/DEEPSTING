@@ -1,0 +1,59 @@
+{
+  "id": "catacombs_n09",
+  "stratum": [
+    "catacombs"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "....X...X....",
+    ".............",
+    "....X...X....",
+    ".............",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "bone_ant",
+      "at": [
+        9,
+        5
+      ]
+    },
+    {
+      "enemy": "skull_moth",
+      "at": [
+        3,
+        6
+      ]
+    },
+    {
+      "enemy": "urn_spider",
+      "at": [
+        0,
+        6
+      ]
+    },
+    {
+      "enemy": "urn_spider",
+      "at": [
+        10,
+        1
+      ]
+    },
+    {
+      "enemy": "crypt_tick",
+      "at": [
+        4,
+        3
+      ]
+    }
+  ]
+}

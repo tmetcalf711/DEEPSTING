@@ -1,0 +1,66 @@
+{
+  "id": "buried_ruins_n09",
+  "stratum": [
+    "buried_ruins"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "..XXX...XXX..",
+    ".............",
+    ".............",
+    ".............",
+    "..XXX...XXX..",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "bone_ant",
+      "at": [
+        1,
+        0
+      ]
+    },
+    {
+      "enemy": "scarab_sentinel",
+      "at": [
+        4,
+        4
+      ]
+    },
+    {
+      "enemy": "scarab_sentinel",
+      "at": [
+        9,
+        4
+      ]
+    },
+    {
+      "enemy": "bone_ant",
+      "at": [
+        11,
+        6
+      ]
+    },
+    {
+      "enemy": "scarab_sentinel",
+      "at": [
+        3,
+        2
+      ]
+    },
+    {
+      "enemy": "bone_ant",
+      "at": [
+        2,
+        6
+      ]
+    }
+  ]
+}

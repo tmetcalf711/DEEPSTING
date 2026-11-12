@@ -1,0 +1,59 @@
+{
+  "id": "buried_ruins_n08",
+  "stratum": [
+    "buried_ruins"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".SSS.....SSS.",
+    ".............",
+    ".............",
+    ".............",
+    ".SSS.....SSS.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "urn_spider",
+      "at": [
+        8,
+        3
+      ]
+    },
+    {
+      "enemy": "bone_ant",
+      "at": [
+        3,
+        2
+      ]
+    },
+    {
+      "enemy": "urn_spider",
+      "at": [
+        9,
+        6
+      ]
+    },
+    {
+      "enemy": "mummy_grub",
+      "at": [
+        11,
+        0
+      ]
+    },
+    {
+      "enemy": "mummy_grub",
+      "at": [
+        0,
+        6
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "id": "grease_fly",
+  "name_key": "ENEMY_GREASE_FLY_NAME",
+  "archetype": "flyer",
+  "family": "sewer_pipes",
+  "strata": [
+    "sewer_pipes"
+  ],
+  "hp": 6,
+  "radius": 5,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": true,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "flyer",
+    "speed": 55,
+    "dive_speed": 140,
+    "dive_interval": 2.2
+  }
+}

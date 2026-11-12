@@ -19,6 +19,7 @@
     "stutter_chance": 0.2
   },
   "strata": [
+    "flooded_burrows",
     "hive",
     "topsoil"
   ]

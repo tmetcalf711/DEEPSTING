@@ -8,7 +8,8 @@ Top-down 2.5D roguelite twin-stick shooter (Binding of Isaac structure), Godot 4
 - **Milestone 1 complete:** playable Abandoned Hive floor (procedural layout, combat, 4 enemies + boss, workers/stash/boss shaft, brood rescue, Dig Charges + secret rooms, 12 items, HUD/minimap/pause/death).
 - **Milestone 2 complete:** chapter 1 = Abandoned Hive → Topsoil; shaped rooms (1x1/2x1/1x2/2x2), every special room, Royal/Den deals, Royal Jelly locks, curses, 51 templates, in-engine room editor.
 - **Milestone 3 complete:** 61 items, 15 knick-knacks, 10 fossils, 12 Strange Fluids, 12 mutations; event triggers, on-hit procs, auras, orbital/biter familiars, multishot/boomerang/wave; radiation meter + mutation picker; Synergy Lab.
-- **Next:** Milestone 4 (full descent: chapters 1–4 + alternates, 3 bosses per chapter, champions, difficulty curve, first ending). Waiting for the user's go-ahead.
+- **Milestone 4 complete:** 8 floors (chapters 1–4, each with an alternate stratum), 42 enemies, 13 bosses (3+ per chapter + the Gilded Idol), 8 champion types, difficulty curve (`config/difficulty.json`), Ending 1.
+- **Next:** Milestone 5 (achievements → unlocks, completion marks, mutated brood, the Hive hub, Trove, Hive Upgrades, castes, save/resume). Waiting for the user's go-ahead.
 - User decisions from the M0 review are in DESIGN.md §20 (hearts + Chitin, Mana chits, Pulp, floor stash, title).
 - Work in milestones (DESIGN.md §17). After each one, summarize, list known issues, and stop for review.
 
@@ -38,11 +39,11 @@ assets/audio/{sfx,music}/<id>.ogg    missing = silent no-op (Audio autoload)
 data/<category>/**/<id>.json         ALL content; one entry per file; file name == id
 scenes/run/run.tscn    the run (RunController); scenes/ui/main_menu.tscn
 scripts/autoload/      singletons (see below)
-scripts/systems/       pure systems: floor_gen (layout), floor_contents (what's in each room), item_pool, shot_spec, projectile_system, fx, input_bindings
+scripts/systems/       pure systems: floor_gen (layout), floor_contents (what's in each room), difficulty (the curve), item_pool, shot_spec, projectile_system, fx, input_bindings
 scripts/run/           run_controller.gd (floors/chapters, curses, deals, transitions, camera, console cmds), room.gd (tiles, door slots, clear/haul/shaft, creep)
 scripts/run/specials/  one script per special room type (shop, den, royal, sacrifice, challenge, miniboss, curse, vault, arcade)
 scripts/player/        player.gd, effect_host.gd (item effects dispatcher)
-scripts/enemies/       enemy.gd (class Enemy: statuses, burrowing, splitting) + behaviors/<type>.gd (chase, turret, flyer, swarm, burrow, charger, creep, pattern_boss)
+scripts/enemies/       enemy.gd (class Enemy: statuses, champions, burrowing, splitting) + behaviors/<type>.gd (chase, turret, flyer, swarm, burrow, charger, creep, caster, spawner, hopper, dummy, pattern_boss)
 scripts/actors/        rock, pickup, pedestal, ware, arcade_machine, deposit, worker, larva, brood_cell, dig_charge, trapdoor, loot_pile, familiar
 scripts/tools/         room_editor.gd (scene: tools/room_editor.tscn), synergy_lab.gd (lab panel; main menu buttons in dev builds)
 scripts/effects/       one file per effect `type` (stat_mod, projectile_mod, proc, trigger, aura, familiar, flag, health, consumables, active, ability, perma_stat, room_stat, radiation)
@@ -65,7 +66,9 @@ translations/strings.csv   every player-facing string (keys,en,...)
 - **Economy:** hauls go to `RunState.floor_stash` (lost on death) and are banked as Pulp via `RunState.bank_stash()` when the boss-shaft haul finishes. Brood rescues bank immediately (`MetaSave.rescue_lost_brood`).
 - **Content is data:** add items, enemies, rooms etc. as JSON in `/data`. Never branch on specific ids in gameplay code (`if item == "x"` is forbidden). New behavior = a new effect `type` script in `scripts/effects/` (with `const PERSISTENT` + `static func apply`), a new enemy `behavior.type` script, a new ability script, or a new special-room script in `scripts/run/specials/<type>.gd`.
 - **Debug console (backtick):** `give`, `spawn`, `goto <floor|room type>`, `room <template>`, `curse <id|none>`, `deal royal|den`, `mana <n>`, `jelly <n>`, `heal`, `reveal`, `god`, `seed`, `bank`, `unlock_all`.
-- **Floors:** `RunController.floor_plan()` reads `config/floorgen.chapters`. Rooms are keyed by their anchor cell; doors are wall slots `"ox,oy,D"` with links `slot -> [anchor, slot]`, stored on BOTH sides (mirror flags with `RunController.mirror_door_flag`). Door kinds: normal, secret, locked, spiked, challenge, deal.
+- **Floors:** `RunController.floor_plan()` reads `config/floorgen.chapters` (slots `{main, alt, chapter, final_boss?, ending?}`); `stratum_for_floor(i, seed)` picks main/alt; the choice is kept in `RunState.floor_strata`.
+- **Difficulty:** use `Difficulty.*` (hp_mult, bullet_speed_mult, hit_damage, champion_chance, max_template_difficulty), never hard-coded per-depth numbers. Enemy shots go through `Enemy.fire()` so scaling applies.
+- **Smoke-test timing:** tweens/workers run on real time while headless frames run faster; poll with a deadline (`_await_shaft`) instead of fixed frame waits, and let the runner auto-pick mutation pickers (they pause the game). Rooms are keyed by their anchor cell; doors are wall slots `"ox,oy,D"` with links `slot -> [anchor, slot]`, stored on BOTH sides (mirror flags with `RunController.mirror_door_flag`). Door kinds: normal, secret, locked, spiked, challenge, deal.
 - **Room-local queries:** use `room.room_enemies()` / `room.is_ancestor_of(n)`, never raw group lists (a room being freed can still be in the tree for a frame).
 - **Room templates:** big rooms are 26×7 (2x1), 13×14 (1x2) or 26×14 (2x2) tiles; `stratum: ["*"]` = shared (special rooms). 13×7 grid chars `. R T # X S B D P` (floor, rock, tinted rock, block, pit, spikes, brood cell, deposit slot, pedestal). `room_types` says which room kinds can use a template, and the `brood_cell` tag is required for rooms hosting sealed cells. Door entry lanes must stay walkable (validator enforces).
 - **Adding a data category or required field:** update `Content.SCHEMA` (and `validate()` for extra rules), then add a test.

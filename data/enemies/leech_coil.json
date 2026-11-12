@@ -1,0 +1,24 @@
+{
+  "id": "leech_coil",
+  "name_key": "ENEMY_LEECH_COIL_NAME",
+  "archetype": "chaser",
+  "family": "flooded_burrows",
+  "strata": [
+    "flooded_burrows"
+  ],
+  "hp": 14,
+  "radius": 6,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "chase",
+    "speed": 32,
+    "stutter_chance": 0.1
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "geode_golem",
+  "name_key": "BOSS_GEODE_GOLEM_NAME",
+  "title_key": "BOSS_GEODE_GOLEM_TITLE",
+  "chapter": 3,
+  "strata": [
+    "bedrock",
+    "collapsed_mine"
+  ],
+  "hp": 420,
+  "radius": 18,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 12,
+    "minion": "feral_ant",
+    "max_minions": 3,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "ring_burst",
+          "aimed_fan",
+          "bullet_wall"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "charge",
+          "ring_burst",
+          "bullet_wall",
+          "aimed_fan"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0,
+    "kill_minions_on_death": false
+  },
+  "split_into": {
+    "enemy": "crystal_shard",
+    "count": 4
+  }
+}

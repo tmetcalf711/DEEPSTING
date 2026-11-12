@@ -1,0 +1,66 @@
+{
+  "id": "landfill_w01",
+  "stratum": [
+    "landfill"
+  ],
+  "shape": "2x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    "..........................",
+    ".SSS.....SSS..RR.......RR.",
+    "..............R...........",
+    "..........................",
+    "..............R...........",
+    ".SSS.....SSS..RR.......RR.",
+    ".........................."
+  ],
+  "spawns": [
+    {
+      "enemy": "battery_slug",
+      "at": [
+        15,
+        0
+      ]
+    },
+    {
+      "enemy": "tin_roach",
+      "at": [
+        12,
+        1
+      ]
+    },
+    {
+      "enemy": "wrapper_moth",
+      "at": [
+        25,
+        6
+      ]
+    },
+    {
+      "enemy": "cap_crab",
+      "at": [
+        10,
+        4
+      ]
+    },
+    {
+      "enemy": "cap_crab",
+      "at": [
+        8,
+        2
+      ]
+    },
+    {
+      "enemy": "battery_slug",
+      "at": [
+        17,
+        4
+      ]
+    }
+  ]
+}

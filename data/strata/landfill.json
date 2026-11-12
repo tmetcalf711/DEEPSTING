@@ -1,0 +1,35 @@
+{
+  "id": "landfill",
+  "name_key": "STRATUM_LANDFILL_NAME",
+  "chapter": 2,
+  "floor_slot": "A",
+  "resources": [
+    {
+      "id": "minerals",
+      "weight": 2
+    },
+    {
+      "id": "wood_pulp",
+      "weight": 2
+    },
+    {
+      "id": "protein",
+      "weight": 1
+    }
+  ],
+  "palette": {
+    "floor": "#3a3328",
+    "floor_alt": "#342e24",
+    "wall": "#5c5444",
+    "wall_top": "#8a7f63",
+    "accent": "#c9b37a"
+  },
+  "music": "landfill_theme",
+  "enemies": [
+    "cap_crab",
+    "wrapper_moth",
+    "tin_roach",
+    "battery_slug",
+    "feral_ant"
+  ]
+}

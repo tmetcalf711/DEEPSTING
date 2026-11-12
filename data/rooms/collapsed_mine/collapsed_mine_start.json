@@ -1,0 +1,23 @@
+{
+  "id": "collapsed_mine_start",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "start"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "..XXX...XXX..",
+    ".............",
+    ".............",
+    ".............",
+    "..XXX...XXX..",
+    "............."
+  ],
+  "spawns": []
+}

@@ -1,0 +1,57 @@
+{
+  "id": "gilded_idol",
+  "name_key": "BOSS_GILDED_IDOL_NAME",
+  "title_key": "BOSS_GILDED_IDOL_TITLE",
+  "chapter": 4,
+  "strata": [
+    "buried_ruins",
+    "catacombs"
+  ],
+  "hp": 760,
+  "radius": 19,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 20,
+    "minion": "bone_ant",
+    "max_minions": 3,
+    "phases": [
+      {
+        "until_hp": 0.66,
+        "patterns": [
+          "ring_burst",
+          "aimed_fan",
+          "bullet_wall",
+          "homing_orbs"
+        ]
+      },
+      {
+        "until_hp": 0.33,
+        "patterns": [
+          "cross_sweep",
+          "charge",
+          "spiral_burst",
+          "spawn_minions"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "bullet_wall",
+          "cross_sweep",
+          "homing_orbs",
+          "rubble_rain",
+          "charge"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  },
+  "final": true
+}

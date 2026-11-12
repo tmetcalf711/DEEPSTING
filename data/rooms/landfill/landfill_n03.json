@@ -1,0 +1,38 @@
+{
+  "id": "landfill_n03",
+  "stratum": [
+    "landfill"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".SSS.....SSS.",
+    ".............",
+    ".............",
+    ".........D...",
+    ".SSS.....SSS.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "wrapper_moth",
+      "at": [
+        4,
+        3
+      ]
+    },
+    {
+      "enemy": "cap_crab",
+      "at": [
+        1,
+        6
+      ]
+    }
+  ]
+}

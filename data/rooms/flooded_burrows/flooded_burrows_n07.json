@@ -1,0 +1,59 @@
+{
+  "id": "flooded_burrows_n07",
+  "stratum": [
+    "flooded_burrows"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "...X.....X...",
+    "...X.....X...",
+    ".............",
+    "...X.....X...",
+    "...X.....X...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "mud_skipper",
+      "at": [
+        9,
+        6
+      ]
+    },
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        10,
+        5
+      ]
+    },
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        10,
+        0
+      ]
+    },
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        8,
+        3
+      ]
+    },
+    {
+      "enemy": "leech_coil",
+      "at": [
+        11,
+        6
+      ]
+    }
+  ]
+}

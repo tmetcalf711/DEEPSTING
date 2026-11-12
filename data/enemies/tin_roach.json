@@ -1,0 +1,25 @@
+{
+  "id": "tin_roach",
+  "name_key": "ENEMY_TIN_ROACH_NAME",
+  "archetype": "swarmer",
+  "family": "landfill",
+  "strata": [
+    "landfill",
+    "sewer_pipes"
+  ],
+  "hp": 6,
+  "radius": 4,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "swarm",
+    "speed": 82,
+    "flank": 26
+  }
+}

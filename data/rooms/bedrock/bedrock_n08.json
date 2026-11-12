@@ -1,0 +1,52 @@
+{
+  "id": "bedrock_n08",
+  "stratum": [
+    "bedrock"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "...#.....#...",
+    ".............",
+    "...#.....#...",
+    ".............",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "dust_moth",
+      "at": [
+        4,
+        3
+      ]
+    },
+    {
+      "enemy": "geode_shell",
+      "at": [
+        9,
+        0
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        10,
+        6
+      ]
+    },
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        10,
+        1
+      ]
+    }
+  ]
+}

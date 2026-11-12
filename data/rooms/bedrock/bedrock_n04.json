@@ -1,0 +1,45 @@
+{
+  "id": "bedrock_n04",
+  "stratum": [
+    "bedrock"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "...R.....R...",
+    "...R.....R...",
+    ".............",
+    "...R.....R...",
+    "...R.....R...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "cart_beetle",
+      "at": [
+        2,
+        5
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        5,
+        3
+      ]
+    },
+    {
+      "enemy": "dust_moth",
+      "at": [
+        2,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "flooded_burrows_w01",
+  "stratum": [
+    "flooded_burrows"
+  ],
+  "shape": "2x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    "..........................",
+    ".T.X.....X.T..X.........X.",
+    "..........................",
+    "...X.....X................",
+    "..........................",
+    ".T.X.....X.T..X.........X.",
+    ".........................."
+  ],
+  "spawns": [
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        22,
+        2
+      ]
+    },
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        3,
+        0
+      ]
+    },
+    {
+      "enemy": "mud_skipper",
+      "at": [
+        13,
+        1
+      ]
+    },
+    {
+      "enemy": "mud_skipper",
+      "at": [
+        10,
+        5
+      ]
+    },
+    {
+      "enemy": "leech_coil",
+      "at": [
+        10,
+        0
+      ]
+    },
+    {
+      "enemy": "leech_coil",
+      "at": [
+        5,
+        3
+      ]
+    },
+    {
+      "enemy": "paper_moth",
+      "at": [
+        11,
+        2
+      ]
+    },
+    {
+      "enemy": "paper_moth",
+      "at": [
+        10,
+        3
+      ]
+    }
+  ]
+}

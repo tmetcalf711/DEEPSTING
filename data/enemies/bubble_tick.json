@@ -1,0 +1,27 @@
+{
+  "id": "bubble_tick",
+  "name_key": "ENEMY_BUBBLE_TICK_NAME",
+  "archetype": "turret",
+  "family": "flooded_burrows",
+  "strata": [
+    "flooded_burrows"
+  ],
+  "hp": 16,
+  "radius": 7,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": "tick_swell"
+  },
+  "behavior": {
+    "type": "turret",
+    "interval": 2.8,
+    "bullet_speed": 50,
+    "pattern": "aimed",
+    "count": 3,
+    "homing": 1.1
+  }
+}

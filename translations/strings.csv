@@ -421,3 +421,62 @@ LAB_TITLE,Synergy Lab
 LAB_CLEAR,Clear build
 LAB_BACK,Back
 BANNER_LAB,Synergy Lab
+ENEMY_LEECH_COIL_NAME,Leech Coil
+ENEMY_DROWNED_ANT_NAME,Drowned Ant
+ENEMY_BUBBLE_TICK_NAME,Bubble Tick
+ENEMY_MUD_SKIPPER_NAME,Mud Skipper
+ENEMY_CAP_CRAB_NAME,Cap Crab
+ENEMY_WRAPPER_MOTH_NAME,Wrapper Moth
+ENEMY_TIN_ROACH_NAME,Tin Roach
+ENEMY_BATTERY_SLUG_NAME,Battery Slug
+ENEMY_PIPE_EEL_NAME,Pipe Eel
+ENEMY_GREASE_FLY_NAME,Grease Fly
+ENEMY_SLUDGE_WORM_NAME,Sludge Worm
+ENEMY_SLUDGE_WORMLET_NAME,Sludge Wormlet
+ENEMY_CLOG_NAME,Clog
+ENEMY_CRYSTAL_TICK_NAME,Crystal Tick
+ENEMY_GEODE_SHELL_NAME,Geode Shell
+ENEMY_CRYSTAL_SHARD_NAME,Crystal Shard
+ENEMY_LANTERN_CENTIPEDE_NAME,Lantern Centipede
+ENEMY_CART_BEETLE_NAME,Cart Beetle
+ENEMY_DUST_MOTH_NAME,Dust Moth
+ENEMY_MINER_GRUB_NAME,Miner Grub
+ENEMY_SCARAB_SENTINEL_NAME,Scarab Sentinel
+ENEMY_MUMMY_GRUB_NAME,Mummy Grub
+ENEMY_URN_SPIDER_NAME,Urn Spider
+ENEMY_BONE_ANT_NAME,Bone Ant
+ENEMY_SKULL_MOTH_NAME,Skull Moth
+ENEMY_CRYPT_TICK_NAME,Crypt Tick
+ENEMY_RUIN_CASTER_NAME,Hieroglyph Centipede
+ENEMY_HOARDER_RAT_NAME,Hoarder Rat
+ENEMY_QUARTZ_SENTINEL_NAME,Quartz Sentinel
+ENEMY_TOMB_GUARDIAN_NAME,Tomb Guardian
+BOSS_HEAP_NAME,The Heap
+BOSS_HEAP_TITLE,everything we threw away
+BOSS_RAT_HOARDER_NAME,The Rat Hoarder
+BOSS_RAT_HOARDER_TITLE,finders keepers
+BOSS_SEWER_MOUTH_NAME,Sewer Mouth
+BOSS_SEWER_MOUTH_TITLE,it swallows the runoff
+BOSS_GEODE_GOLEM_NAME,Geode Golem
+BOSS_GEODE_GOLEM_TITLE,"hollow, and full of teeth"
+BOSS_CRYSTAL_MANTIS_NAME,Crystal Mantis
+BOSS_CRYSTAL_MANTIS_TITLE,prays to nothing
+BOSS_OLD_DRILL_NAME,Old Drill
+BOSS_OLD_DRILL_TITLE,still running
+BOSS_PHARAOH_BEETLE_NAME,The Entombed Beetle
+BOSS_PHARAOH_BEETLE_TITLE,it wore a crown before we did
+BOSS_URN_MOTHER_NAME,Urn Mother
+BOSS_URN_MOTHER_TITLE,her children are everywhere
+BOSS_CATACOMB_CHOIR_NAME,Catacomb Choir
+BOSS_CATACOMB_CHOIR_TITLE,"three voices, one hymn"
+BOSS_GILDED_IDOL_NAME,The Gilded Idol
+BOSS_GILDED_IDOL_TITLE,"the first treasure, the last guard"
+STRATUM_FLOODED_BURROWS_NAME,Flooded Burrows
+STRATUM_LANDFILL_NAME,Landfill Layer
+STRATUM_SEWER_PIPES_NAME,Sewer Pipes
+STRATUM_BEDROCK_NAME,Bedrock Caverns
+STRATUM_COLLAPSED_MINE_NAME,Collapsed Mine
+STRATUM_BURIED_RUINS_NAME,Buried Ruins
+STRATUM_CATACOMBS_NAME,Catacombs
+ENDING_1_TITLE,Ending 1: The Gilded Idol
+ENDING_1_TEXT,"The idol topples, and under it the floor is warm. Something below is still running, pumping glow into the soil. The swarm carries the gold home, and the colony grows a little bigger. But you can feel it through your feet: the basin goes deeper still."

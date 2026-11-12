@@ -1,0 +1,24 @@
+{
+  "id": "crystal_shard",
+  "name_key": "ENEMY_CRYSTAL_SHARD_NAME",
+  "archetype": "swarmer",
+  "family": "bedrock",
+  "strata": [
+    "bedrock"
+  ],
+  "hp": 6,
+  "radius": 4,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "swarm",
+    "speed": 70,
+    "flank": 18
+  }
+}

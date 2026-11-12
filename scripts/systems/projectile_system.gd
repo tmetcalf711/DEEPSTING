@@ -9,6 +9,7 @@ const SHOT_HEIGHT := 6.0
 const FALL_DIST := 24.0
 const ENEMY_RED := Color(0.95, 0.22, 0.25)
 const ENEMY_GREEN := Color(0.45, 0.95, 0.25)
+const ENEMY_VIOLET := Color(0.75, 0.35, 1.0)
 const OUTLINE := Color(0.08, 0.04, 0.03)
 const ELEMENT_COLORS: Dictionary = {"poison": Color(0.45, 1.0, 0.3), "slow": Color(0.6, 0.85, 1.0),
 	"burn": Color(1.0, 0.5, 0.15), "shock": Color(1.0, 1.0, 0.4)}
@@ -118,16 +119,18 @@ func spawn_player_volley(pos: Vector2, dir: Vector2, spec: Dictionary, inherit: 
 		spawn_player_shot(pos, dir.rotated(a), spec, inherit)
 
 
-func spawn_enemy_shot(pos: Vector2, vel: Vector2, color: Color = ENEMY_RED, radius: float = 3.0, travel: float = 400.0) -> void:
+func spawn_enemy_shot(pos: Vector2, vel: Vector2, color: Color = ENEMY_RED, radius: float = 3.0, travel: float = 400.0,
+		homing: float = 0.0, damage_halves: int = 1) -> void:
 	if bullets.size() >= MAX_BULLETS:
 		return
 	var b := _new_bullet()
 	b.friendly = false
 	b.pos = pos
 	b.vel = vel * (0.8 if RunState.flag("slow_enemy_shots") else 1.0)
-	b.damage = 1.0  # half-hearts
+	b.damage = float(damage_halves)  # half-hearts
 	b.radius = radius
 	b.travel_left = travel
+	b.homing = homing
 	b.color = color
 	bullets.append(b)
 
@@ -161,6 +164,10 @@ func _physics_process(delta: float) -> void:
 		b.age += delta
 		if b.friendly and b.homing > 0.0 and not b.returned:
 			_steer(b, targets, delta)
+		elif not b.friendly and b.homing > 0.0 and player and is_instance_valid(player):
+			# Homing enemy shots (violet in the color language) curve gently toward the wasp.
+			var diff := wrapf((player.global_position - b.pos).angle() - b.vel.angle(), -PI, PI)
+			b.vel = b.vel.rotated(clampf(diff, -b.homing * delta, b.homing * delta))
 		if b.boomerang and not b.returned and b.travel_left < b.max_range * 0.5:
 			# Boomerang: turn around and fly home, able to hit everything again.
 			b.returned = true

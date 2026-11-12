@@ -358,17 +358,21 @@ static func add_deal_room(layout: Dictionary, type: String) -> Vector2i:
 
 
 ## Assigns a template id to each room by type, shape, stratum tag and door slots.
-static func assign_templates(layout: Dictionary, templates: Array, r: RandomNumberGenerator) -> void:
+## max_difficulty: hardest template difficulty allowed at this depth (Difficulty.max_template_difficulty).
+static func assign_templates(layout: Dictionary, templates: Array, r: RandomNumberGenerator, max_difficulty: int = 99) -> void:
 	var sorted_t := templates.duplicate()
 	sorted_t.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a["id"]) < str(b["id"]))
 	for a in layout["order"]:
-		assign_template(layout["rooms"][a], sorted_t, r)
+		assign_template(layout["rooms"][a], sorted_t, r, max_difficulty)
 
 
-static func assign_template(room: Dictionary, sorted_templates: Array, r: RandomNumberGenerator) -> void:
+static func assign_template(room: Dictionary, sorted_templates: Array, r: RandomNumberGenerator, max_difficulty: int = 99) -> void:
 	var cands: Array = []
 	var weights: Array = []
 	for t in sorted_templates:
+		var diff: int = int(t.get("difficulty", 1))
+		if diff > max_difficulty and room["type"] == "normal":
+			continue
 		if t.get("shape", "1x1") != room["shape"]:
 			continue
 		if not room["type"] in t.get("room_types", ["normal"]):
@@ -383,7 +387,14 @@ static func assign_template(room: Dictionary, sorted_templates: Array, r: Random
 			if not ok:
 				continue
 		cands.append(t["id"])
-		weights.append(float(t.get("weight", 1.0)))
+		# Deeper floors lean toward the hardest band they're allowed.
+		var w := float(t.get("weight", 1.0))
+		if max_difficulty < 99 and diff == max_difficulty and max_difficulty > 1:
+			w *= 1.5
+		weights.append(w)
+	if cands.is_empty() and max_difficulty < 99:
+		assign_template(room, sorted_templates, r, 99)  # nothing in band: ignore difficulty
+		return
 	if cands.is_empty():
 		if room["brood_cell"]:
 			# No brood template for this shape: keep the room, lose the sealed cell.

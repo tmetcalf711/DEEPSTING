@@ -1,0 +1,45 @@
+{
+  "id": "buried_ruins_n04",
+  "stratum": [
+    "buried_ruins"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "....#...#....",
+    ".............",
+    "........D....",
+    ".............",
+    "....#...#....",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "ruin_caster",
+      "at": [
+        11,
+        0
+      ]
+    },
+    {
+      "enemy": "ruin_caster",
+      "at": [
+        1,
+        6
+      ]
+    },
+    {
+      "enemy": "urn_spider",
+      "at": [
+        3,
+        5
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "lantern_centipede",
+  "name_key": "ENEMY_LANTERN_CENTIPEDE_NAME",
+  "archetype": "caster",
+  "family": "bedrock",
+  "strata": [
+    "bedrock",
+    "collapsed_mine"
+  ],
+  "hp": 26,
+  "radius": 8,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "caster",
+    "speed": 16,
+    "interval": 2.6,
+    "pattern": "fan",
+    "count": 5,
+    "bullet_speed": 85
+  }
+}

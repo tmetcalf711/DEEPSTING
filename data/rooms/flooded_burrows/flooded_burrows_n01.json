@@ -1,0 +1,45 @@
+{
+  "id": "flooded_burrows_n01",
+  "stratum": [
+    "flooded_burrows"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "...XX...XX...",
+    ".............",
+    ".............",
+    ".............",
+    "...XX...XX...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "mud_skipper",
+      "at": [
+        8,
+        2
+      ]
+    },
+    {
+      "enemy": "drowned_ant",
+      "at": [
+        10,
+        0
+      ]
+    },
+    {
+      "enemy": "drowned_ant",
+      "at": [
+        9,
+        4
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "bedrock",
+  "name_key": "STRATUM_BEDROCK_NAME",
+  "chapter": 3,
+  "floor_slot": "A",
+  "resources": [
+    {
+      "id": "minerals",
+      "weight": 3
+    },
+    {
+      "id": "amber",
+      "weight": 2
+    }
+  ],
+  "palette": {
+    "floor": "#2b2a33",
+    "floor_alt": "#26252d",
+    "wall": "#4a4858",
+    "wall_top": "#77749a",
+    "accent": "#b9a7ff"
+  },
+  "music": "bedrock_theme",
+  "enemies": [
+    "crystal_tick",
+    "geode_shell",
+    "lantern_centipede",
+    "cart_beetle",
+    "dust_moth"
+  ]
+}

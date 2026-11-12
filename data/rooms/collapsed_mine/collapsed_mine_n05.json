@@ -1,0 +1,52 @@
+{
+  "id": "collapsed_mine_n05",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".T.R.....R.T.",
+    "...........D.",
+    "...R.....R...",
+    ".............",
+    ".T.R.....R.T.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        11,
+        6
+      ]
+    },
+    {
+      "enemy": "dust_moth",
+      "at": [
+        9,
+        4
+      ]
+    },
+    {
+      "enemy": "miner_grub",
+      "at": [
+        9,
+        6
+      ]
+    },
+    {
+      "enemy": "cart_beetle",
+      "at": [
+        9,
+        2
+      ]
+    }
+  ]
+}

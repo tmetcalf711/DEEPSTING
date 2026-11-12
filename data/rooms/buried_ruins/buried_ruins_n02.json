@@ -1,0 +1,38 @@
+{
+  "id": "buried_ruins_n02",
+  "stratum": [
+    "buried_ruins"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "...##...##...",
+    ".............",
+    ".............",
+    ".............",
+    "...##...##...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "mummy_grub",
+      "at": [
+        10,
+        0
+      ]
+    },
+    {
+      "enemy": "scarab_sentinel",
+      "at": [
+        1,
+        0
+      ]
+    }
+  ]
+}

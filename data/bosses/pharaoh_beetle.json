@@ -1,0 +1,45 @@
+{
+  "id": "pharaoh_beetle",
+  "name_key": "BOSS_PHARAOH_BEETLE_NAME",
+  "title_key": "BOSS_PHARAOH_BEETLE_TITLE",
+  "chapter": 4,
+  "strata": [
+    "buried_ruins",
+    "catacombs"
+  ],
+  "hp": 480,
+  "radius": 16,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 16,
+    "minion": "bone_ant",
+    "max_minions": 3,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "spawn_minions",
+          "ring_burst",
+          "homing_orbs"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "cross_sweep",
+          "homing_orbs",
+          "spawn_minions",
+          "ring_burst"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

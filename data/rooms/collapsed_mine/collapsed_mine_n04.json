@@ -1,0 +1,52 @@
+{
+  "id": "collapsed_mine_n04",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "..XXX...XXX..",
+    ".............",
+    ".............",
+    ".............",
+    "..XXX...XXX..",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "dust_moth",
+      "at": [
+        10,
+        0
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        1,
+        6
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        2,
+        0
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        4,
+        3
+      ]
+    }
+  ]
+}

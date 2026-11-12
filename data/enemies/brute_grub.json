@@ -5,7 +5,8 @@
   "family": "hive",
   "strata": [
     "hive",
-    "topsoil"
+    "topsoil",
+    "flooded_burrows"
   ],
   "hp": 80,
   "radius": 11,

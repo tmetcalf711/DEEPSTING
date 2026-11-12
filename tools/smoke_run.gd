@@ -17,6 +17,8 @@ var walk_action := ""
 var start_anchor := Vector2i.ZERO
 var failures: PackedStringArray = []
 var prev_trinket := ""
+var expecting_picker := false
+var descended := false  # the M3 section checks the picker itself
 
 
 func _press(action: String, on: bool) -> void:
@@ -61,6 +63,12 @@ func _process(_d: float) -> bool:
 	if wait > 0:
 		wait -= 1
 		return false
+	var picker: Node = rc.get_node_or_null("MutationPicker")
+	if picker and not picker.is_queued_for_deletion() and not expecting_picker:
+		print("smoke: auto-picked mutation %s" % picker.options[0])
+		picker._pick(picker.options[0])  # it pauses the game (and any transition) until chosen
+	if rc._transitioning:
+		return false  # tweens run on real time; headless frames are faster than that
 	if steps.is_empty():
 		_finish()
 		return false
@@ -97,7 +105,9 @@ func _build_steps() -> void:
 			_queue_special(t))
 	# 4. Milestone 3 systems in real play.
 	_then(1, func() -> void: _queue_m3())
-	# 5. Curses regenerate the floor.
+	# 5. Every enemy (each as a champion) and every boss fights for a moment.
+	_then(1, func() -> void: _queue_bestiary())
+	# 6. Curses regenerate the floor.
 	for c in ["cave_in", "tremor", "toxic_fog", "labyrinth", "silt"]:
 		_then(20, func() -> void:
 			_console("curse " + c)
@@ -122,17 +132,14 @@ func _queue_floor_tour() -> void:
 			var info: Dictionary = rc.layout["rooms"][a]
 			print("smoke: entered %s %s room %s (%s)" % [info["shape"], info["type"], a, info["template"]])])
 		front.append([40, func() -> void:
-			for e in get_nodes_in_group("enemies"):
-				e.take_hit(9999.0, Vector2.RIGHT, [])])
+			_kill_all()])
 		front.append([70, func() -> void:
-			for e in get_nodes_in_group("enemies"):
-				e.take_hit(9999.0, Vector2.RIGHT, [])])
+			_kill_all()])
 	front.append([1, func() -> void:
 		# The boss shaft banks the stash; then descend through the trapdoor.
 		rc.enter_room(rc.layout["boss"], "")])
 	front.append([30, func() -> void:
-		for e in get_nodes_in_group("enemies"):
-			e.take_hit(9999.0, Vector2.RIGHT, [])])
+		_kill_all()])
 	front.append([300, func() -> void:
 		_check(rc.room.info.get("shaft_done", false), "boss shaft completed")
 		_check(_rs().stash_total() == 0, "stash banked")
@@ -213,6 +220,7 @@ func _queue_m3() -> void:
 		_press("use_consumable", false)
 		_check(_rs().fluids_identified.size() >= 1, "fluid identified")
 		_rs().add_radiation(200.0)
+		expecting_picker = true
 		_kill_all()])
 	front.append([30, func() -> void:
 		var picker: Node = rc.get_node_or_null("MutationPicker")
@@ -224,10 +232,71 @@ func _queue_m3() -> void:
 		_press("shoot_right", false)
 		print("smoke: mutations %s, next threshold %d" % [_rs().mutations, _rs().radiation_threshold])
 		_check(_rs().mutations.size() >= 2, "mutation added")
+		expecting_picker = false
 		var picker: Node = rc.get_node_or_null("MutationPicker")
 		if picker:
 			picker._pick(picker.options[0])])
 	steps = front + steps
+
+
+func _queue_bestiary() -> void:
+	var front: Array = []
+	var champs: Array = root.get_node("Content").get_entry("config", "champions")["types"].keys()
+	champs.sort()
+	var i := 0
+	for cat in ["enemies", "bosses"]:
+		for id in root.get_node("Content").ids(cat):
+			var champ: String = champs[i % champs.size()] if cat == "enemies" else ""
+			i += 1
+			front.append([1, func() -> void:
+				rc._start_room_test("lab_range")
+				_kill_all()
+				var data: Dictionary = root.get_node("Content").get_entry(cat, id)
+				var e: Node = rc.room.spawn_enemy(data, rc.room.center() + Vector2(40, 0), cat == "bosses", true, champ)
+				e.untargetable = false])
+			front.append([70, func() -> void:
+				var alive: int = rc.room.room_enemies().size()
+				if alive == 0:
+					failures.append("bestiary: %s died on its own" % id)
+				_kill_all()])
+			front.append([15, func() -> void: _kill_all()])
+	front.append([1, func() -> void: print("smoke: bestiary fought %d enemies and bosses" % i)])
+	steps = front + steps
+
+
+## Floors 3-8: boss, shaft, trapdoor; the last boss ends the run with Ending 1.
+func _queue_descent() -> void:
+	var front: Array = []
+	for f in range(2, 8):
+		front.append([1, func() -> void:
+			rc.start_floor(f)
+			print("smoke: descent floor %d = %s, boss %s" % [f + 1, rc.stratum["id"], rc.layout["rooms"][rc.layout["boss"]]["boss_id"]])
+			rc.enter_room(rc.layout["boss"], "")])
+		front.append([40, func() -> void: _kill_all()])
+		front.append([20, func() -> void: _kill_all()])
+		front.append([30, func() -> void: _await_shaft(f, 0)])
+	front.append([30, func() -> void:
+		_check(rc._ended, "the run ended after the last boss")
+		var ends: Dictionary = root.get_node("MetaSave").data.get("endings", {})
+		_check(ends.has("ending_1"), "ending 1 recorded")
+		var screen: Array = rc.get_children().filter(func(n: Node) -> bool: return n.get("ending") == "ending_1")
+		_check(not screen.is_empty(), "ending screen shown")
+		print("smoke: reached %s" % ends.keys())
+		paused = false
+		rc._ended = false
+		for n in screen:
+			n.queue_free()])
+	steps = front + steps
+
+
+## Real-time animations (tweens, workers) don't advance per frame headless: poll with a deadline.
+func _await_shaft(f: int, tries: int) -> void:
+	if rc.room.info.get("shaft_done", false) or tries >= 60:
+		_check(rc.room.info.get("shaft_done", false), "floor %d boss shaft" % (f + 1))
+		rc.on_trapdoor()
+		return
+	_kill_all()
+	steps.push_front([20, func() -> void: _await_shaft(f, tries + 1)])
 
 
 func _special_phase(type: String, phase: int) -> void:
@@ -285,12 +354,26 @@ func _special_phase(type: String, phase: int) -> void:
 		_check(locked.is_empty(), "challenge pedestal unlocked")
 
 
+## Test shortcut: kill everything outright (champion traits like shields or splitting stripped
+## first; champions have their own checks).
 func _kill_all() -> void:
 	for e in get_nodes_in_group("enemies"):
+		_strip(e)
 		e.take_hit(9999.0, Vector2.RIGHT, [])
 
 
+func _strip(e: Node) -> void:
+	e.champion = ""
+	e.champion_cfg = {}
+	e.shield_hits = 0
+	e.untargetable = false
+
+
 func _finish() -> void:
+	if not descended:
+		descended = true
+		_queue_descent()
+		return
 	# Deal rooms on a real floor, plus a locked door.
 	_console("goto 2")
 	_console("deal royal")

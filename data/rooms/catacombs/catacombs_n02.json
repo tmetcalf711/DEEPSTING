@@ -1,0 +1,45 @@
+{
+  "id": "catacombs_n02",
+  "stratum": [
+    "catacombs"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "....#...#....",
+    ".............",
+    ".............",
+    ".............",
+    "....#...#....",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "skull_moth",
+      "at": [
+        2,
+        6
+      ]
+    },
+    {
+      "enemy": "mummy_grub",
+      "at": [
+        3,
+        5
+      ]
+    },
+    {
+      "enemy": "bone_ant",
+      "at": [
+        11,
+        6
+      ]
+    }
+  ]
+}

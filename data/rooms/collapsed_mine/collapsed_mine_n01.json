@@ -1,0 +1,38 @@
+{
+  "id": "collapsed_mine_n01",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "...#.....#...",
+    ".............",
+    "...#.....#...",
+    ".............",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "dust_moth",
+      "at": [
+        3,
+        5
+      ]
+    },
+    {
+      "enemy": "dust_moth",
+      "at": [
+        2,
+        6
+      ]
+    }
+  ]
+}

@@ -50,6 +50,9 @@ func tick(e: Enemy, delta: float) -> void:
 		"charge": _charge(e)
 		"burrow_strike": _burrow_strike(e, delta)
 		"rubble_rain": _rubble_rain(e)
+		"cross_sweep": _cross_sweep(e)
+		"homing_orbs": _homing_orbs(e)
+		"bullet_wall": _bullet_wall(e)
 		_: _end()
 
 
@@ -109,7 +112,7 @@ func _spawn(e: Enemy) -> void:
 		var alive: int = e.room.room_enemies().size() - 1
 		var data: Dictionary = Content.get_entry("enemies", minion)
 		for i in mini(2, max_minions - alive):
-			e.room.spawn_enemy(data, e.global_position + Vector2.from_angle(e.rng.randf() * TAU) * 14.0)
+			e.room.spawn_enemy(data, e.room.nearest_free_point(e.global_position + Vector2.from_angle(e.rng.randf() * TAU) * 14.0), false, false)
 		_end()
 
 
@@ -173,4 +176,48 @@ func _rubble_rain(e: Enemy) -> void:
 			if rc.player and rc.player.global_position.distance_to(spot) < 10.0:
 				rc.player.hurt(1, "rubble")
 		_spots.clear()
+		_end()
+
+
+## Four arms of bullets sweeping around the boss.
+func _cross_sweep(e: Enemy) -> void:
+	e.velocity = Vector2.ZERO
+	if _t < windup:
+		return
+	var k := int((_t - windup) / 0.09)
+	while _spiral_ang < k:
+		_spiral_ang += 1.0
+		for arm in 4:
+			e.fire(Vector2.from_angle(_spiral_ang * 0.16 + arm * PI / 2.0) * 72.0)
+	if _t >= windup + 1.6:
+		_spiral_ang = 0.0
+		_end()
+
+
+## Slow violet orbs that curve toward the wasp.
+func _homing_orbs(e: Enemy) -> void:
+	e.velocity = Vector2.ZERO
+	if _t >= windup and not _fired:
+		_fired = true
+		var n := 3 if _phase == 0 else 5
+		var base := e.to_player().angle()
+		for i in n:
+			e.fire(Vector2.from_angle(base + (i - (n - 1) / 2.0) * 0.6) * 45.0, ProjectileSystem.ENEMY_VIOLET, 4.0, 1.6)
+		_end()
+
+
+## A wall of bullets falls from the top wall with one gap to slip through.
+func _bullet_wall(e: Enemy) -> void:
+	e.velocity = Vector2.ZERO
+	if _t >= windup and not _fired:
+		_fired = true
+		var rc := RunController.instance
+		var w: float = e.room.room_w
+		var gap: float = e.rng.randf_range(30.0, w - 30.0)
+		var x := 6.0
+		while x < w - 4.0:
+			if absf(x - gap) > 16.0:
+				rc.projectiles.spawn_enemy_shot(Vector2(x, 4.0), Vector2(0, 55.0 * Difficulty.bullet_speed_mult(Difficulty.depth())),
+					ProjectileSystem.ENEMY_RED, 3.0, 400.0, 0.0, Difficulty.hit_damage(Difficulty.depth()))
+			x += 12.0
 		_end()

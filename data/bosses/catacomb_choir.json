@@ -1,0 +1,45 @@
+{
+  "id": "catacomb_choir",
+  "name_key": "BOSS_CATACOMB_CHOIR_NAME",
+  "title_key": "BOSS_CATACOMB_CHOIR_TITLE",
+  "chapter": 4,
+  "strata": [
+    "catacombs",
+    "buried_ruins"
+  ],
+  "hp": 470,
+  "radius": 15,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 20,
+    "minion": "feral_ant",
+    "max_minions": 3,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "cross_sweep",
+          "homing_orbs",
+          "ring_burst"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "spiral_burst",
+          "cross_sweep",
+          "homing_orbs",
+          "bullet_wall"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

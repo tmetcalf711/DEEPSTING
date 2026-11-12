@@ -1,0 +1,52 @@
+{
+  "id": "flooded_burrows_n09",
+  "stratum": [
+    "flooded_burrows"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "....X...X....",
+    ".............",
+    ".............",
+    ".............",
+    "....X...X....",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        9,
+        0
+      ]
+    },
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        8,
+        2
+      ]
+    },
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        3,
+        0
+      ]
+    },
+    {
+      "enemy": "drowned_ant",
+      "at": [
+        11,
+        0
+      ]
+    }
+  ]
+}

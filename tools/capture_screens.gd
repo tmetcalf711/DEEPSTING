@@ -116,6 +116,37 @@ func _build() -> void:
 	_then(1, func() -> void: _console("curse cave_in"))
 	_then(40, func() -> void: _shot("07_curse_cave_in"))
 	_then(1, func() -> void: _console("curse none"))
+	# Milestone 4: new strata (with champions), the final boss, the ending.
+	for tid in ["flooded_burrows_n05", "landfill_n07", "sewer_pipes_x01", "bedrock_n08", "collapsed_mine_w01", "buried_ruins_n09", "catacombs_n06"]:
+		_then(1, func() -> void:
+			root.get_node("RunState").floor_index = 6
+			rc._start_room_test(tid)
+			var k := 0
+			for e in rc.room.room_enemies():
+				var types: Array = root.get_node("Content").get_entry("config", "champions")["types"].keys()
+				e.champion = types[k % types.size()]
+				e.champion_cfg = root.get_node("Content").get_entry("config", "champions")["types"][e.champion]
+				k += 1
+			Input.action_press("shoot_right"))
+		_then(70, func() -> void:
+			Input.action_release("shoot_right")
+			_shot("12_" + tid))
+	_then(1, func() -> void:
+		rc._start_room_test("catacombs_boss")
+		for e in rc.room.room_enemies():
+			e.queue_free()
+		rc.room.enemies_alive = 0
+		rc.room.spawn_enemy(root.get_node("Content").get_entry("bosses", "gilded_idol"), rc.room.center() + Vector2(0, -20), true))
+	_then(200, func() -> void: _shot("13_gilded_idol"))
+	_then(1, func() -> void:
+		rc._end_run(true, "ending_1"))
+	_then(40, func() -> void:
+		_shot("14_ending_1")
+		paused = false
+		rc._ended = false
+		for n in rc.get_children():
+			if n.get("ending") == "ending_1":
+				n.queue_free())
 	# Consumables, knick-knack, radiation, mutation picker.
 	_then(1, func() -> void:
 		var rs: Node = root.get_node("RunState")

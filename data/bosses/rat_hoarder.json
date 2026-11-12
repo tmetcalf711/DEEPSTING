@@ -1,0 +1,44 @@
+{
+  "id": "rat_hoarder",
+  "name_key": "BOSS_RAT_HOARDER_NAME",
+  "title_key": "BOSS_RAT_HOARDER_TITLE",
+  "chapter": 2,
+  "strata": [
+    "landfill"
+  ],
+  "hp": 300,
+  "radius": 14,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 26,
+    "minion": "tin_roach",
+    "max_minions": 3,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "aimed_fan",
+          "charge",
+          "homing_orbs"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "charge",
+          "aimed_fan",
+          "spawn_minions",
+          "homing_orbs"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

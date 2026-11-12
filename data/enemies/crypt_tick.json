@@ -1,0 +1,26 @@
+{
+  "id": "crypt_tick",
+  "name_key": "ENEMY_CRYPT_TICK_NAME",
+  "archetype": "turret",
+  "family": "catacombs",
+  "strata": [
+    "catacombs"
+  ],
+  "hp": 26,
+  "radius": 7,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": "tick_swell"
+  },
+  "behavior": {
+    "type": "turret",
+    "interval": 2.6,
+    "bullet_speed": 55,
+    "count": 6,
+    "homing": 0.8
+  }
+}

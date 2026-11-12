@@ -1,0 +1,27 @@
+{
+  "id": "pipe_eel",
+  "name_key": "ENEMY_PIPE_EEL_NAME",
+  "archetype": "burrower",
+  "family": "sewer_pipes",
+  "strata": [
+    "sewer_pipes"
+  ],
+  "hp": 16,
+  "radius": 6,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "burrow",
+    "dig_speed": 80,
+    "under_time": 1.2,
+    "surface_time": 1.5,
+    "ring": 8,
+    "bullet_speed": 72
+  }
+}

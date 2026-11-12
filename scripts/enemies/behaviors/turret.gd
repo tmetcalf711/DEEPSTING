@@ -7,6 +7,8 @@ var _t := 0.0
 var _diag := false
 var _armed := false
 var count := 4
+var pattern := "alternate_cross"
+var homing := 0.0
 
 
 func init(e: Enemy, p: Dictionary) -> void:
@@ -14,6 +16,8 @@ func init(e: Enemy, p: Dictionary) -> void:
 	bullet_speed = float(p.get("bullet_speed", 85))
 	windup = float(e.data.get("telegraph", {}).get("windup", 0.55))
 	count = int(p.get("count", 4))
+	pattern = str(p.get("pattern", "alternate_cross"))
+	homing = float(p.get("homing", 0.0))
 	_t = interval * e.rng.randf_range(0.4, 1.0)
 
 
@@ -26,8 +30,14 @@ func tick(e: Enemy, delta: float) -> void:
 	if _t <= 0.0:
 		_armed = false
 		_t = interval
+		var color := ProjectileSystem.ENEMY_VIOLET if homing > 0.0 else ProjectileSystem.ENEMY_RED
+		if pattern == "aimed":
+			var base := e.to_player().angle()
+			for i in count:
+				e.fire(Vector2.from_angle(base + (i - (count - 1) / 2.0) * 0.2) * bullet_speed, color, 3.0, homing)
+			return
 		var step := TAU / count
 		var off := step / 2.0 if _diag else 0.0
 		for i in count:
-			e.fire(Vector2.from_angle(off + i * step) * bullet_speed)
+			e.fire(Vector2.from_angle(off + i * step) * bullet_speed, color, 3.0, homing)
 		_diag = not _diag

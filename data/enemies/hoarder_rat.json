@@ -1,0 +1,28 @@
+{
+  "id": "hoarder_rat",
+  "name_key": "ENEMY_HOARDER_RAT_NAME",
+  "archetype": "chaser",
+  "family": "landfill",
+  "strata": [
+    "landfill",
+    "sewer_pipes"
+  ],
+  "hp": 120,
+  "radius": 11,
+  "contact_damage": 2,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "chase",
+    "speed": 44,
+    "stutter_chance": 0.0
+  },
+  "tags": [
+    "miniboss"
+  ]
+}

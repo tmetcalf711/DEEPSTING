@@ -1,0 +1,35 @@
+{
+  "id": "buried_ruins",
+  "name_key": "STRATUM_BURIED_RUINS_NAME",
+  "chapter": 4,
+  "floor_slot": "A",
+  "resources": [
+    {
+      "id": "amber",
+      "weight": 2
+    },
+    {
+      "id": "relic_shard",
+      "weight": 1
+    },
+    {
+      "id": "minerals",
+      "weight": 1
+    }
+  ],
+  "palette": {
+    "floor": "#3a3226",
+    "floor_alt": "#352d22",
+    "wall": "#6b5a3c",
+    "wall_top": "#a68c55",
+    "accent": "#f0c860"
+  },
+  "music": "ruins_theme",
+  "enemies": [
+    "scarab_sentinel",
+    "mummy_grub",
+    "urn_spider",
+    "bone_ant",
+    "ruin_caster"
+  ]
+}

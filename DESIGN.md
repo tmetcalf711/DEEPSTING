@@ -1,6 +1,6 @@
 # DeepSting — Game Design Document (living)
 
-> Status: **Milestone 3 complete** (item & synergy system at scale; chapter 1 playable). This is the source of truth for design. When code and this document disagree, fix one of them in the same commit.
+> Status: **Milestone 4 complete** (the full descent: chapters 1–4 with alternate floors, first ending). This is the source of truth for design. When code and this document disagree, fix one of them in the same commit.
 > Every ambiguity resolved during development goes in **§19 Decisions Log**. Questions that would be expensive to change later go in **§20 Open Questions**.
 
 ---
@@ -637,7 +637,7 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | 1 ✅ | Vertical slice: Abandoned Hive floor (fixed or simple gen), movement/dash/shoot, health, doors, 4 enemies + 1 boss, deposits + worker haul, brood cells, Dig Charge + 1 secret wall, 10 items (stat, projectile mods, familiar, active), minimap, death + restart | playable start-to-boss loop in under 10 min |
 | 2 ✅ | Full floorgen + all special rooms, 40 ch1 templates, room editor, curses, Royal/Den, Trader | invariant tests green; seeds reproduce |
 | 3 ✅ | Generic modifier stack at scale, all pools, trinkets, fossils, fluids, radiation + mutations, 60 items, synergy test scene | stacking tests green; 500-bullet perf test passes |
-| 4 | Ch1–4 + alts, 3 bosses/chapter, champions, difficulty curve, first ending | full run to ending 1 |
+| 4 ✅ | Ch1–4 + alts, 3 bosses/chapter, champions, difficulty curve, first ending | full run to ending 1 |
 | 5 | Achievements → unlocks, pool locking, completion marks, 6 mutated brood, hive + Pulper, Trove, Hive Upgrades, 3 castes, save/resume | fresh save → unlocks flow across runs |
 | 6 | Ch5–6, alt path, secret bosses, mutated castes, Contamination, challenges, Daily, 120+ items | content complete |
 | 7 | Polish and accessibility, rebinding UI, palettes, SFX hooks, perf, Deck check | Deck 1280×800 at 60 fps |
@@ -697,6 +697,13 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | D41 | Radiation: kills add the enemy's `radiation` (bosses 20), glowing contamination tiles (`G`) add 5/s; thresholds 60, 90, 120...; the pick appears at the next room clear (or right away if the room is already clear) | never interrupts a fight |
 | D42 | Synergy callout is generic: an item synergizes when its build tags (modifiers / proc kinds) pair with an owned tag in `config/synergies.json` | no item pairs are hand-listed |
 | D43 | Knick-knacks share ItemPool rules (no repeats in a run) via a single "trinkets" pool | reuse, determinism |
+| D44 | `config/floorgen.chapters` lists floor slots `{main, alt, final_boss?, ending?}`; the alternate is picked by a seeded roll per (seed, floor) at `alt_chance` 33%. `alts_require_unlock` is false until Milestone 5's achievements gate them | alternates are playable now; flipping one flag gates them later |
+| D45 | Difficulty curve in `config/difficulty.json`: enemy HP +10%/floor (bosses half that), enemy shot speed +3%/floor, champion chance 5% +1%/floor (cap 40%), template difficulty bands 1/1/2/2/2/3/3/3, hits do a full heart from floor 7 | one tunable file; tested |
+| D46 | Champions: 8 data-driven types (tough, fast, shielded, regenerating, volatile, toxic, splitting, radiant). Each wears a pulsing colored ring plus a light tint, always drops a pickup and gives 5× radiation (radiant 10×). Bosses, boss minions and split children are never champions | readable at a glance; not color alone (the ring pulses) |
+| D47 | A boss already met this run isn't rolled again if another fits the stratum | Isaac-like variety across a chapter |
+| D48 | The last floor's boss is fixed (`final_boss`); beating it and taking the trapdoor ends the run with that floor's `ending` screen (story text) and records it in the meta save (v3 adds `endings`) | the first ending; deeper chapters will move the ending down |
+| D49 | Chapters 2–4 room templates are a scripted first pass (mirrored layouts per stratum flavor, enemies kept away from door lanes); refine them in the room editor | gets every floor playable now; hand-tuning comes from playtesting |
+| D50 | The mutation pick also opens as soon as the meter fills while you're in an already-cleared room | completes D41 (a smoke test found the gap) |
 
 ---
 
@@ -714,6 +721,10 @@ All eight Milestone 0 questions were answered (2026-11-04):
 | Q7 Brood familiars | Only in the rescue run, until a late-game **Brood Bond** perk lets you pick one to start with | §13.3, D15 |
 | Q8 Leaderboards | **Steam only** | §13.6 |
 | Extra | Health stays **hearts**; **Chitin** = soul-heart shields; **Toxic Spined Chitin** = black hearts; **Royal Jelly** = keys for now | §3.4, §4 |
+
+### New open questions (Milestone 4)
+3. **Q11: Alternate floors before unlocks.** Alternates (Flooded Burrows, Sewer Pipes, Collapsed Mine, Catacombs) show up 1 in 3 times right now. The design gates them behind achievements; Milestone 5 can switch that on (`alts_require_unlock`). Gate them, or keep them in from the start?
+4. **Q12: Run length.** A full run is now 8 floors. Isaac's first ending also sits around 8 floors. Does that pace feel right once you play it, or should chapter 1 be a single floor?
 
 ### New open questions (Milestone 1 review)
 1. **Q9: Royal Jelly's second use.** M2 added Mana sinks (the Trader, Arcade machines) and Royal Jelly locks (Trader from floor 2, Dig Site from depth 3, Vault, Library). Do you still want a second Royal Jelly use (e.g. feeding rescued brood for a bonus)?

@@ -1,0 +1,23 @@
+{
+  "id": "landfill_treasure",
+  "stratum": [
+    "landfill"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "treasure"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".R.........R.",
+    ".............",
+    "......P......",
+    ".............",
+    ".R.........R.",
+    "............."
+  ],
+  "spawns": []
+}

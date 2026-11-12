@@ -1,0 +1,35 @@
+{
+  "id": "catacombs",
+  "name_key": "STRATUM_CATACOMBS_NAME",
+  "chapter": 4,
+  "floor_slot": "alt",
+  "resources": [
+    {
+      "id": "relic_shard",
+      "weight": 1
+    },
+    {
+      "id": "protein",
+      "weight": 2
+    },
+    {
+      "id": "amber",
+      "weight": 1
+    }
+  ],
+  "palette": {
+    "floor": "#2a2526",
+    "floor_alt": "#252021",
+    "wall": "#4a3f40",
+    "wall_top": "#7a6a6c",
+    "accent": "#d8c8b0"
+  },
+  "music": "catacombs_theme",
+  "enemies": [
+    "skull_moth",
+    "crypt_tick",
+    "bone_ant",
+    "urn_spider",
+    "mummy_grub"
+  ]
+}

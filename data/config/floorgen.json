@@ -80,9 +80,57 @@
     {
       "id": "ch1",
       "floors": [
-        "hive",
-        "topsoil"
+        {
+          "main": "hive"
+        },
+        {
+          "main": "topsoil",
+          "alt": "flooded_burrows"
+        }
+      ]
+    },
+    {
+      "id": "ch2",
+      "floors": [
+        {
+          "main": "landfill",
+          "alt": "sewer_pipes"
+        },
+        {
+          "main": "landfill",
+          "alt": "sewer_pipes"
+        }
+      ]
+    },
+    {
+      "id": "ch3",
+      "floors": [
+        {
+          "main": "bedrock",
+          "alt": "collapsed_mine"
+        },
+        {
+          "main": "bedrock",
+          "alt": "collapsed_mine"
+        }
+      ]
+    },
+    {
+      "id": "ch4",
+      "floors": [
+        {
+          "main": "buried_ruins",
+          "alt": "catacombs"
+        },
+        {
+          "main": "buried_ruins",
+          "alt": "catacombs",
+          "final_boss": "gilded_idol",
+          "ending": "ending_1"
+        }
       ]
     }
-  ]
+  ],
+  "alt_chance": 0.33,
+  "alts_require_unlock": false
 }

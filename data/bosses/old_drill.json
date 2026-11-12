@@ -1,0 +1,45 @@
+{
+  "id": "old_drill",
+  "name_key": "BOSS_OLD_DRILL_NAME",
+  "title_key": "BOSS_OLD_DRILL_TITLE",
+  "chapter": 3,
+  "strata": [
+    "collapsed_mine",
+    "bedrock"
+  ],
+  "hp": 400,
+  "radius": 16,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 16,
+    "minion": "miner_grub",
+    "max_minions": 3,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "burrow_strike",
+          "rubble_rain",
+          "spiral_burst"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "burrow_strike",
+          "rubble_rain",
+          "cross_sweep",
+          "spiral_burst"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

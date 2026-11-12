@@ -1,0 +1,25 @@
+{
+  "id": "dust_moth",
+  "name_key": "ENEMY_DUST_MOTH_NAME",
+  "archetype": "flyer",
+  "family": "collapsed_mine",
+  "strata": [
+    "collapsed_mine"
+  ],
+  "hp": 10,
+  "radius": 6,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": true,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "flyer",
+    "speed": 46,
+    "dive_speed": 140,
+    "dive_interval": 2.4
+  }
+}

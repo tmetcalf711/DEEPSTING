@@ -1,0 +1,26 @@
+{
+  "id": "crystal_tick",
+  "name_key": "ENEMY_CRYSTAL_TICK_NAME",
+  "archetype": "turret",
+  "family": "bedrock",
+  "strata": [
+    "bedrock",
+    "collapsed_mine"
+  ],
+  "hp": 22,
+  "radius": 7,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": "tick_swell"
+  },
+  "behavior": {
+    "type": "turret",
+    "interval": 2.4,
+    "bullet_speed": 80,
+    "count": 8
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": "champions",
+  "types": {
+    "tough": {
+      "weight": 3,
+      "tint": "#ff5a5a",
+      "hp_mult": 2.0
+    },
+    "fast": {
+      "weight": 2,
+      "tint": "#ffe14d",
+      "speed_mult": 1.45
+    },
+    "shielded": {
+      "weight": 2,
+      "tint": "#9fd0ff",
+      "shield_hits": 3
+    },
+    "regenerating": {
+      "weight": 1.5,
+      "tint": "#5dff7a",
+      "regen": 2.0
+    },
+    "volatile": {
+      "weight": 1.5,
+      "tint": "#ff9a3c",
+      "death_burst": 8
+    },
+    "toxic": {
+      "weight": 1.5,
+      "tint": "#9aae3a",
+      "trail": "sludge"
+    },
+    "splitting": {
+      "weight": 1,
+      "tint": "#d07aff",
+      "split_copies": 2
+    },
+    "radiant": {
+      "weight": 1,
+      "tint": "#eaff7a",
+      "hp_mult": 1.2,
+      "radiation_mult": 10.0
+    }
+  }
+}

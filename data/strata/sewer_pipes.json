@@ -1,0 +1,31 @@
+{
+  "id": "sewer_pipes",
+  "name_key": "STRATUM_SEWER_PIPES_NAME",
+  "chapter": 2,
+  "floor_slot": "alt",
+  "resources": [
+    {
+      "id": "protein",
+      "weight": 2
+    },
+    {
+      "id": "minerals",
+      "weight": 2
+    }
+  ],
+  "palette": {
+    "floor": "#2a3027",
+    "floor_alt": "#252a22",
+    "wall": "#46503f",
+    "wall_top": "#6e7d5a",
+    "accent": "#a8c46a"
+  },
+  "music": "sewer_theme",
+  "enemies": [
+    "pipe_eel",
+    "grease_fly",
+    "sludge_worm",
+    "clog",
+    "tin_roach"
+  ]
+}

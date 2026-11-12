@@ -1,0 +1,27 @@
+{
+  "id": "ruin_caster",
+  "name_key": "ENEMY_RUIN_CASTER_NAME",
+  "archetype": "caster",
+  "family": "buried_ruins",
+  "strata": [
+    "buried_ruins"
+  ],
+  "hp": 30,
+  "radius": 8,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.7,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "caster",
+    "speed": 14,
+    "interval": 3.2,
+    "pattern": "spiral",
+    "count": 2,
+    "bullet_speed": 60
+  }
+}

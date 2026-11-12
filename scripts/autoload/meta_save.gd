@@ -3,7 +3,7 @@ extends Node
 ## Files live in one directory (Steam Cloud friendly). Writes are atomic (tmp -> rename) and the
 ## previous good copy is kept as .bak, which is used if the main file fails to parse.
 
-const META_VERSION := 2
+const META_VERSION := 3
 const SETTINGS_VERSION := 1
 const RUN_VERSION := 1
 
@@ -38,6 +38,7 @@ static func default_meta() -> Dictionary:
 		"trove_seen": {},             # "kind:id" -> true
 		"upgrades": {},               # hive upgrade_id -> level
 		"runs": {"started": 0, "won": 0, "best_depth": 0},
+		"endings": {},                # ending id -> true
 	}
 
 
@@ -60,6 +61,8 @@ static func migrate_meta(d: Dictionary) -> Dictionary:
 		d = _migrate_meta_v0_to_v1(d)
 	if v < 2:
 		d = _migrate_meta_v1_to_v2(d)
+	if v < 3:
+		d = _migrate_meta_v2_to_v3(d)
 	# Fill any keys added since (forward-compatible defaults).
 	var defaults := default_meta()
 	for k in defaults:
@@ -80,6 +83,15 @@ static func _migrate_meta_v0_to_v1(d: Dictionary) -> Dictionary:
 	for k in d:
 		if k not in ["currency", "brood", "version", "comb"]:
 			out[k] = d[k]
+	return out
+
+
+## v3: endings reached (Milestone 4's first ending).
+static func _migrate_meta_v2_to_v3(d: Dictionary) -> Dictionary:
+	var out := d.duplicate(true)
+	if not out.has("endings"):
+		out["endings"] = {}
+	out["version"] = 3
 	return out
 
 

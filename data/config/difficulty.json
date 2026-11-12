@@ -1,0 +1,21 @@
+{
+  "id": "difficulty",
+  "hp_per_depth": 0.1,
+  "boss_hp_factor": 0.5,
+  "bullet_speed_per_depth": 0.03,
+  "full_heart_from_depth": 7,
+  "champion_base": 0.05,
+  "champion_per_depth": 0.01,
+  "champion_cap": 0.4,
+  "spore_bloom_bonus": 0.15,
+  "template_difficulty_by_depth": [
+    1,
+    1,
+    2,
+    2,
+    2,
+    3,
+    3,
+    3
+  ]
+}

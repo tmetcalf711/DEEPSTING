@@ -1,0 +1,27 @@
+{
+  "id": "miner_grub",
+  "name_key": "ENEMY_MINER_GRUB_NAME",
+  "archetype": "burrower",
+  "family": "collapsed_mine",
+  "strata": [
+    "collapsed_mine"
+  ],
+  "hp": 20,
+  "radius": 7,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "burrow",
+    "dig_speed": 75,
+    "under_time": 1.4,
+    "surface_time": 1.4,
+    "ring": 6,
+    "bullet_speed": 80
+  }
+}

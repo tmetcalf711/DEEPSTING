@@ -1,0 +1,45 @@
+{
+  "id": "landfill_n06",
+  "stratum": [
+    "landfill"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".SSS.....SSS.",
+    ".............",
+    ".............",
+    ".............",
+    ".SSS.....SSS.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "battery_slug",
+      "at": [
+        8,
+        3
+      ]
+    },
+    {
+      "enemy": "battery_slug",
+      "at": [
+        1,
+        0
+      ]
+    },
+    {
+      "enemy": "cap_crab",
+      "at": [
+        3,
+        0
+      ]
+    }
+  ]
+}

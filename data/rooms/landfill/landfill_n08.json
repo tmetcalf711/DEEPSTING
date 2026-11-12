@@ -1,0 +1,52 @@
+{
+  "id": "landfill_n08",
+  "stratum": [
+    "landfill"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "...R.....R...",
+    "...R.....R...",
+    ".....D.......",
+    "...R.....R...",
+    "...R.....R...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "cap_crab",
+      "at": [
+        0,
+        6
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        3,
+        0
+      ]
+    },
+    {
+      "enemy": "cap_crab",
+      "at": [
+        10,
+        6
+      ]
+    },
+    {
+      "enemy": "battery_slug",
+      "at": [
+        0,
+        0
+      ]
+    }
+  ]
+}

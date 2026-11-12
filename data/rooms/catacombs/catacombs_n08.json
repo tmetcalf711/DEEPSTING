@@ -1,0 +1,59 @@
+{
+  "id": "catacombs_n08",
+  "stratum": [
+    "catacombs"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".##.......##.",
+    ".............",
+    "........D....",
+    ".............",
+    ".##.......##.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "skull_moth",
+      "at": [
+        9,
+        5
+      ]
+    },
+    {
+      "enemy": "skull_moth",
+      "at": [
+        4,
+        4
+      ]
+    },
+    {
+      "enemy": "crypt_tick",
+      "at": [
+        3,
+        1
+      ]
+    },
+    {
+      "enemy": "mummy_grub",
+      "at": [
+        10,
+        6
+      ]
+    },
+    {
+      "enemy": "crypt_tick",
+      "at": [
+        1,
+        0
+      ]
+    }
+  ]
+}

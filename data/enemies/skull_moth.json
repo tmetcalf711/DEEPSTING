@@ -1,0 +1,28 @@
+{
+  "id": "skull_moth",
+  "name_key": "ENEMY_SKULL_MOTH_NAME",
+  "archetype": "caster",
+  "family": "catacombs",
+  "strata": [
+    "catacombs"
+  ],
+  "hp": 18,
+  "radius": 6,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": true,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "caster",
+    "speed": 28,
+    "interval": 3.0,
+    "pattern": "ring",
+    "count": 6,
+    "bullet_speed": 50,
+    "homing": 0.9
+  }
+}

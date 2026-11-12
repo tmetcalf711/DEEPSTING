@@ -433,9 +433,12 @@ func _spawn_enemies() -> void:
 		spawn_enemy(data, tile_center(Vector2i(int(at[0]), int(at[1]))), is_boss)
 
 
-func spawn_enemy(data: Dictionary, pos: Vector2, is_boss: bool = false) -> Node2D:
+func spawn_enemy(data: Dictionary, pos: Vector2, is_boss: bool = false, allow_champion: bool = true, force_champion: String = "") -> Node2D:
 	var e: CharacterBody2D = EnemyScript.new()
-	e.setup(data, self, is_boss)
+	var champ := force_champion
+	if champ == "" and allow_champion and not is_boss and data.get("champion_ok", true):
+		champ = roll_champion(rng_enemies)
+	e.setup(data, self, is_boss, champ)
 	e.position = pos
 	entities.add_child(e)
 	enemies_alive += 1
@@ -446,6 +449,27 @@ func spawn_enemy(data: Dictionary, pos: Vector2, is_boss: bool = false) -> Node2
 		info["cleared"] = false
 		refresh_doors()
 	return e
+
+
+## Champion roll for a spawn (DESIGN.md §7.3): chance from the difficulty curve and curses,
+## type weighted from config/champions.json, on the room's seeded enemy stream.
+func roll_champion(r: RandomNumberGenerator) -> String:
+	if r.randf() >= Difficulty.champion_chance(Difficulty.depth(), RunController.instance.curse_effect() if RunController.instance else ""):
+		return ""
+	var types: Dictionary = Content.get_entry("config", "champions").get("types", {})
+	var ids: Array = types.keys()
+	ids.sort()
+	if ids.is_empty():
+		return ""
+	return str(ids[RNG.weighted_index(r, ids.map(func(k: String) -> float: return float(types[k].get("weight", 1.0))))])
+
+
+## A splitting champion's smaller, normal copy.
+func spawn_split_copy(data: Dictionary, pos: Vector2, hp_frac: float) -> void:
+	var e: Node2D = spawn_enemy(data, pos, false, false)
+	e.max_hp *= hp_frac
+	e.hp = e.max_hp
+	e.scale = Vector2.ONE * 0.8
 
 
 ## Undo a reservation made by a splitting enemy once its children have been spawned.

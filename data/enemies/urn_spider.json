@@ -1,0 +1,26 @@
+{
+  "id": "urn_spider",
+  "name_key": "ENEMY_URN_SPIDER_NAME",
+  "archetype": "spawner",
+  "family": "buried_ruins",
+  "strata": [
+    "buried_ruins",
+    "catacombs"
+  ],
+  "hp": 28,
+  "radius": 8,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "spawner",
+    "interval": 3.2,
+    "minion": "bone_ant",
+    "cap": 3
+  }
+}

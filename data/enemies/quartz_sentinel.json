@@ -1,0 +1,29 @@
+{
+  "id": "quartz_sentinel",
+  "name_key": "ENEMY_QUARTZ_SENTINEL_NAME",
+  "archetype": "turret",
+  "family": "bedrock",
+  "strata": [
+    "bedrock",
+    "collapsed_mine"
+  ],
+  "hp": 130,
+  "radius": 11,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "turret",
+    "interval": 1.6,
+    "bullet_speed": 85,
+    "count": 10
+  },
+  "tags": [
+    "miniboss"
+  ]
+}

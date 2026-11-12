@@ -1,0 +1,52 @@
+{
+  "id": "bedrock_n05",
+  "stratum": [
+    "bedrock"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".SSS.....SSS.",
+    ".............",
+    ".............",
+    ".............",
+    ".SSS.....SSS.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        3,
+        0
+      ]
+    },
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        1,
+        0
+      ]
+    },
+    {
+      "enemy": "cart_beetle",
+      "at": [
+        1,
+        6
+      ]
+    },
+    {
+      "enemy": "cart_beetle",
+      "at": [
+        10,
+        0
+      ]
+    }
+  ]
+}

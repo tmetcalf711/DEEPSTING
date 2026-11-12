@@ -1,0 +1,45 @@
+{
+  "id": "urn_mother",
+  "name_key": "BOSS_URN_MOTHER_NAME",
+  "title_key": "BOSS_URN_MOTHER_TITLE",
+  "chapter": 4,
+  "strata": [
+    "buried_ruins",
+    "catacombs"
+  ],
+  "hp": 460,
+  "radius": 16,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 10,
+    "minion": "urn_spider",
+    "max_minions": 2,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "spawn_minions",
+          "spiral_burst",
+          "bullet_wall"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "spawn_minions",
+          "spiral_burst",
+          "bullet_wall",
+          "homing_orbs"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

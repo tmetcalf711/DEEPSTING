@@ -19,6 +19,7 @@
     "flank": 22
   },
   "strata": [
+    "flooded_burrows",
     "hive",
     "topsoil"
   ]

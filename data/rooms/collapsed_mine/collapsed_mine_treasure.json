@@ -1,0 +1,23 @@
+{
+  "id": "collapsed_mine_treasure",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "treasure"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".RR.......RR.",
+    ".............",
+    "......P......",
+    ".............",
+    ".RR.......RR.",
+    "............."
+  ],
+  "spawns": []
+}

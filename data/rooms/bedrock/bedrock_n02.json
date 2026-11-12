@@ -1,0 +1,45 @@
+{
+  "id": "bedrock_n02",
+  "stratum": [
+    "bedrock"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "..XXX...XXX..",
+    ".............",
+    ".............",
+    ".............",
+    "..XXX...XXX..",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "geode_shell",
+      "at": [
+        3,
+        2
+      ]
+    },
+    {
+      "enemy": "dust_moth",
+      "at": [
+        9,
+        4
+      ]
+    },
+    {
+      "enemy": "cart_beetle",
+      "at": [
+        10,
+        0
+      ]
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "flooded_burrows_treasure",
+  "stratum": [
+    "flooded_burrows"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "treasure"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".XX.......XX.",
+    ".............",
+    "......P......",
+    ".............",
+    ".XX.......XX.",
+    "............."
+  ],
+  "spawns": []
+}

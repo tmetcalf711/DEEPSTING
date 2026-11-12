@@ -1,0 +1,24 @@
+{
+  "id": "sludge_wormlet",
+  "name_key": "ENEMY_SLUDGE_WORMLET_NAME",
+  "archetype": "chaser",
+  "family": "sewer_pipes",
+  "strata": [
+    "sewer_pipes"
+  ],
+  "hp": 8,
+  "radius": 5,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "chase",
+    "speed": 44,
+    "stutter_chance": 0.05
+  }
+}

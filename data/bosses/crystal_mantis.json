@@ -1,0 +1,44 @@
+{
+  "id": "crystal_mantis",
+  "name_key": "BOSS_CRYSTAL_MANTIS_NAME",
+  "title_key": "BOSS_CRYSTAL_MANTIS_TITLE",
+  "chapter": 3,
+  "strata": [
+    "bedrock"
+  ],
+  "hp": 380,
+  "radius": 15,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 28,
+    "minion": "feral_ant",
+    "max_minions": 3,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "charge",
+          "cross_sweep",
+          "aimed_fan"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "charge",
+          "cross_sweep",
+          "charge",
+          "homing_orbs"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

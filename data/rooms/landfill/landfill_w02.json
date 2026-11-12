@@ -1,0 +1,66 @@
+{
+  "id": "landfill_w02",
+  "stratum": [
+    "landfill"
+  ],
+  "shape": "2x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    "..........................",
+    ".T.R.....R.T..T.R.....R.T.",
+    "..........................",
+    "...R.....R......R.....R...",
+    "..........................",
+    ".T.R.....R.T..T.R.....R.T.",
+    "......................D..."
+  ],
+  "spawns": [
+    {
+      "enemy": "feral_ant",
+      "at": [
+        11,
+        3
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        13,
+        2
+      ]
+    },
+    {
+      "enemy": "tin_roach",
+      "at": [
+        15,
+        5
+      ]
+    },
+    {
+      "enemy": "wrapper_moth",
+      "at": [
+        20,
+        3
+      ]
+    },
+    {
+      "enemy": "feral_ant",
+      "at": [
+        15,
+        2
+      ]
+    },
+    {
+      "enemy": "cap_crab",
+      "at": [
+        8,
+        2
+      ]
+    }
+  ]
+}

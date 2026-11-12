@@ -62,6 +62,8 @@ var radiation: float = 0.0
 var radiation_threshold: int = 60
 var mutations_offered: int = 0
 var mutations: Array[String] = []
+var bosses_met: Array = []            # boss ids already rolled this run (avoid repeats)
+var floor_strata: Dictionary = {}      # "floor index" -> stratum id chosen for this run (main or alt)
 
 # Floor stash: hauled materials waiting to be carried up the boss shaft. Lost on death.
 var floor_stash: Dictionary = {}  # resource_type -> amount
@@ -119,6 +121,8 @@ func reset() -> void:
 	radiation_threshold = int(Content.get_entry("config", "radiation").get("first_threshold", 60))
 	mutations_offered = 0
 	mutations = []
+	floor_strata = {}
+	bosses_met = []
 	floor_stash = {}
 	stats = {"kills": 0, "rooms_cleared": 0, "brood_rescued": 0, "damage_taken": 0,
 		"secrets_found": 0, "pulp_banked": 0, "stash_lost": 0, "items": 0}
@@ -329,6 +333,7 @@ func to_dict() -> Dictionary:
 		"trinket": trinket, "consumable": consumable.duplicate(), "fluid_map": fluid_map.duplicate(),
 		"fluids_identified": fluids_identified.duplicate(), "perma_mods": perma_mods.duplicate(true),
 		"radiation": radiation, "radiation_threshold": radiation_threshold, "mutations": mutations.duplicate(),
+		"floor_strata": floor_strata.duplicate(), "bosses_met": bosses_met.duplicate(),
 	}
 
 
@@ -363,6 +368,8 @@ func from_dict(d: Dictionary) -> void:
 	radiation = float(d.get("radiation", 0.0))
 	radiation_threshold = int(d.get("radiation_threshold", radiation_threshold))
 	mutations.assign(d.get("mutations", []))
+	floor_strata = d.get("floor_strata", {}).duplicate()
+	bosses_met = d.get("bosses_met", []).duplicate()
 	# Run snapshots are taken at floor start; streams derive from (seed, floor), so re-seeding
 	# reproduces the floor exactly.
 	RNG.set_run_seed(seed_value)

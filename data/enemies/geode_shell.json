@@ -1,0 +1,28 @@
+{
+  "id": "geode_shell",
+  "name_key": "ENEMY_GEODE_SHELL_NAME",
+  "archetype": "splitter",
+  "family": "bedrock",
+  "strata": [
+    "bedrock"
+  ],
+  "hp": 34,
+  "radius": 9,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "chase",
+    "speed": 22,
+    "stutter_chance": 0.05
+  },
+  "split_into": {
+    "enemy": "crystal_shard",
+    "count": 3
+  }
+}

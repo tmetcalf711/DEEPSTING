@@ -1,0 +1,25 @@
+{
+  "id": "bone_ant",
+  "name_key": "ENEMY_BONE_ANT_NAME",
+  "archetype": "swarmer",
+  "family": "buried_ruins",
+  "strata": [
+    "buried_ruins",
+    "catacombs"
+  ],
+  "hp": 8,
+  "radius": 4,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "swarm",
+    "speed": 78,
+    "flank": 24
+  }
+}

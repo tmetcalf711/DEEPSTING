@@ -1,0 +1,27 @@
+{
+  "id": "scarab_sentinel",
+  "name_key": "ENEMY_SCARAB_SENTINEL_NAME",
+  "archetype": "turret",
+  "family": "buried_ruins",
+  "strata": [
+    "buried_ruins",
+    "catacombs"
+  ],
+  "hp": 30,
+  "radius": 8,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.55,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "turret",
+    "interval": 2.2,
+    "bullet_speed": 95,
+    "pattern": "aimed",
+    "count": 3
+  }
+}

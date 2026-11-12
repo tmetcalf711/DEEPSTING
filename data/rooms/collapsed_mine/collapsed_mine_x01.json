@@ -1,0 +1,115 @@
+{
+  "id": "collapsed_mine_x01",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "2x2",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    "..........................",
+    ".SSS.....SSS..SSS....DSSS.",
+    "..........................",
+    "..........................",
+    "..........................",
+    ".SSS.....SSS..SSS.....SSS.",
+    "..........................",
+    "..........................",
+    "..............SSS.....SSS.",
+    "...#.....##...............",
+    "..........................",
+    "...#.....##...............",
+    "..............SSS.....SSS.",
+    ".........................."
+  ],
+  "spawns": [
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        25,
+        7
+      ]
+    },
+    {
+      "enemy": "dust_moth",
+      "at": [
+        23,
+        6
+      ]
+    },
+    {
+      "enemy": "dust_moth",
+      "at": [
+        10,
+        10
+      ]
+    },
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        11,
+        9
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        16,
+        4
+      ]
+    },
+    {
+      "enemy": "dust_moth",
+      "at": [
+        9,
+        4
+      ]
+    },
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        5,
+        10
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        7,
+        8
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        5,
+        7
+      ]
+    },
+    {
+      "enemy": "miner_grub",
+      "at": [
+        17,
+        10
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        12,
+        3
+      ]
+    },
+    {
+      "enemy": "miner_grub",
+      "at": [
+        15,
+        9
+      ]
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "id": "heap",
+  "name_key": "BOSS_HEAP_NAME",
+  "title_key": "BOSS_HEAP_TITLE",
+  "chapter": 2,
+  "strata": [
+    "landfill",
+    "sewer_pipes"
+  ],
+  "hp": 330,
+  "radius": 17,
+  "contact_damage": 1,
+  "radiation": 20,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.6,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "pattern_boss",
+    "speed": 14,
+    "minion": "tin_roach",
+    "max_minions": 3,
+    "phases": [
+      {
+        "until_hp": 0.5,
+        "patterns": [
+          "spawn_minions",
+          "ring_burst",
+          "bullet_wall"
+        ]
+      },
+      {
+        "until_hp": 0,
+        "patterns": [
+          "charge",
+          "ring_burst",
+          "spawn_minions",
+          "bullet_wall"
+        ]
+      }
+    ],
+    "pattern_gap": 1.0
+  }
+}

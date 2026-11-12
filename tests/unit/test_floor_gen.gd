@@ -217,7 +217,7 @@ func _full_floor(seed_value: int, floor_index: int) -> Dictionary:
 	var rng: Node = load("res://scripts/autoload/rng.gd").new()
 	rng.set_run_seed(seed_value)
 	rng.set_floor(floor_index)
-	var stratum: Dictionary = Content.get_entry("strata", RC.floor_plan()[floor_index])
+	var stratum: Dictionary = Content.get_entry("strata", str(RC.floor_plan()[floor_index]["main"]))
 	var l := FloorGen.generate(floor_index + 1, rng.stream("map"), _cfg(), _opts())
 	var templates := Content.all("rooms").filter(func(t: Dictionary) -> bool: return stratum["id"] in t["stratum"] or "*" in t["stratum"])
 	FloorGen.assign_templates(l, templates, rng.stream("rooms"))

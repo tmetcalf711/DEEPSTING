@@ -1,0 +1,35 @@
+{
+  "id": "collapsed_mine",
+  "name_key": "STRATUM_COLLAPSED_MINE_NAME",
+  "chapter": 3,
+  "floor_slot": "alt",
+  "resources": [
+    {
+      "id": "minerals",
+      "weight": 3
+    },
+    {
+      "id": "wood_pulp",
+      "weight": 1
+    },
+    {
+      "id": "amber",
+      "weight": 1
+    }
+  ],
+  "palette": {
+    "floor": "#33291f",
+    "floor_alt": "#2d241b",
+    "wall": "#55452f",
+    "wall_top": "#7a6a4a",
+    "accent": "#e0a24a"
+  },
+  "music": "mine_theme",
+  "enemies": [
+    "dust_moth",
+    "miner_grub",
+    "cart_beetle",
+    "lantern_centipede",
+    "crystal_tick"
+  ]
+}

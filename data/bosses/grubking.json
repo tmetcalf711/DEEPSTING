@@ -4,6 +4,7 @@
   "title_key": "BOSS_GRUBKING_TITLE",
   "chapter": 1,
   "strata": [
+    "flooded_burrows",
     "hive",
     "topsoil"
   ],

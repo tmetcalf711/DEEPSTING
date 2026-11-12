@@ -1,0 +1,45 @@
+{
+  "id": "bedrock_n01",
+  "stratum": [
+    "bedrock"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "...RR...RR...",
+    ".............",
+    ".............",
+    ".............",
+    "...RR...RR...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        2,
+        0
+      ]
+    },
+    {
+      "enemy": "geode_shell",
+      "at": [
+        2,
+        5
+      ]
+    },
+    {
+      "enemy": "cart_beetle",
+      "at": [
+        8,
+        4
+      ]
+    }
+  ]
+}

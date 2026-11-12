@@ -1,0 +1,23 @@
+{
+  "id": "buried_ruins_treasure",
+  "stratum": [
+    "buried_ruins"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "treasure"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "...#.....#...",
+    "......P......",
+    "...#.....#...",
+    ".............",
+    "............."
+  ],
+  "spawns": []
+}

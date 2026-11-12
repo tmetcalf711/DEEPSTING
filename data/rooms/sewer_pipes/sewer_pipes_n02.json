@@ -1,0 +1,38 @@
+{
+  "id": "sewer_pipes_n02",
+  "stratum": [
+    "sewer_pipes"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "...#.....#...",
+    ".............",
+    "...#...D.#...",
+    ".............",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "sludge_worm",
+      "at": [
+        10,
+        5
+      ]
+    },
+    {
+      "enemy": "tin_roach",
+      "at": [
+        5,
+        3
+      ]
+    }
+  ]
+}

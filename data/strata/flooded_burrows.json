@@ -1,0 +1,35 @@
+{
+  "id": "flooded_burrows",
+  "name_key": "STRATUM_FLOODED_BURROWS_NAME",
+  "chapter": 1,
+  "floor_slot": "B-alt",
+  "resources": [
+    {
+      "id": "nectar",
+      "weight": 2
+    },
+    {
+      "id": "protein",
+      "weight": 2
+    },
+    {
+      "id": "wood_pulp",
+      "weight": 1
+    }
+  ],
+  "palette": {
+    "floor": "#24302d",
+    "floor_alt": "#1f2a27",
+    "wall": "#3d4f49",
+    "wall_top": "#5f8f86",
+    "accent": "#7fd6c2"
+  },
+  "music": "flooded_theme",
+  "enemies": [
+    "leech_coil",
+    "drowned_ant",
+    "bubble_tick",
+    "mud_skipper",
+    "paper_moth"
+  ]
+}

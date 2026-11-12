@@ -3,11 +3,13 @@ extends CanvasLayer
 
 var victory := false
 var stash_lost := 0
+var ending := ""
 
 
-func setup(won: bool, lost: int) -> void:
+func setup(won: bool, lost: int, p_ending: String = "") -> void:
 	victory = won
 	stash_lost = lost
+	ending = p_ending
 
 
 func _ready() -> void:
@@ -26,10 +28,21 @@ func _ready() -> void:
 	center.add_child(vb)
 	var title := Label.new()
 	title.text = tr("END_VICTORY" if victory else "END_DEATH")
+	if ending != "":
+		title.text = tr(ending.to_upper() + "_TITLE")
 	title.add_theme_font_size_override("font_size", 20)
 	title.add_theme_color_override("font_color", Color(0.98, 0.78, 0.15) if victory else Color(0.9, 0.25, 0.25))
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vb.add_child(title)
+	if ending != "":
+		var story := Label.new()
+		story.text = tr(ending.to_upper() + "_TEXT")
+		story.autowrap_mode = TextServer.AUTOWRAP_WORD
+		story.custom_minimum_size = Vector2(360, 0)
+		story.add_theme_font_size_override("font_size", 9)
+		story.add_theme_color_override("font_color", Color(0.9, 0.85, 0.7))
+		story.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		vb.add_child(story)
 	var s := RunState.stats
 	var info := Label.new()
 	info.add_theme_font_size_override("font_size", 9)

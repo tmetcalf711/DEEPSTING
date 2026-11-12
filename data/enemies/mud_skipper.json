@@ -1,0 +1,26 @@
+{
+  "id": "mud_skipper",
+  "name_key": "ENEMY_MUD_SKIPPER_NAME",
+  "archetype": "hopper",
+  "family": "flooded_burrows",
+  "strata": [
+    "flooded_burrows"
+  ],
+  "hp": 14,
+  "radius": 6,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "hopper",
+    "leap_speed": 135,
+    "leap_time": 0.35,
+    "rest": 1.2,
+    "land_ring": 4
+  }
+}

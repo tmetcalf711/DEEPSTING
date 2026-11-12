@@ -1,0 +1,45 @@
+{
+  "id": "flooded_burrows_n05",
+  "stratum": [
+    "flooded_burrows"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "..XXX...XXX..",
+    ".............",
+    ".............",
+    ".............",
+    "..XXX...XXX..",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "leech_coil",
+      "at": [
+        9,
+        6
+      ]
+    },
+    {
+      "enemy": "drowned_ant",
+      "at": [
+        12,
+        6
+      ]
+    },
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        11,
+        0
+      ]
+    }
+  ]
+}

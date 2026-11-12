@@ -1,0 +1,30 @@
+{
+  "id": "tomb_guardian",
+  "name_key": "ENEMY_TOMB_GUARDIAN_NAME",
+  "archetype": "caster",
+  "family": "buried_ruins",
+  "strata": [
+    "buried_ruins",
+    "catacombs"
+  ],
+  "hp": 150,
+  "radius": 11,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": false,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.7,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "caster",
+    "speed": 20,
+    "interval": 2.2,
+    "pattern": "spiral",
+    "bullet_speed": 65
+  },
+  "tags": [
+    "miniboss"
+  ]
+}

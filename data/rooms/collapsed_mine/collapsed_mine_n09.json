@@ -1,0 +1,52 @@
+{
+  "id": "collapsed_mine_n09",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "....X...X....",
+    ".............",
+    "....X...X....",
+    ".........D...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        11,
+        0
+      ]
+    },
+    {
+      "enemy": "miner_grub",
+      "at": [
+        8,
+        3
+      ]
+    },
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        9,
+        2
+      ]
+    },
+    {
+      "enemy": "miner_grub",
+      "at": [
+        3,
+        4
+      ]
+    }
+  ]
+}

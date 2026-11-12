@@ -1,0 +1,23 @@
+{
+  "id": "catacombs_treasure",
+  "stratum": [
+    "catacombs"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "treasure"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".T.#.....#.T.",
+    ".............",
+    "...#..P..#...",
+    ".............",
+    ".T.#.....#.T.",
+    "............."
+  ],
+  "spawns": []
+}

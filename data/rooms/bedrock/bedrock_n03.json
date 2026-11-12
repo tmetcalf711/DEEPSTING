@@ -1,0 +1,38 @@
+{
+  "id": "bedrock_n03",
+  "stratum": [
+    "bedrock"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "..XXX...XXX..",
+    ".............",
+    ".....D.......",
+    ".............",
+    "..XXX...XXX..",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "lantern_centipede",
+      "at": [
+        0,
+        6
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        4,
+        2
+      ]
+    }
+  ]
+}

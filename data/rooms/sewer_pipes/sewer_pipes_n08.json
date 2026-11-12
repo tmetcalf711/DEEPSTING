@@ -1,0 +1,66 @@
+{
+  "id": "sewer_pipes_n08",
+  "stratum": [
+    "sewer_pipes"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 3,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    "...D.........",
+    ".SSS.....SSS.",
+    ".............",
+    ".............",
+    ".............",
+    ".SSS.....SSS.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "clog",
+      "at": [
+        8,
+        2
+      ]
+    },
+    {
+      "enemy": "sludge_worm",
+      "at": [
+        2,
+        0
+      ]
+    },
+    {
+      "enemy": "pipe_eel",
+      "at": [
+        3,
+        4
+      ]
+    },
+    {
+      "enemy": "sludge_worm",
+      "at": [
+        7,
+        3
+      ]
+    },
+    {
+      "enemy": "grease_fly",
+      "at": [
+        2,
+        6
+      ]
+    },
+    {
+      "enemy": "grease_fly",
+      "at": [
+        8,
+        4
+      ]
+    }
+  ]
+}

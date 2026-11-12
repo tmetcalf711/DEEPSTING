@@ -1,0 +1,28 @@
+{
+  "id": "sludge_worm",
+  "name_key": "ENEMY_SLUDGE_WORM_NAME",
+  "archetype": "splitter",
+  "family": "sewer_pipes",
+  "strata": [
+    "sewer_pipes"
+  ],
+  "hp": 24,
+  "radius": 8,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "chase",
+    "speed": 28,
+    "stutter_chance": 0.05
+  },
+  "split_into": {
+    "enemy": "sludge_wormlet",
+    "count": 2
+  }
+}

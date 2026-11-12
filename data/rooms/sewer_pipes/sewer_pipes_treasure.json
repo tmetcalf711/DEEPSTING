@@ -1,0 +1,23 @@
+{
+  "id": "sewer_pipes_treasure",
+  "stratum": [
+    "sewer_pipes"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "treasure"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "...X.....X...",
+    "...X.....X...",
+    "......P......",
+    "...X.....X...",
+    "...X.....X...",
+    "............."
+  ],
+  "spawns": []
+}

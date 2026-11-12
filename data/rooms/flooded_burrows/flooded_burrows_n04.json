@@ -1,0 +1,45 @@
+{
+  "id": "flooded_burrows_n04",
+  "stratum": [
+    "flooded_burrows"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".............",
+    "...#.....#...",
+    ".............",
+    "...#.....#...",
+    ".............",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "paper_moth",
+      "at": [
+        8,
+        4
+      ]
+    },
+    {
+      "enemy": "bubble_tick",
+      "at": [
+        11,
+        6
+      ]
+    },
+    {
+      "enemy": "drowned_ant",
+      "at": [
+        3,
+        5
+      ]
+    }
+  ]
+}

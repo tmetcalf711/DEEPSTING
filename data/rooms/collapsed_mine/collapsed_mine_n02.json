@@ -1,0 +1,38 @@
+{
+  "id": "collapsed_mine_n02",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".RR.......RR.",
+    ".............",
+    ".............",
+    ".............",
+    ".RR.......RR.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "miner_grub",
+      "at": [
+        11,
+        6
+      ]
+    },
+    {
+      "enemy": "crystal_tick",
+      "at": [
+        7,
+        3
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "id": "cart_beetle",
+  "name_key": "ENEMY_CART_BEETLE_NAME",
+  "archetype": "charger",
+  "family": "bedrock",
+  "strata": [
+    "bedrock",
+    "collapsed_mine"
+  ],
+  "hp": 24,
+  "radius": 8,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.45,
+    "sfx": "beetle_click"
+  },
+  "behavior": {
+    "type": "charger",
+    "speed": 22,
+    "charge_speed": 200,
+    "align": 10,
+    "sight": 200
+  }
+}

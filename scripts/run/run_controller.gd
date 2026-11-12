@@ -67,6 +67,7 @@ func _ready() -> void:
 	top.add_child(_fade)
 	top.add_child(_flash)
 	Events.player_died.connect(_on_player_died)
+	Events.radiation_changed.connect(_on_radiation_changed)
 	Events.player_damaged.connect(func(_a: int, _s: String) -> void: took_damage_this_floor = true)
 	_register_commands()
 	if GameState.room_test_template != "":
@@ -95,11 +96,36 @@ func _overlay_rect(c: Color) -> ColorRect:
 # ---------------------------------------------------------------- floors
 
 ## The ordered list of stratum ids for the run, across chapters (from config/floorgen chapters).
+## Every floor slot of the run in order: {main, alt?, chapter, final_boss?, ending?} (config chapters).
 static func floor_plan() -> Array:
 	var out: Array = []
-	for ch in Content.get_entry("config", "floorgen").get("chapters", []):
-		out.append_array(ch.get("floors", []))
+	var chapters: Array = Content.get_entry("config", "floorgen").get("chapters", [])
+	for ci in chapters.size():
+		for f in chapters[ci].get("floors", []):
+			var slot: Dictionary = f.duplicate() if f is Dictionary else {"main": str(f)}
+			slot["chapter"] = ci + 1
+			out.append(slot)
 	return out
+
+
+## Which stratum a floor uses: the main one, or (seeded, ~1 in 3) its alternate variant once
+## alternates are available (DESIGN.md §8). Decided per (seed, floor), so it never depends on play.
+static func stratum_for_floor(floor_index: int, run_seed: int) -> String:
+	var plan := floor_plan()
+	var slot: Dictionary = plan[clampi(floor_index, 0, plan.size() - 1)]
+	var alt: String = str(slot.get("alt", ""))
+	if alt == "":
+		return str(slot["main"])
+	var cfg: Dictionary = Content.get_entry("config", "floorgen")
+	if bool(cfg.get("alts_require_unlock", false)) and not MetaSave.is_unlocked("strata", alt):
+		return str(slot["main"])
+	var r := RandomNumberGenerator.new()
+	r.seed = RNG.derive_seed(run_seed, "alt_stratum", floor_index)
+	return alt if r.randf() < float(cfg.get("alt_chance", 0.33)) else str(slot["main"])
+
+
+static func is_last_floor(floor_index: int) -> bool:
+	return floor_index >= floor_plan().size() - 1
 
 
 func start_floor(floor_index: int) -> void:
@@ -107,7 +133,12 @@ func start_floor(floor_index: int) -> void:
 	RNG.set_floor(floor_index)
 	var depth := floor_index + 1
 	var plan := floor_plan()
-	stratum = Content.get_entry("strata", str(plan[mini(floor_index, plan.size() - 1)]))
+	var stratum_id: String = RunState.floor_strata.get(str(floor_index), "")
+	if stratum_id == "":
+		stratum_id = stratum_for_floor(floor_index, RunState.seed_value)
+		RunState.floor_strata[str(floor_index)] = stratum_id
+	stratum = Content.get_entry("strata", stratum_id)
+	var slot: Dictionary = plan[mini(floor_index, plan.size() - 1)]
 	var cfg: Dictionary = Content.get_entry("config", "floorgen")
 	curse_id = _forced_curse if _forced_curse != "" else _roll_curse(floor_index, cfg)
 	_forced_curse = ""
@@ -122,10 +153,14 @@ func start_floor(floor_index: int) -> void:
 		"labyrinth": curse_effect() == "labyrinth",
 	}
 	layout = FloorGen.generate(depth, RNG.stream("map"), cfg, opts)
-	FloorGen.assign_templates(layout, _templates(), RNG.stream("rooms"))
+	FloorGen.assign_templates(layout, _templates(), RNG.stream("rooms"), Difficulty.max_template_difficulty(depth))
 	_ensure_pools()
 	FloorContents.fill(layout, {"floor_index": floor_index, "stratum": stratum, "pool": item_pool,
-		"items_rng": RNG.stream("items"), "rooms_rng": RNG.stream("rooms"), "cfg": cfg})
+		"items_rng": RNG.stream("items"), "rooms_rng": RNG.stream("rooms"), "cfg": cfg,
+		"final_boss": str(slot.get("final_boss", "")), "bosses_met": RunState.bosses_met.duplicate()})
+	var bid: String = str(layout["rooms"][layout["boss"]].get("boss_id", "")) if layout["boss"] != FloorGen.NONE else ""
+	if bid != "" and not RunState.bosses_met.has(bid):
+		RunState.bosses_met.append(bid)
 	if player == null:
 		player = PlayerScript.new()
 	took_damage_this_floor = false
@@ -314,6 +349,12 @@ func _maybe_open_deal(r: Room, force_type: String = "") -> void:
 	Events.toast.emit(tr("TOAST_DEAL_" + type.to_upper()))
 
 
+## Meter filled while standing in a cleared room (glowing puddles, fluids): offer right away.
+func _on_radiation_changed(_v: float, _t: int) -> void:
+	if RunState.mutation_ready() and room and room.is_cleared and not _transitioning and not _ended:
+		call_deferred("_offer_mutation")
+
+
 ## Radiation meter full: choose 1 of 3 mutations (offered at room clear, never mid-fight).
 func _offer_mutation() -> void:
 	if not RunState.mutation_ready() or _ended or get_node_or_null("MutationPicker"):
@@ -367,8 +408,11 @@ func on_trapdoor() -> void:
 	if RunState.floor_index + 1 < floor_plan().size():
 		_descend(RunState.floor_index + 1)
 	else:
-		# End of the content built so far (chapter 1 in M2); later chapters arrive in M4.
-		_end_run(true)
+		# The bottom of the descent so far: the first ending (chapters 5-6 arrive in M6).
+		var ending: String = str(floor_plan()[RunState.floor_index].get("ending", "ending_1"))
+		MetaSave.data["endings"][ending] = true
+		MetaSave.add_counter("endings." + ending)
+		_end_run(true, ending)
 
 
 func _descend(next_floor: int) -> void:
@@ -425,7 +469,7 @@ func _on_player_died() -> void:
 	_end_run(false)
 
 
-func _end_run(victory: bool) -> void:
+func _end_run(victory: bool, ending: String = "") -> void:
 	if _ended:
 		return
 	_ended = true
@@ -439,7 +483,7 @@ func _end_run(victory: bool) -> void:
 	MetaSave.delete_run()
 	Events.run_ended.emit(victory)
 	var end: CanvasLayer = EndScript.new()
-	end.setup(victory, lost)
+	end.setup(victory, lost, ending)
 	add_child(end)
 	get_tree().paused = true
 

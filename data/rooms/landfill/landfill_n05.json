@@ -1,0 +1,45 @@
+{
+  "id": "landfill_n05",
+  "stratum": [
+    "landfill"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".....D.......",
+    ".............",
+    "....X...X....",
+    ".............",
+    "....X...X....",
+    ".............",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "wrapper_moth",
+      "at": [
+        2,
+        0
+      ]
+    },
+    {
+      "enemy": "tin_roach",
+      "at": [
+        0,
+        0
+      ]
+    },
+    {
+      "enemy": "tin_roach",
+      "at": [
+        7,
+        3
+      ]
+    }
+  ]
+}

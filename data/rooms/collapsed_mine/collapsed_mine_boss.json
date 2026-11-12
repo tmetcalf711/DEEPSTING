@@ -1,0 +1,31 @@
+{
+  "id": "collapsed_mine_boss",
+  "stratum": [
+    "collapsed_mine"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "boss"
+  ],
+  "difficulty": 1,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".T.R.....R.T.",
+    ".............",
+    "...R.....R...",
+    ".............",
+    ".T.R.....R.T.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "@boss",
+      "at": [
+        6,
+        2
+      ]
+    }
+  ]
+}

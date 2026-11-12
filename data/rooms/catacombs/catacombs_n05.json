@@ -1,0 +1,52 @@
+{
+  "id": "catacombs_n05",
+  "stratum": [
+    "catacombs"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    ".##.......##.",
+    ".......D.....",
+    ".............",
+    ".............",
+    ".##.......##.",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "crypt_tick",
+      "at": [
+        0,
+        0
+      ]
+    },
+    {
+      "enemy": "mummy_grub",
+      "at": [
+        3,
+        5
+      ]
+    },
+    {
+      "enemy": "bone_ant",
+      "at": [
+        0,
+        6
+      ]
+    },
+    {
+      "enemy": "mummy_grub",
+      "at": [
+        11,
+        6
+      ]
+    }
+  ]
+}

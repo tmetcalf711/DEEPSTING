@@ -19,7 +19,8 @@ static func fill(layout: Dictionary, ctx: Dictionary) -> void:
 	var cfg: Dictionary = ctx.get("cfg", {})
 	var shop_cfg: Dictionary = Content.get_entry("config", "shop")
 	var drops: Dictionary = Content.get_entry("config", "drops")
-	var bosses := _sorted(Content.all("bosses").filter(func(b: Dictionary) -> bool: return stratum["id"] in b.get("strata", [])))
+	var bosses := _sorted(Content.all("bosses").filter(func(b: Dictionary) -> bool:
+		return stratum["id"] in b.get("strata", []) and not b.get("final", false)))
 	var minibosses := _sorted(Content.all("enemies").filter(func(e: Dictionary) -> bool:
 		return "miniboss" in e.get("tags", []) and (stratum["id"] in e.get("strata", [stratum["id"]]))))
 	for a in layout["order"]:
@@ -28,7 +29,15 @@ static func fill(layout: Dictionary, ctx: Dictionary) -> void:
 			"treasure":
 				info["pedestal"] = _roll_with_strata(pool, "dig_site", stratum, ri)
 			"boss":
-				info["boss_id"] = bosses[rr.randi_range(0, bosses.size() - 1)]["id"] if not bosses.is_empty() else ""
+				var fb: String = str(ctx.get("final_boss", ""))
+				if fb != "":
+					info["boss_id"] = fb  # the chapter-ending boss is fixed
+				else:
+					# Prefer a boss not met yet this run (no repeats within a chapter like Isaac).
+					var met: Array = ctx.get("bosses_met", [])
+					var fresh := bosses.filter(func(b: Dictionary) -> bool: return not met.has(b["id"]))
+					var pick_from: Array = fresh if not fresh.is_empty() else bosses
+					info["boss_id"] = pick_from[rr.randi_range(0, pick_from.size() - 1)]["id"] if not pick_from.is_empty() else ""
 				info["pedestal_on_clear"] = pool.roll("boss", ri)
 			"secret":
 				if ri.randf() < float(drops.get("secret_room", {}).get("item_chance", 0.5)):

@@ -24,6 +24,12 @@ var poison_t := 0.0
 var burn_t := 0.0
 var slow_t := 0.0
 var _poison_tick := 0.0
+## Champion variant (DESIGN.md §7.3): "" or a key of config/champions.json.
+var champion := ""
+var champion_cfg: Dictionary = {}
+var speed_mult := 1.0
+var shield_hits := 0
+var _trail_t := 0.0
 
 var _spr: Sprite2D
 var _flash := 0.0
@@ -33,12 +39,18 @@ var _t := 0.0
 var _spawn_t := 0.45
 
 
-func setup(d: Dictionary, p_room: Node, boss: bool) -> void:
+func setup(d: Dictionary, p_room: Node, boss: bool, p_champion: String = "") -> void:
 	data = d
 	room = p_room
 	is_boss = boss
 	rng = p_room.rng_enemies
-	hp = float(d.get("hp", 10))
+	hp = float(d.get("hp", 10)) * Difficulty.hp_mult(Difficulty.depth(), boss)
+	champion = p_champion
+	champion_cfg = Content.get_entry("config", "champions").get("types", {}).get(champion, {})
+	if not champion_cfg.is_empty():
+		hp *= float(champion_cfg.get("hp_mult", 1.0))
+		speed_mult = float(champion_cfg.get("speed_mult", 1.0))
+		shield_hits = int(champion_cfg.get("shield_hits", 0))
 	max_hp = hp
 	hit_radius = float(d.get("radius", 6))
 	flying = bool(d.get("flying", false))
@@ -78,8 +90,10 @@ func to_player() -> Vector2:
 	return (p.global_position - global_position) if p else Vector2.ZERO
 
 
-func fire(vel: Vector2, color: Color = ProjectileSystem.ENEMY_RED, radius: float = 3.0) -> void:
-	RunController.instance.projectiles.spawn_enemy_shot(global_position + Vector2(0, -2), vel, color, radius)
+func fire(vel: Vector2, color: Color = ProjectileSystem.ENEMY_RED, radius: float = 3.0, homing: float = 0.0) -> void:
+	var d := Difficulty.depth()
+	RunController.instance.projectiles.spawn_enemy_shot(global_position + Vector2(0, -2), vel * Difficulty.bullet_speed_mult(d),
+		color, radius, 400.0, homing, Difficulty.hit_damage(d))
 
 
 ## Starts a wind-up flash + squash for `duration` seconds (the readable tell, §7.1).
@@ -117,6 +131,7 @@ func _physics_process(delta: float) -> void:
 		velocity = knock
 	elif behavior:
 		behavior.tick(self, delta)
+		velocity *= speed_mult
 		if slow_t > 0.0:
 			velocity *= 0.5
 		velocity += knock
@@ -139,6 +154,15 @@ func apply_elements(elements: Array) -> void:
 
 
 func _tick_status(delta: float) -> void:
+	if not champion_cfg.is_empty():
+		var regen: float = float(champion_cfg.get("regen", 0.0))
+		if regen > 0.0:
+			hp = minf(max_hp, hp + regen * delta)
+		if champion_cfg.has("trail"):
+			_trail_t -= delta
+			if _trail_t <= 0.0:
+				_trail_t = 0.5
+				room.add_creep(global_position, str(champion_cfg["trail"]), 4.0)
 	slow_t = maxf(0.0, slow_t - delta)
 	burn_t = maxf(0.0, burn_t - delta)
 	if poison_t > 0.0 or burn_t > 0.0:
@@ -161,12 +185,17 @@ func _contact() -> void:
 	if untargetable:
 		return
 	var p := player()
-	if p and p.global_position.distance_to(global_position) < hit_radius + 4.0:
-		p.hurt(int(data.get("contact_damage", 1)), data["id"])
+	if p and p.global_position.distance_to(global_position) < hit_radius + 4.0 and int(data.get("contact_damage", 1)) > 0:
+		p.hurt(int(data.get("contact_damage", 1)) * Difficulty.hit_damage(Difficulty.depth()), data["id"])
 
 
 func take_hit(damage: float, dir: Vector2, elements: Array) -> void:
 	if dead or untargetable:
+		return
+	if shield_hits > 0:
+		shield_hits -= 1
+		RunController.instance.fx.spark(global_position, Color(0.8, 0.9, 1.0))
+		_flash = 0.04
 		return
 	apply_elements(elements)
 	hp -= damage
@@ -191,7 +220,9 @@ func die(counted: bool = true) -> void:
 	var rc := RunController.instance
 	rc.fx.burst(global_position, _spr.modulate * Color(0.6, 0.9, 0.3), 14 if not is_boss else 60, 70.0 if not is_boss else 140.0, 2.0)
 	if counted:
-		RunState.add_radiation(float(data.get("radiation", 1)))
+		RunState.add_radiation(float(data.get("radiation", 1)) * (float(champion_cfg.get("radiation_mult", 5.0)) if champion != "" else 1.0))
+		if champion != "":
+			_champion_death(rc)
 		if rc.player and rc.player.effects:
 			rc.player.effects.fire_event("kill", global_position)
 		RunState.bump("kills")
@@ -210,11 +241,29 @@ func die(counted: bool = true) -> void:
 		var child: Dictionary = Content.get_entry("enemies", str(split.get("enemy", "")))
 		for i in int(split.get("count", 2)):
 			var off := Vector2.from_angle(TAU * i / float(split.get("count", 2)) + 0.5) * (hit_radius + 4.0)
-			room.call_deferred("spawn_enemy", child, room.nearest_free_point(global_position + off))
+			room.call_deferred("spawn_enemy", child, room.nearest_free_point(global_position + off), false, false)
 		room.enemies_alive += int(split.get("count", 2))  # reserve; spawn_enemy adds again, so undo below
 		room.call_deferred("_release_reserved", int(split.get("count", 2)))
 	room.on_enemy_died(self)
 	queue_free()
+
+
+## Champion death extras: guaranteed pickup, plus volatile bursts and splitting.
+func _champion_death(rc: RunController) -> void:
+	room.drop_from_table("champion", global_position, true)
+	MetaSave.add_counter("champions_killed")
+	var burst: int = int(champion_cfg.get("death_burst", 0))
+	if burst > 0:
+		rc.fx.explosion(global_position, 20.0)
+		for i in burst:
+			fire(Vector2.from_angle(TAU * i / burst) * 70.0, ProjectileSystem.ENEMY_GREEN)
+	var copies: int = int(champion_cfg.get("split_copies", 0))
+	for i in copies:
+		var off := Vector2.from_angle(TAU * i / maxf(1.0, copies) + 0.4) * (hit_radius + 4.0)
+		room.call_deferred("spawn_split_copy", data, room.nearest_free_point(global_position + off), 0.5)
+	if copies > 0:
+		room.enemies_alive += copies
+		room.call_deferred("_release_reserved", copies)
 
 
 func _animate() -> void:
@@ -245,7 +294,8 @@ func _animate() -> void:
 	elif slow_t > 0.0:
 		_spr.modulate = Color(0.75, 0.85, 1.0)
 	else:
-		_spr.modulate = Color.WHITE
+		# Champions: a light wash of their color (the sprite stays readable; the ring carries the color).
+		_spr.modulate = Color.WHITE.lerp(Color.from_string(str(champion_cfg.get("tint", "#ffffff")), Color.WHITE), 0.45) if champion != "" else Color.WHITE
 	_spr.flip_h = to_player().x < 0
 	queue_redraw()
 
@@ -258,4 +308,10 @@ func _draw() -> void:
 		return
 	draw_set_transform(Vector2(0, 1), 0.0, Vector2(1.0, 0.5))
 	draw_circle(Vector2.ZERO, hit_radius * (0.8 if flying else 1.0), Color(0, 0, 0, 0.35))
+	if champion != "":
+		# Champions wear a colored ring so they read at a glance (not color alone: it pulses).
+		var c := Color.from_string(str(champion_cfg.get("tint", "#ffffff")), Color.WHITE)
+		draw_arc(Vector2.ZERO, hit_radius + 2.0 + sin(_t * 6.0), 0, TAU, 20, c, 2.0)
+	if shield_hits > 0:
+		draw_arc(Vector2(0, -hit_radius), hit_radius + 3.0, 0, TAU, 16, Color(0.8, 0.9, 1.0, 0.8), 1.0)
 	draw_set_transform(Vector2.ZERO)

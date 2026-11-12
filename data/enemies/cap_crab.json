@@ -1,0 +1,26 @@
+{
+  "id": "cap_crab",
+  "name_key": "ENEMY_CAP_CRAB_NAME",
+  "archetype": "hopper",
+  "family": "landfill",
+  "strata": [
+    "landfill"
+  ],
+  "hp": 20,
+  "radius": 7,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "hopper",
+    "leap_speed": 120,
+    "leap_time": 0.4,
+    "rest": 1.4,
+    "land_ring": 0
+  }
+}

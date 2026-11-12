@@ -1,0 +1,45 @@
+{
+  "id": "sewer_pipes_n05",
+  "stratum": [
+    "sewer_pipes"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "....X...X....",
+    ".............",
+    ".............",
+    ".............",
+    "....X...X....",
+    ".........D..."
+  ],
+  "spawns": [
+    {
+      "enemy": "tin_roach",
+      "at": [
+        1,
+        0
+      ]
+    },
+    {
+      "enemy": "tin_roach",
+      "at": [
+        11,
+        6
+      ]
+    },
+    {
+      "enemy": "grease_fly",
+      "at": [
+        3,
+        6
+      ]
+    }
+  ]
+}

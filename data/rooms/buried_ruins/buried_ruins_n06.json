@@ -1,0 +1,52 @@
+{
+  "id": "buried_ruins_n06",
+  "stratum": [
+    "buried_ruins"
+  ],
+  "shape": "1x1",
+  "room_types": [
+    "normal"
+  ],
+  "difficulty": 2,
+  "weight": 1.0,
+  "tags": [],
+  "grid": [
+    ".............",
+    "...##...##...",
+    ".............",
+    "........D....",
+    ".............",
+    "...##...##...",
+    "............."
+  ],
+  "spawns": [
+    {
+      "enemy": "urn_spider",
+      "at": [
+        1,
+        0
+      ]
+    },
+    {
+      "enemy": "ruin_caster",
+      "at": [
+        8,
+        4
+      ]
+    },
+    {
+      "enemy": "ruin_caster",
+      "at": [
+        9,
+        2
+      ]
+    },
+    {
+      "enemy": "scarab_sentinel",
+      "at": [
+        11,
+        0
+      ]
+    }
+  ]
+}

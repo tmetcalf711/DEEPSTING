@@ -1,0 +1,24 @@
+{
+  "id": "drowned_ant",
+  "name_key": "ENEMY_DROWNED_ANT_NAME",
+  "archetype": "swarmer",
+  "family": "flooded_burrows",
+  "strata": [
+    "flooded_burrows"
+  ],
+  "hp": 5,
+  "radius": 4,
+  "contact_damage": 1,
+  "radiation": 1,
+  "champion_ok": true,
+  "flying": false,
+  "telegraph": {
+    "windup": 0.5,
+    "sfx": ""
+  },
+  "behavior": {
+    "type": "swarm",
+    "speed": 58,
+    "flank": 20
+  }
+}

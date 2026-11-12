@@ -4,6 +4,7 @@
   "archetype": "chaser",
   "family": "hive",
   "strata": [
+    "flooded_burrows",
     "hive",
     "topsoil"
   ],

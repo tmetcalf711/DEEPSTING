@@ -4,6 +4,7 @@
   "title_key": "BOSS_TUNNEL_MOLE_TITLE",
   "chapter": 1,
   "strata": [
+    "flooded_burrows",
     "topsoil"
   ],
   "hp": 260,
