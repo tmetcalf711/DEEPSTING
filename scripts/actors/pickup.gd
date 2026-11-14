@@ -23,6 +23,7 @@ func setup(p_room: Node, p_data: Dictionary, p_payload: String = "") -> void:
 
 func _ready() -> void:
 	add_to_group("pickups")
+	add_to_group("inspectable")
 	if payload == "":
 		payload = roll_payload(str(data["kind"]), room.rng_drops)
 	_spr = Sprite2D.new()
@@ -42,6 +43,12 @@ func _ready() -> void:
 
 
 ## What a trinket / fossil / fluid pickup contains. Uses the given (seeded) stream.
+func inspect_info() -> Dictionary:
+	if collected:
+		return {}
+	return load("res://scripts/ui/inspect.gd").for_pickup(data, payload)
+
+
 static func roll_payload(kind: String, r: RandomNumberGenerator) -> String:
 	match kind:
 		"trinket":

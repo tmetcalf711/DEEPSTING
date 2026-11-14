@@ -48,7 +48,7 @@ scripts/actors/        rock, pickup, pedestal, ware, arcade_machine, deposit, wo
 scripts/tools/         room_editor.gd (scene: tools/room_editor.tscn), synergy_lab.gd (lab panel; main menu buttons in dev builds)
 scripts/effects/       one file per effect `type` (stat_mod, projectile_mod, proc, trigger, aura, familiar, flag, health, consumables, active, ability, perma_stat, room_stat, radiation)
 scripts/effects/abilities/  abilities used by actives/fossils/fluids (stun_flash, sunburst, reveal_map, volley, shatter_rocks, teleport)
-scripts/ui/            main_menu, hud, minimap, pause_menu, end_screen, darkness (Cave-in curse)
+scripts/ui/            main_menu, hud (incl. the item-label side panel), inspect (label text for items/wares/pickups), minimap, pause_menu, end_screen, mutation_picker, darkness (Cave-in curse)
 tests/unit/test_*.gd   GUT tests
 tools/                 validate_data.gd, check_scripts.gd (every script parses + menu boots), run_tests.sh, smoke_run.gd, capture_screens.gd, room editor
 translations/strings.csv   every player-facing string (keys,en,...)
@@ -73,6 +73,7 @@ translations/strings.csv   every player-facing string (keys,en,...)
 - **Room templates:** big rooms are 26×7 (2x1), 13×14 (1x2) or 26×14 (2x2) tiles; `stratum: ["*"]` = shared (special rooms). 13×7 grid chars `. R T # X S B D P` (floor, rock, tinted rock, block, pit, spikes, brood cell, deposit slot, pedestal). `room_types` says which room kinds can use a template, and the `brood_cell` tag is required for rooms hosting sealed cells. Door entry lanes must stay walkable (validator enforces).
 - **Adding a data category or required field:** update `Content.SCHEMA` (and `validate()` for extra rules), then add a test.
 - **Strings:** all UI text goes through `tr("KEY")`, with the key added to `translations/strings.csv`. Data files reference `*_key` fields, never literal text.
+- **Item labels:** anything the player should be able to identify joins group `inspectable` and implements `inspect_info()` (build it with `scripts/ui/inspect.gd`); the HUD shows the nearest one.
 - **Art:** always `Art.texture(category, id)`. Never `load()` sprite paths directly.
 - **Signals:** cross-system communication goes through `Events`. Declare typed signals there.
 - **Saves:** bump `MetaSave.META_VERSION` and add a `_migrate_meta_vN_to_vN+1` step plus a test when the save shape changes. Anything that "banks immediately" (hauls, brood) calls `save_meta()` on the event.

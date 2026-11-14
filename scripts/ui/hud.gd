@@ -12,6 +12,15 @@ var _banner_sub: Label
 var _banner_t := 0.0
 var _toasts: VBoxContainer
 var _boss_frac := -1.0
+const INSPECT_RADIUS := 30.0   # world px: about two tiles
+var _inspect: PanelContainer
+var _inspect_icon: TextureRect
+var _inspect_title: Label
+var _inspect_kind: Label
+var _inspect_body: Label
+var _inspect_extra: Label
+var _inspect_alpha := 0.0
+var inspected: Node = null      # what the side panel is describing (read by tests)
 var _boss_name := ""
 
 
@@ -50,6 +59,7 @@ func _ready() -> void:
 	mm.position = Vector2(-100, 6)
 	mm.size = Vector2(94, 64)
 	_root.add_child(mm)
+	_build_inspect_panel()
 	Events.banner.connect(_on_banner)
 	Events.toast.connect(_on_toast)
 	Events.boss_spawned.connect(_on_boss_spawned)
@@ -63,6 +73,83 @@ func _on_boss_spawned(id: String) -> void:
 
 func _on_boss_health(f: float) -> void:
 	_boss_frac = f if f > 0.0 else -1.0
+
+
+## Side panel that names whatever item / ware / pickup the wasp is standing near.
+func _build_inspect_panel() -> void:
+	_inspect = PanelContainer.new()
+	_inspect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_inspect.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	_inspect.position = Vector2(-158, 94)
+	_inspect.custom_minimum_size = Vector2(152, 0)
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0.06, 0.05, 0.04, 0.88)
+	sb.border_color = Color(0.85, 0.65, 0.25, 0.9)
+	sb.set_border_width_all(1)
+	sb.set_content_margin_all(4)
+	_inspect.add_theme_stylebox_override("panel", sb)
+	_root.add_child(_inspect)
+	var hb := HBoxContainer.new()
+	hb.add_theme_constant_override("separation", 4)
+	_inspect.add_child(hb)
+	_inspect_icon = TextureRect.new()
+	_inspect_icon.custom_minimum_size = Vector2(24, 24)
+	_inspect_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_inspect_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_inspect_icon.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	hb.add_child(_inspect_icon)
+	var vb := VBoxContainer.new()
+	vb.add_theme_constant_override("separation", 0)
+	vb.custom_minimum_size = Vector2(118, 0)
+	hb.add_child(vb)
+	_inspect_title = _label(9)
+	_inspect_kind = _label(7)
+	_inspect_kind.add_theme_color_override("font_color", Color(0.7, 0.68, 0.62))
+	_inspect_body = _label(8)
+	_inspect_extra = _label(8)
+	_inspect_extra.add_theme_color_override("font_color", Color(0.6, 0.95, 1.0))
+	for l in [_inspect_title, _inspect_kind, _inspect_body, _inspect_extra]:
+		l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		l.custom_minimum_size = Vector2(118, 0)
+		vb.add_child(l)
+	_inspect.modulate.a = 0.0
+
+
+## The nearest inspectable thing in the current room within reach of the wasp, or null.
+static func nearest_inspectable(rc: Node) -> Node:
+	if rc == null or rc.room == null or rc.player == null:
+		return null
+	var best: Node = null
+	var best_d := INSPECT_RADIUS
+	for n in rc.get_tree().get_nodes_in_group("inspectable"):
+		if not is_instance_valid(n) or not rc.room.is_ancestor_of(n) or n.is_queued_for_deletion():
+			continue
+		var d: float = n.global_position.distance_to(rc.player.global_position)
+		if d < best_d and not n.inspect_info().is_empty():
+			best_d = d
+			best = n
+	return best
+
+
+func _update_inspect(delta: float) -> void:
+	var target := nearest_inspectable(RunController.instance)
+	if target:
+		var info: Dictionary = target.inspect_info()
+		inspected = target
+		_inspect_icon.texture = info.get("icon")
+		_inspect_title.text = str(info.get("title", ""))
+		_inspect_title.add_theme_color_override("font_color", info.get("color", Color.WHITE))
+		_inspect_kind.text = str(info.get("kind", ""))
+		_inspect_body.text = str(info.get("body", ""))
+		_inspect_extra.text = str(info.get("extra", ""))
+		_inspect_extra.visible = _inspect_extra.text != ""
+		_inspect_body.visible = _inspect_body.text != ""
+		_inspect_alpha = minf(1.0, _inspect_alpha + delta * 8.0)
+	else:
+		inspected = null
+		_inspect_alpha = maxf(0.0, _inspect_alpha - delta * 6.0)
+	_inspect.modulate.a = _inspect_alpha
+	_inspect.size = Vector2(_inspect.custom_minimum_size.x, 0)  # shrink to fit the text
 
 
 func _label(size: int) -> Label:
@@ -94,6 +181,7 @@ func _on_toast(text: String) -> void:
 
 
 func _process(delta: float) -> void:
+	_update_inspect(delta)
 	# The boss bar only shows while a live boss is in the current room.
 	if _boss_frac > 0.0:
 		var rc0 := RunController.instance

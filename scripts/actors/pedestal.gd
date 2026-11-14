@@ -20,11 +20,23 @@ func setup(p_room: Node, id: String, p_extra_index: int = -1) -> void:
 	extra_index = p_extra_index
 
 
+const Inspect := preload("res://scripts/ui/inspect.gd")
+
+
 func _ready() -> void:
 	add_to_group("pedestals")
+	add_to_group("inspectable")
 	_spr = Sprite2D.new()
 	add_child(_spr)
 	_refresh()
+
+
+## HUD side-panel label (see scripts/ui/inspect.gd).
+func inspect_info() -> Dictionary:
+	var d := Inspect.for_item(item_id)
+	if not d.is_empty() and locked:
+		d["extra"] = tr("INSPECT_LOCKED_CHALLENGE")
+	return d
 
 
 func set_item(id: String) -> void:

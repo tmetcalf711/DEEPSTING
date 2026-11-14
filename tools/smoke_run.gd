@@ -315,6 +315,11 @@ func _special_phase(type: String, phase: int) -> void:
 				_check(sold > 0, type + " sold something")
 			"sacrifice":
 				p.position = rc.room.feature.position
+			"vault", "library":
+				# Stand near (not on) the pedestal: the HUD side panel should name the item.
+				var ped: Array = get_nodes_in_group("pedestals").filter(func(n: Node) -> bool: return rc.room.is_ancestor_of(n))
+				if not ped.is_empty():
+					p.position = ped[0].position + Vector2(0, 20)
 			"arcade":
 				var machines: Array = rc.room.entities.get_children().filter(func(n: Node) -> bool: return n.has_method("_play"))
 				_check(machines.size() == 3, "arcade machines")
@@ -329,6 +334,10 @@ func _special_phase(type: String, phase: int) -> void:
 				_check(rc.room.enemies_alive > 0, type + " spawned enemies")
 				_kill_all()
 	elif phase == 1:
+		if type in ["vault", "library"]:
+			var hud: Node = rc.hud
+			_check(hud.inspected != null and hud._inspect_title.text != "", type + ": side panel names the nearby item")
+			print("smoke: %s inspect -> %s / %s" % [type, hud._inspect_title.text, hud._inspect_kind.text])
 		match type:
 			"sacrifice":
 				_check(int(rc.room.info.get("sac_uses", 0)) == 0, "god mode blocks sacrifice damage")

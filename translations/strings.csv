@@ -480,3 +480,27 @@ STRATUM_BURIED_RUINS_NAME,Buried Ruins
 STRATUM_CATACOMBS_NAME,Catacombs
 ENDING_1_TITLE,Ending 1: The Gilded Idol
 ENDING_1_TEXT,"The idol topples, and under it the floor is warm. Something below is still running, pumping glow into the soil. The swarm carries the gold home, and the colony grows a little bigger. But you can feel it through your feet: the basin goes deeper still."
+INSPECT_UNKNOWN,???
+INSPECT_UNKNOWN_DESC,The fog hides what this is.
+INSPECT_KIND_ITEM,Passive item
+INSPECT_KIND_ACTIVE,Active item
+INSPECT_CHARGE,%d-room charge
+INSPECT_QUALITY,Quality %d
+INSPECT_KIND_TRINKET,Knick-knack
+INSPECT_KIND_FOSSIL,Fossil (single use)
+INSPECT_KIND_FLUID,Strange Fluid (single use)
+INSPECT_KIND_PICKUP,Pickup
+INSPECT_SWAP_HINT,Swaps with your knick-knack
+INSPECT_USE_HINT,Press Q / LT to use
+INSPECT_FLUID_KNOWN,You've drunk this one before.
+INSPECT_FLUID_UNKNOWN,Unidentified. Who knows what it does?
+INSPECT_LOCKED_CHALLENGE,Locked until the waves are beaten
+INSPECT_PRICE_MANA,Price: %d Mana
+INSPECT_PRICE_HEARTS,Price: %d heart container(s)
+INSPECT_CANT_AFFORD,(not enough)
+INSPECT_PICKUP_MANA,In-run currency for shops and arcades.
+INSPECT_PICKUP_HEART,Restores health.
+INSPECT_PICKUP_CHITIN,"A shield heart, lost before your own."
+INSPECT_PICKUP_TOXIC_CHITIN,A shield heart that bursts at enemies when it breaks.
+INSPECT_PICKUP_DIG_CHARGE,"Press E / LB to blast rocks, enemies and cracked walls."
+INSPECT_PICKUP_ROYAL_JELLY,Opens locked doors.

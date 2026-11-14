@@ -704,6 +704,7 @@ Required coverage: floor-gen invariants (M2), pool weighting/removal (M3), save/
 | D48 | The last floor's boss is fixed (`final_boss`); beating it and taking the trapdoor ends the run with that floor's `ending` screen (story text) and records it in the meta save (v3 adds `endings`) | the first ending; deeper chapters will move the ending down |
 | D49 | Chapters 2–4 room templates are a scripted first pass (mirrored layouts per stratum flavor, enemies kept away from door lanes); refine them in the room editor | gets every floor playable now; hand-tuning comes from playtesting |
 | D50 | The mutation pick also opens as soon as the meter fills while you're in an already-cleared room | completes D41 (a smoke test found the gap) |
+| D51 | Item labels (user request): walking within ~2 tiles of a pedestal, ware or pickup shows a HUD side panel (under the minimap) with its name, type, quality, effect and price. Actors opt in with group `inspectable` + `inspect_info()`; text comes from `scripts/ui/inspect.gd`; the Toxic Fog curse still hides items | identify things before committing to them; one generic path |
 
 ---
 

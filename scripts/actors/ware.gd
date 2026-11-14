@@ -17,7 +17,30 @@ func setup(p_room: Node, p_entry: Dictionary) -> void:
 	entry = p_entry
 
 
+const Inspect := preload("res://scripts/ui/inspect.gd")
+
+
+## HUD side-panel label, with the price.
+func inspect_info() -> Dictionary:
+	if entry.get("sold", false):
+		return {}
+	var d: Dictionary
+	if entry["kind"] == "item":
+		d = Inspect.for_item(str(entry["id"]))
+	else:
+		d = Inspect.for_pickup(Content.get_entry("pickups", str(entry["id"])), str(entry.get("payload", "")))
+	if d.is_empty():
+		return d
+	if entry.has("heart_cost"):
+		d["extra"] = tr("INSPECT_PRICE_HEARTS") % int(entry["heart_cost"])
+	else:
+		var price: int = int(entry.get("price", 0))
+		d["extra"] = (tr("INSPECT_PRICE_MANA") % price) + ("" if RunState.mana >= price else "  " + tr("INSPECT_CANT_AFFORD"))
+	return d
+
+
 func _ready() -> void:
+	add_to_group("inspectable")
 	_spr = Sprite2D.new()
 	add_child(_spr)
 	_label = Label.new()

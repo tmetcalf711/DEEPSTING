@@ -116,6 +116,17 @@ func _build() -> void:
 	_then(1, func() -> void: _console("curse cave_in"))
 	_then(40, func() -> void: _shot("07_curse_cave_in"))
 	_then(1, func() -> void: _console("curse none"))
+	# Item labels: stand near a shop ware and a pedestal.
+	_then(1, func() -> void:
+		rc._start_room_test("special_shop")
+		var wares: Array = rc.room.entities.get_children().filter(func(n: Node) -> bool: return n.has_method("_try_buy"))
+		rc.player.position = wares[0].position + Vector2(0, 18))
+	_then(30, func() -> void: _shot("15_label_shop"))
+	_then(1, func() -> void:
+		rc._start_room_test("special_vault")
+		var ped: Array = get_nodes_in_group("pedestals").filter(func(n: Node) -> bool: return rc.room.is_ancestor_of(n))
+		rc.player.position = ped[0].position + Vector2(0, 18))
+	_then(30, func() -> void: _shot("16_label_pedestal"))
 	# Milestone 4: new strata (with champions), the final boss, the ending.
 	for tid in ["flooded_burrows_n05", "landfill_n07", "sewer_pipes_x01", "bedrock_n08", "collapsed_mine_w01", "buried_ruins_n09", "catacombs_n06"]:
 		_then(1, func() -> void:
